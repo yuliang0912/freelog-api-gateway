@@ -20,7 +20,7 @@ module.exports = (option, app) => {
             return
         }
 
-        ctx.gatewayInfo = {routerInfo}
+        ctx.gatewayInfo = {routerInfo, identityInfo: {}, componentProcessResult: []}
 
         await next()
     }

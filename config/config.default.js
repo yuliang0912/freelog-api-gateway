@@ -72,8 +72,8 @@ module.exports = app => {
         },
 
         RasSha256Key: {
-            resourceAuth: {
-                publicKey: fs.readFileSync('config/auth_key/resource_auth_public_key.pem').toString()
+            identity: {
+                publicKey: fs.readFileSync('app/certificate/public-jwt-identity-key.pem').toString()
             }
         },
     }

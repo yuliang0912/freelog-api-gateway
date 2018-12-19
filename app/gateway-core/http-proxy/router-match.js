@@ -30,11 +30,12 @@ module.exports = class GatewayUrlRouterMatch {
     /**
      * 获取上游服务器路由信息
      */
-    async getUpstreamInfo(routerInfo, url) {
+    async getUpstreamInfo(routerInfo, url, method) {
 
         const {upstream} = routerInfo
         upstream.forwardUri = this._getUpstreamRouterUrl(routerInfo, url)
         upstream.serverGroupInfo = await this.serverGroupProvider.findById(upstream.serverGroupId)
+        upstream.method = upstream.method || method
 
         return routerInfo
     }
@@ -46,15 +47,15 @@ module.exports = class GatewayUrlRouterMatch {
 
         let matchScore = 0
         const regExp = /^\${(\d+)}$/
-        const routerSchemes = router.routerUrlRule.toLowerCase().split('/')
-        const urlPathSchemes = urlPath.split('/')
+        const routerSchemes = router.routerUrlRule.toLowerCase().split('/').filter(x => x !== "")
+        const urlPathSchemes = urlPath.toLowerCase().split('/').filter(x => x !== "")
 
         if (urlPathSchemes.length < routerSchemes.length) {
             router.matchScore = 0
             return router
         }
 
-        const routerUrl = [], regMatchValues = []
+        const routerUrl = [""], regMatchValues = []
         for (let i = 0, j = routerSchemes.length; i < j; i++) {
 
             const isRegExpMatch = regExp.test(routerSchemes[i])

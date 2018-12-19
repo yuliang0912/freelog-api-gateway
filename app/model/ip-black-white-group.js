@@ -12,16 +12,16 @@ module.exports = app => {
         }
     }
 
-    const ServerSchema = new mongoose.Schema({
-        serverName: {type: String, required: true},
-        serverIp: {type: String, required: true},
-        weightCoefficient: {type: Number, default: 100, required: true},
+    const IpSchema = new mongoose.Schema({
+        ip: {type: String, unique: true, required: true},
+        remark: {type: String, default: '', required: false},
         status: {type: Number, default: 1, enum: [0, 1], required: true}, //状态 1:启用 0:禁用
     }, {_id: false, versionKey: false})
 
-    const ServerGroupSchema = new mongoose.Schema({
-        groupName: {type: String, unique: true, required: true},
-        servers: [ServerSchema],
+    const IpWhiteListGroupSchema = new mongoose.Schema({
+        groupName: {type: String, required: true},
+        IpSettings: [IpSchema],
+        groupType: {type: String, enum: ['black', 'white'], required: true},
         status: {type: Number, default: 1, enum: [0, 1], required: true}, //状态 1:启用 0:禁用
     }, {
         versionKey: false,
@@ -30,5 +30,5 @@ module.exports = app => {
         toObject: toObjectOptions
     })
 
-    return mongoose.model('server-group', ServerGroupSchema)
+    return mongoose.model('ip-black-white-list-group', IpWhiteListGroupSchema)
 }

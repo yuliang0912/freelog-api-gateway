@@ -1,67 +1,48 @@
 'use strict'
 
-const patrun = require('patrun')
-const lodash = require('lodash')
+const Patrun = require('patrun')
+const {ArgumentError} = require('egg-freelog-base/error')
+const JsonWebTokenAuthenticationComponent = require('./authentication/jwt-authentication')
+const NullIdentityAuthenticationComponent = require('./authentication/null-identity-authentication')
+const InternalIdentityAuthenticationComponent = require('./authentication/internal-identity-authentication')
+const ClientCredentialsAuthenticationComponent = require('./authentication/client-credentials-authentication')
 
 module.exports = class ComponentHandler {
 
     constructor(app) {
-
-    }
-
-    async handle(routerInfo, ctx) {
-
-        const {httpComponents} = routerInfo
-
-        await this._eachCheckComponents(httpComponents, true).then(console.log)
+        this.app = app
+        this.patrun = Patrun()
+        this._registerHttpComponents()
     }
 
     /**
-     * 指定组件检查
+     * 执行http组件
+     * @param comName
+     * @param ctx
      */
-    async _componentHandle(componentName) {
-        return true
+    async componentHandle(comName, ctx) {
+        const component = this.patrun.find({comName})
+        if (!component) {
+            throw new ArgumentError(`参数comName:${comName}错误,未找到对应的组件`)
+        }
+        return component.handle(ctx)
     }
 
     /**
-     * object复杂嵌套组合条件处理
+     * 注册http处理组件
+     * @private
      */
-    async _objectConditionHandle({must, should}) {
-        if (must) {
-            const mustResult = await this._eachCheckComponents(must, true)
-            if (!mustResult) {
-                return false
-            }
-        }
-        if (should) {
-            const shouldResult = await this._eachCheckComponents(should, false)
-            if (!shouldResult) {
-                return false
-            }
-        }
-        return true
-    }
+    _registerHttpComponents() {
 
-    /**
-     * 循环检查各个组件的执行结果
-     */
-    async _eachCheckComponents(list, isEvery = true) {
-        for (let i = 0; i < list.length; i++) {
-            let condition = list[i], currRet = null
-            if (lodash.isObject(condition)) {
-                currRet = await this._objectConditionHandle(condition)
-            } else if (lodash.isString(condition)) {
-                currRet = await this._componentHandle(condition)
-            } else if (lodash.isArray(condition)) {
-                currRet = await this._eachCheckComponents(condition, isEvery)
-            }
-            if (isEvery && !currRet) {
-                return false
-            }
-            if (!isEvery && currRet) {
-                return true
-            }
-        }
-        return Boolean(isEvery)
+        const {app, patrun} = this
+
+        const components = [
+            new JsonWebTokenAuthenticationComponent(app),
+            new NullIdentityAuthenticationComponent(app),
+            new InternalIdentityAuthenticationComponent(app),
+            new ClientCredentialsAuthenticationComponent(app)
+        ]
+
+        components.forEach(com => patrun.add({comName: com.comName}, com))
     }
 }

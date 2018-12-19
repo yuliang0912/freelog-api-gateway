@@ -1,13 +1,11 @@
 'use strict'
 
-'use strict'
-
 const ComHandlerResult = require('../com-handle-result')
 
 module.exports = class NullIdentityAuthenticationComponent {
 
     constructor(app) {
-        this.comName = "ip-white-list"
+        this.comName = "null-identity"
     }
 
     /**
@@ -16,8 +14,6 @@ module.exports = class NullIdentityAuthenticationComponent {
     async handle(ctx) {
 
         const comHandlerResult = new ComHandlerResult(this.comName, true)
-
-        comHandlerResult.tips = "白名单功能暂未实现"
 
         ctx.gatewayInfo.componentProcessResult.push(comHandlerResult)
 
