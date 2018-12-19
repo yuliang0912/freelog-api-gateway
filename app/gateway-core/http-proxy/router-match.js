@@ -1,6 +1,7 @@
 'use strict'
 
 const lodash = require('lodash')
+const {ApplicationError} = require('egg-freelog-base/error')
 
 module.exports = class GatewayUrlRouterMatch {
 
@@ -36,6 +37,11 @@ module.exports = class GatewayUrlRouterMatch {
         upstream.forwardUri = this._getUpstreamRouterUrl(routerInfo, url)
         upstream.serverGroupInfo = await this.serverGroupProvider.findById(upstream.serverGroupId)
         upstream.method = upstream.method || method
+        upstream.serverInfo = upstream.serverGroupInfo.servers.find(x => x.status === 1)
+
+        if (!upstream.serverInfo) {
+            throw new ApplicationError('没有可路由的上游服务器', {url, upstream})
+        }
 
         return routerInfo
     }

@@ -15,8 +15,6 @@ module.exports = class NullIdentityAuthenticationComponent {
 
         const comHandlerResult = new ComHandlerResult(this.comName, true)
 
-        ctx.gatewayInfo.componentProcessResult.push(comHandlerResult)
-
         return comHandlerResult
     }
 }

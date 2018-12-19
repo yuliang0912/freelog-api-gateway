@@ -6,7 +6,7 @@
 
 module.exports = {
 
-    middleware: ['gatewayErrorHandler', 'freelogGatewayMain', 'httpComponentHandler', 'apiMockHandler', 'httpProxyHandler'],
+    middleware: ['gatewayErrorHandler', 'freelogGatewayMain', 'httpComponentHandler', 'apiMockHandler', 'httpProxyHandler', 'freelogGatewayTerminus'],
 
     /**
      * 本地开发环境身份信息

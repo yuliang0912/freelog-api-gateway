@@ -13,6 +13,7 @@ module.exports = app => {
         upstream: {
             serverGroupId: {type: String, required: true},
             protocol: {type: String, default: 'http', required: true},
+            port: {type: Number, required: true},
             forwardUriScheme: {type: String, required: true},
             method: {type: String, default: null} //为空,则与请求的method相同
         },

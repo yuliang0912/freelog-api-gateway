@@ -54,7 +54,6 @@ module.exports = class ClientCredentialsAuthenticationComponent {
         comHandlerResult.attachData = {clientInfo}
 
         ctx.gatewayInfo.identityInfo.clientInfo = clientInfo
-        ctx.gatewayInfo.componentProcessResult.push(comHandlerResult)
 
         return comHandlerResult
     }

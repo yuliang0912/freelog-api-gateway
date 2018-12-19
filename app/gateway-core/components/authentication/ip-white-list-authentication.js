@@ -19,8 +19,6 @@ module.exports = class NullIdentityAuthenticationComponent {
 
         comHandlerResult.tips = "白名单功能暂未实现"
 
-        ctx.gatewayInfo.componentProcessResult.push(comHandlerResult)
-
         return comHandlerResult
     }
 }

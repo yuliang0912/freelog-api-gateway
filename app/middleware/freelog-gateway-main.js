@@ -1,6 +1,7 @@
 'use strict'
 
 const GatewayUrlRouterMatch = require('../gateway-core/http-proxy/router-match')
+const routerNotMatchErrorHandler = require('../gateway-core/error-handler/router-not-match-error-handler')
 
 module.exports = (option, app) => {
 
@@ -15,9 +16,7 @@ module.exports = (option, app) => {
         const routerInfo = await gatewayUrlRouterMatchHandler.matchRouterInfo(routerList, path)
 
         if (!routerInfo) {
-            ctx.status = 404
-            ctx.body = '<h1>404</h1>'
-            return
+            return routerNotMatchErrorHandler(ctx)
         }
 
         ctx.gatewayInfo = {routerInfo, identityInfo: {}, componentProcessResult: []}

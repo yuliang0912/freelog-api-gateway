@@ -3,7 +3,7 @@
 const lodash = require('lodash')
 const ComponentsHandler = require('../gateway-core/components/index')
 
-const ComponentHandler = class ComponentHandler {
+class ComponentHandler {
 
     constructor(app) {
         this.app = app
@@ -15,22 +15,37 @@ const ComponentHandler = class ComponentHandler {
      * 中间件入口
      */
     async main(ctx, next) {
+
         const {httpComponents} = ctx.gatewayInfo.routerInfo
+
         const result = await this._eachCheckComponents(httpComponents, ctx, true)
-        if (!result) {
-            ctx.error({msg: '授权不通过'})
-            //认证授权等失败...
+        if (result) {
+            return await next()
         }
-        await next()
+
+        const isShowDetailErrors = ctx.checkQuery('isShowDetailErrors').optional().toInt().value
+        if (isShowDetailErrors) {
+            ctx.error({
+                msg: "授权不通过", data: {
+                    componentProcessResult: ctx.gatewayInfo.componentProcessResult,
+                    httpComponentRules: httpComponents
+                }
+            })
+        }
+
+        ctx.error({msg: '授权不通过'})
     }
 
     /**
      * 指定组件检查
      */
     async _componentHandle(componentName, ctx) {
-        const result = await this.componentsHandler.componentHandle(componentName, ctx)
-        console.log(result)
-        return result.handleResult
+
+        const comHandlerResult = await this.componentsHandler.componentHandle(componentName, ctx)
+
+        ctx.gatewayInfo.componentProcessResult.push(comHandlerResult)
+
+        return comHandlerResult.handleResult
     }
 
     /**

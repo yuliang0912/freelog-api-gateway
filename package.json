@@ -17,10 +17,11 @@
     "mongoose": "^5.4.0",
     "node-uuid": "^1.4.8",
     "patrun": "^1.0.0",
+    "request": "^2.88.0",
     "uuid": "^3.3.2"
   },
   "scripts": {
-    "start": "egg-scripts start --workers=1",
+    "start": "egg-scripts start --workers=2",
     "stop": "egg-scripts stop"
   },
   "engines": {

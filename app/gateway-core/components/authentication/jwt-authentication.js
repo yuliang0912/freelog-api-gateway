@@ -32,7 +32,7 @@ module.exports = class JsonWebTokenAuthenticationComponent {
             comHandlerResult.tips = "用户JWT数据校验失败"
             return comHandlerResult
         }
-        
+
         const isVerify = cryptoHelper.rsaSha256Verify(`${header}.${payload}`, signature, this.publicKey)
         if (!isVerify) {
             comHandlerResult.error = new AuthenticationError('JWT认证失败,数据校验失败')
@@ -51,7 +51,6 @@ module.exports = class JsonWebTokenAuthenticationComponent {
         comHandlerResult.attachData = payloadObject
 
         ctx.gatewayInfo.identityInfo.userInfo = payloadObject
-        ctx.gatewayInfo.componentProcessResult.push(comHandlerResult)
 
         return comHandlerResult
     }

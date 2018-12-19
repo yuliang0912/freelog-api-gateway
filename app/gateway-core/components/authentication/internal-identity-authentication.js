@@ -37,7 +37,6 @@ module.exports = class InternalIdentityAuthenticationComponent {
         comHandlerResult.handleResult = true
 
         ctx.gatewayInfo.identityInfo.userInfo = comHandlerResult.attachData
-        ctx.gatewayInfo.componentProcessResult.push(comHandlerResult)
 
         return comHandlerResult
     }
