@@ -16,10 +16,9 @@ module.exports = (option, app) => {
         const {upstream} = await gatewayUrlRouterMatchHandler.getUpstreamInfo(routerInfo, ctx.url, ctx.method)
 
         await httpRequestProxy.httpProxy(ctx, upstream).then(response => {
-            Object.keys(response.headers).forEach(header => {
-                ctx.set(header, response.headers[header])
-            })
-            ctx.body = response.body
+            const {headers, body} = response
+            Object.keys(headers).forEach(header => ctx.set(header, headers[header]))
+            ctx.body = body
         }).catch(error => httpRequestProxyErrorHandler(ctx, error))
 
         await next()

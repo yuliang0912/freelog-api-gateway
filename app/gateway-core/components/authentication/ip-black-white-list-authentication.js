@@ -1,13 +1,12 @@
 'use strict'
 
-'use strict'
-
 const ComHandlerResult = require('../com-handle-result')
 
-module.exports = class NullIdentityAuthenticationComponent {
+module.exports = class IpBlackWhiteListAuthenticationComponent {
 
     constructor(app) {
-        this.comName = "ip-white-list"
+        this.comName = "ip-black-white-list"
+        this.IpBlackWhiteGroupProvider = app.dal.IpBlackWhiteGroupProvider
     }
 
     /**
@@ -17,7 +16,7 @@ module.exports = class NullIdentityAuthenticationComponent {
 
         const comHandlerResult = new ComHandlerResult(this.comName, true)
 
-        comHandlerResult.tips = "白名单功能暂未实现"
+        comHandlerResult.tips = "黑白名单功能暂未实现"
 
         return comHandlerResult
     }

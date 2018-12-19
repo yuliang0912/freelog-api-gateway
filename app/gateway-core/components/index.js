@@ -3,9 +3,12 @@
 const Patrun = require('patrun')
 const {ArgumentError} = require('egg-freelog-base/error')
 const JsonWebTokenAuthenticationComponent = require('./authentication/jwt-authentication')
+const JsonWebTokenNodeAuthenticationComponent = require('./authentication/jwt-node-authentication')
 const NullIdentityAuthenticationComponent = require('./authentication/null-identity-authentication')
 const InternalIdentityAuthenticationComponent = require('./authentication/internal-identity-authentication')
+const IpBlackWhiteListAuthenticationComponent = require('./authentication/ip-black-white-list-authentication')
 const ClientCredentialsAuthenticationComponent = require('./authentication/client-credentials-authentication')
+
 
 module.exports = class ComponentHandler {
 
@@ -39,7 +42,9 @@ module.exports = class ComponentHandler {
         const components = [
             new JsonWebTokenAuthenticationComponent(app),
             new NullIdentityAuthenticationComponent(app),
+            new JsonWebTokenNodeAuthenticationComponent(app),
             new InternalIdentityAuthenticationComponent(app),
+            new IpBlackWhiteListAuthenticationComponent(app),
             new ClientCredentialsAuthenticationComponent(app)
         ]
 

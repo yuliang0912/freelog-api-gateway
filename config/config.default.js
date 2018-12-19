@@ -72,9 +72,12 @@ module.exports = app => {
         },
 
         RasSha256Key: {
+            node: {
+                publicKey: fs.readFileSync('app/certificate/public-jwt-node-key.pem').toString()
+            },
             identity: {
                 publicKey: fs.readFileSync('app/certificate/public-jwt-identity-key.pem').toString()
-            }
+            },
         },
     }
 }

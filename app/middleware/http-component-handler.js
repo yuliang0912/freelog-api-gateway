@@ -81,6 +81,9 @@ class ComponentHandler {
      * 循环检查各个组件的执行结果
      */
     async _eachCheckComponents(list, ctx, isEvery = true) {
+        if (!list.length) {
+            return true
+        }
         for (let i = 0; i < list.length; i++) {
             let condition = list[i], currRet = null
             if (lodash.isObject(condition)) {

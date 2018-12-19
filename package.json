@@ -29,8 +29,9 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/yuliang0912/freelog-api-gateway"
   },
   "author": "yuliang",
+  "email": "yuliang@freelog.com",
   "license": "MIT"
 }
