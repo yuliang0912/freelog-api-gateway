@@ -2,14 +2,14 @@
 
 const moment = require("moment")
 const ComHandlerResult = require('../com-handle-result')
-const AuthenticationError = require('../../../error/AuthenticationError')
-const {ArgumentError} = require('egg-freelog-base/error')
+const {ArgumentError, AuthenticationError} = require('egg-freelog-base/error')
 const cryptoHelper = require('egg-freelog-base/app/extend/helper/crypto_helper')
 
 module.exports = class ClientCredentialsAuthenticationComponent {
 
     constructor(app) {
         this.comName = "client"
+        this.comType = "authentication"
         this.clientInfoProvider = app.dal.clientInfoProvider
     }
 
@@ -18,7 +18,7 @@ module.exports = class ClientCredentialsAuthenticationComponent {
      */
     async handle(ctx) {
 
-        const comHandlerResult = new ComHandlerResult(this.comName)
+        const comHandlerResult = new ComHandlerResult(this.comName, this.comType)
 
         const clientId = ctx.checkHeader("clientid").notEmpty().toInt().value
         const timeLine = ctx.checkHeader("timeline").notEmpty().toInt().value

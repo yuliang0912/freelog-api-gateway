@@ -2,6 +2,7 @@
 
 const lodash = require('lodash')
 const ComponentsHandler = require('../gateway-core/components/index')
+const componentsInvokeErrorHandler = require('../gateway-core/error-handler/component-invoke-error-handler')
 
 class ComponentHandler {
 
@@ -42,6 +43,7 @@ class ComponentHandler {
     async _componentHandle(componentName, ctx) {
 
         const comHandlerResult = await this.componentsHandler.componentHandle(componentName, ctx)
+            .catch(error => componentsInvokeErrorHandler(ctx, componentName, error))
 
         ctx.gatewayInfo.componentProcessResult.push(comHandlerResult)
 

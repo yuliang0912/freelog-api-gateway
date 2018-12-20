@@ -1,22 +1,23 @@
 'use strict'
 
 const ComHandlerResult = require('../com-handle-result')
-const AuthenticationError = require('../../../error/AuthenticationError')
+const {AuthenticationError} = require('egg-freelog-base/error')
 const cryptoHelper = require('egg-freelog-base/app/extend/helper/crypto_helper')
 
 module.exports = class JsonWebTokenAuthenticationComponent {
 
     constructor(app) {
         this.comName = "jwt-node"
+        this.comType = "authentication"
         this.publicKey = app.config.RasSha256Key.node.publicKey
     }
 
     /**
-     * client证书认证组件处理函数
+     * JWT-节点信息认证处理
      */
     async handle(ctx) {
 
-        const comHandlerResult = new ComHandlerResult(this.comName)
+        const comHandlerResult = new ComHandlerResult(this.comName, this.comType)
 
         const jwtStr = ctx.cookies.get('nodeInfo')
         if (!jwtStr) {

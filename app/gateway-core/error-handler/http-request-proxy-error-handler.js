@@ -1,29 +1,21 @@
 'use strict'
 
+const {GatewayUpstreamApiError} = require('egg-freelog-base/error')
+
 const codeMsgMap = {
-    "ETIMEDOU": "连接已经超时",
-    "ESOCKETTIMEDOUT": "连接已经超时",
-    "ECONNREFUSED": "不能连接到目标服务器",
-    "HTTPSTATUSCODEERROR": "源服务器错误,[状态码]"
+    ETIMEDOU: "连接已经超时",
+    ESOCKETTIMEDOUT: "连接已经超时",
+    ECONNREFUSED: "不能连接到目标服务器",
+    HTTPSTATUSCODEERROR: "http状态码错误"
 }
 
 module.exports = (ctx, error) => {
 
     const {code, statusCode} = error
 
-    var msg = "服务器错误"
-
-    if (Reflect.has(codeMsgMap, code)) {
-        msg += codeMsgMap[code]
-    }
-    else {
-        msg += ",[状态码]:" + statusCode
-    }
-    if (code === "HTTPSTATUSCODEERROR") {
-        msg += ":" + statusCode
-    }
-    msg += ",[错误详情]:" + error.toString()
+    const msg = `上游服务器服务器错误。${codeMsgMap[code] || ''}`
 
     ctx.status = statusCode || 404
-    ctx.error({msg, errCode: 26, retCode: 5})
+
+    throw new GatewayUpstreamApiError(msg, {code, statusCode, error: error.stack || error.message})
 }

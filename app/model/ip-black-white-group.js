@@ -18,6 +18,7 @@ module.exports = app => {
         status: {type: Number, default: 1, enum: [0, 1], required: true}, //状态 1:启用 0:禁用
     }, {_id: false, versionKey: false})
 
+    
     const IpWhiteListGroupSchema = new mongoose.Schema({
         groupName: {type: String, required: true},
         IpSettings: [IpSchema],

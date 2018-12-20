@@ -6,6 +6,7 @@ module.exports = class NullIdentityAuthenticationComponent {
 
     constructor(app) {
         this.comName = "null-identity"
+        this.comType = "authentication"
     }
 
     /**
@@ -13,7 +14,7 @@ module.exports = class NullIdentityAuthenticationComponent {
      */
     async handle(ctx) {
 
-        const comHandlerResult = new ComHandlerResult(this.comName, true)
+        const comHandlerResult = new ComHandlerResult(this.comName, this.comType, true)
 
         return comHandlerResult
     }
