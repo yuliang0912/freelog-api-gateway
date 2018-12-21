@@ -23,12 +23,12 @@ module.exports = class ComponentHandler {
      * @param comName
      * @param ctx
      */
-    async componentHandle(comName, ctx) {
+    async componentHandle(ctx, comName, comConfig) {
         const component = this.patrun.find({comName})
         if (!component) {
             throw new ArgumentError(`参数comName:${comName}错误,未找到对应的组件`)
         }
-        return component.handle(ctx)
+        return component.handle(ctx, comConfig)
     }
 
     /**

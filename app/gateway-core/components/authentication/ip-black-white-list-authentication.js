@@ -13,7 +13,7 @@ module.exports = class IpBlackWhiteListAuthenticationComponent {
     /**
      * 黑白名单认证
      */
-    async handle(ctx) {
+    async handle(ctx, config) {
 
         const comHandlerResult = new ComHandlerResult(this.comName, this.comType, true)
 

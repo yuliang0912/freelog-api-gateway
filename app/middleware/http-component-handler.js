@@ -3,12 +3,14 @@
 const lodash = require('lodash')
 const ComponentsHandler = require('../gateway-core/components/index')
 const componentsInvokeErrorHandler = require('../gateway-core/error-handler/component-invoke-error-handler')
+const {GatewayAuthenticationError, GatewayAuthorizationError} = require('egg-freelog-base/error')
 
 class ComponentHandler {
 
     constructor(app) {
         this.app = app
         this.componentsHandler = new ComponentsHandler(app)
+        this.httpComponentHandleRuleProvider = app.dal.httpComponentHandleRuleProvider
         return this.main.bind(this)
     }
 
@@ -17,32 +19,58 @@ class ComponentHandler {
      */
     async main(ctx, next) {
 
-        const {httpComponents} = ctx.gatewayInfo.routerInfo
-
-        const result = await this._eachCheckComponents(httpComponents, ctx, true)
-        if (result) {
+        const {httpComponentRuleIds} = ctx.gatewayInfo.routerInfo
+        if (!httpComponentRuleIds.length) {
             return await next()
         }
 
-        const isShowDetailErrors = ctx.checkQuery('isShowDetailErrors').optional().toInt().value
-        if (isShowDetailErrors) {
-            ctx.error({
-                msg: "授权不通过", data: {
-                    componentProcessResult: ctx.gatewayInfo.componentProcessResult,
-                    httpComponentRules: httpComponents
-                }
+        const httpComponentMap = await this.httpComponentHandleRuleProvider.find({
+            _id: {$in: httpComponentRuleIds}, status: 1
+        }).then(list => new Map(list.map(x => [x.id, x])))
+
+        //多组规则按照定义的顺序依次循环处理
+        for (let i = 0, j = httpComponentRuleIds.length; i < j; i++) {
+            const httpComponent = httpComponentMap.get(httpComponentRuleIds[i])
+            if (!httpComponent) {
+                continue
+            }
+            const {httpComponentRules, componentConfig} = httpComponent
+            await this._eachCheckComponents(ctx, httpComponentRules, componentConfig, true).then(result => {
+                !result && this._componentHandleFailedHandle(ctx, httpComponentRules)
             })
         }
 
-        ctx.error({msg: '授权不通过'})
+        await next()
+    }
+
+    /**
+     * 组件处理不通过
+     */
+    _componentHandleFailedHandle(ctx, httpComponentRules) {
+
+        let data = {routeId: ctx.gatewayInfo.routerInfo.id}
+        const {componentProcessResult} = ctx.gatewayInfo
+        const isShowDetailErrors = ctx.checkQuery('isShowDetailErrors').optional().toInt().value
+        if (isShowDetailErrors) {
+            data.httpComponentRules = httpComponentRules
+            data.componentProcessResult = componentProcessResult
+        }
+
+        const lastHandleFailedResult = componentProcessResult.reverse().find(x => !x.handleResult)
+
+        //目前只有认证与授权.后续如果有流量限制熔断等再拓展
+        if (lastHandleFailedResult.comType === "authentication") {
+            throw new GatewayAuthenticationError("认证失败", data)
+        }
+        throw new GatewayAuthorizationError("授权失败", data)
     }
 
     /**
      * 指定组件检查
      */
-    async _componentHandle(componentName, ctx) {
+    async _componentHandle(ctx, componentName, comConfig) {
 
-        const comHandlerResult = await this.componentsHandler.componentHandle(componentName, ctx)
+        const comHandlerResult = await this.componentsHandler.componentHandle(ctx, componentName, comConfig)
             .catch(error => componentsInvokeErrorHandler(ctx, componentName, error))
 
         ctx.gatewayInfo.componentProcessResult.push(comHandlerResult)
@@ -53,20 +81,20 @@ class ComponentHandler {
     /**
      * object复杂嵌套组合条件处理
      */
-    async _objectConditionHandle(objectCondition, ctx) {
+    async _objectConditionHandle(ctx, objectCondition, comConfig) {
 
         const keys = Object.keys(objectCondition)
         for (let i = 0; i < keys.length; i++) {
             var key = keys[i]
             switch (key.toLowerCase()) {
                 case "must":
-                    const mustResult = await this._eachCheckComponents(objectCondition[key], ctx, true)
+                    const mustResult = await this._eachCheckComponents(ctx, objectCondition[key], comConfig, true)
                     if (!mustResult) {
                         return false
                     }
                     break
                 case "should":
-                    const shouldResult = await this._eachCheckComponents(objectCondition[key], ctx, false)
+                    const shouldResult = await this._eachCheckComponents(ctx, objectCondition[key], comConfig, false)
                     if (!shouldResult) {
                         return false
                     }
@@ -82,18 +110,18 @@ class ComponentHandler {
     /**
      * 循环检查各个组件的执行结果
      */
-    async _eachCheckComponents(list, ctx, isEvery = true) {
-        if (!list.length) {
+    async _eachCheckComponents(ctx, comlist, comConfig, isEvery = true) {
+        if (!comlist.length) {
             return true
         }
-        for (let i = 0; i < list.length; i++) {
-            let condition = list[i], currRet = null
+        for (let i = 0; i < comlist.length; i++) {
+            let condition = comlist[i], currRet = null
             if (lodash.isObject(condition)) {
-                currRet = await this._objectConditionHandle(condition, ctx)
+                currRet = await this._objectConditionHandle(ctx, condition, comConfig)
             } else if (lodash.isString(condition)) {
-                currRet = await this._componentHandle(condition, ctx)
+                currRet = await this._componentHandle(ctx, condition, comConfig)
             } else if (lodash.isArray(condition)) {
-                currRet = await this._eachCheckComponents(condition, ctx, isEvery)
+                currRet = await this._eachCheckComponents(ctx, condition, comConfig, isEvery)
             }
             if (isEvery && !currRet) {
                 return false

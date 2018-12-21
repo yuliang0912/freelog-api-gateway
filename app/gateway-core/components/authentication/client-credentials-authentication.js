@@ -2,7 +2,7 @@
 
 const moment = require("moment")
 const ComHandlerResult = require('../com-handle-result')
-const {ArgumentError, AuthenticationError} = require('egg-freelog-base/error')
+const {ArgumentError, GatewayAuthenticationError} = require('egg-freelog-base/error')
 const cryptoHelper = require('egg-freelog-base/app/extend/helper/crypto_helper')
 
 module.exports = class ClientCredentialsAuthenticationComponent {
@@ -16,7 +16,7 @@ module.exports = class ClientCredentialsAuthenticationComponent {
     /**
      * client证书认证组件处理函数
      */
-    async handle(ctx) {
+    async handle(ctx, config) {
 
         const comHandlerResult = new ComHandlerResult(this.comName, this.comType)
 
@@ -31,21 +31,21 @@ module.exports = class ClientCredentialsAuthenticationComponent {
         }
 
         if (Math.abs(moment().format('X') - timeLine) > 180) {
-            comHandlerResult.error = new AuthenticationError("参数timeLine验证失败,timeLine校验不通过", {timeLine})
+            comHandlerResult.error = new GatewayAuthenticationError("参数timeLine验证失败,timeLine校验不通过", {timeLine})
             comHandlerResult.tips = "客户端认证失败"
             return comHandlerResult
         }
 
         const clientInfo = await this.clientInfoProvider.findOne({clientId, status: 1})
         if (!clientInfo) {
-            comHandlerResult.error = new AuthenticationError("client认证失败,未获取到有效的clientInfo", {clientId})
+            comHandlerResult.error = new GatewayAuthenticationError("client认证失败,未获取到有效的clientInfo", {clientId})
             comHandlerResult.tips = "客户端认证失败"
             return comHandlerResult
         }
 
         const text = url + "&timeline=" + timeLine
         if (cryptoHelper.hmacSha1(text, clientInfo.privateKey) !== sign) {
-            comHandlerResult.error = new AuthenticationError("client认证失败,签名不匹配", {clientId})
+            comHandlerResult.error = new GatewayAuthenticationError("client认证失败,签名不匹配", {clientId})
             comHandlerResult.tips = "客户端认证失败,签名不匹配"
             return comHandlerResult
         }

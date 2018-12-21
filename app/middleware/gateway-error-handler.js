@@ -1,5 +1,6 @@
 'use strict'
 
+const uuid = require('node-uuid')
 const {ApplicationError} = require('egg-freelog-base/error')
 
 module.exports = (option, app) => {
@@ -11,6 +12,7 @@ module.exports = (option, app) => {
         try {
             ctx.error = ctx.error.bind(ctx)
             ctx.success = ctx.success.bind(ctx)
+            ctx.request.requestId = uuid.v4().replace(/-/g, '')
 
             if (ctx.request.bodyParserError) {
                 throw Object.assign(ctx.request.bodyParserError, {

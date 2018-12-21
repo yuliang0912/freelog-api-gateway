@@ -24,8 +24,11 @@ module.exports = class HttpRequestProxy {
             encoding: null
         }
 
+        ctx.proxy = {type: "request", gatewayUri: options.uri, method}
+
         //设置HOST,不然代理网页的时候无法正常加载
         options.headers.host = serverInfo.serverIp
+        options.headers.requestId = ctx.request.requestId
 
         delete options.headers['content-length']
 
@@ -46,18 +49,7 @@ module.exports = class HttpRequestProxy {
         }
 
         return new Promise((resolve, reject) => {
-            const proxyServer = Request(options, (error, response) => {
-                if (error) {
-                    return reject(error)
-                }
-                if (/^[2|3]/.test(response.statusCode)) {
-                    return resolve(response)
-                }
-                reject(Object.assign(new Error(response.body), {
-                    code: "HTTPSTATUSCODEERROR",
-                    statusCode: response.statusCode || "NULL"
-                }))
-            })
+            const proxyServer = Request(options, (error, response) => error ? reject(error) : resolve(response))
             if (ctx.req.readable && ["POST", "PUT"].includes(method)) {
                 ctx.req.pipe(proxyServer)
             }

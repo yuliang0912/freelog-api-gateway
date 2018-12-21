@@ -17,21 +17,21 @@ module.exports = class CreateTestDataImport extends Subscription {
 
         const {apiRouterProvider, serverGroupProvider, httpComponentHandleRuleProvider} = this.app.dal
 
-        httpComponentHandleRuleProvider.create({
-            ruleName: "规则1",
-            httpComponentRules: [
-                {
-                    "should": [
-                        "jwt",
-                        "internal-identity",
-                        "null-identity"
-                    ]
-                }
-            ],
-            componentConfig: {
-                test: "yuliang"
-            }
-        })
+        // httpComponentHandleRuleProvider.create({
+        //     ruleName: "规则1",
+        //     httpComponentRules: [
+        //         {
+        //             "should": [
+        //                 "jwt",
+        //                 "internal-identity",
+        //                 "null-identity"
+        //             ]
+        //         }
+        //     ],
+        //     componentConfig: {
+        //         test: "yuliang"
+        //     }
+        // })
 
         // serverGroupProvider.create({
         //     groupName: '本地环境',

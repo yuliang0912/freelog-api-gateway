@@ -35,11 +35,12 @@ module.exports = app => {
             enable: true,
         },
 
-        middleware: ['freelogHttpProxy'],
-
         mongoose: {
             url: "mongodb://127.0.0.1:27017/api-gateway"
         },
+
+        middleware: ['gatewayErrorHandler', 'freelogGatewayMain', 'httpComponentHandler',
+            'apiMockHandler', 'httpProxyHandler', 'proxyResponseHandler', 'freelogGatewayTerminus'],
 
         multipart: {
             autoFields: false,
