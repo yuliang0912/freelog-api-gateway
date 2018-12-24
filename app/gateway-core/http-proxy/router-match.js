@@ -1,7 +1,8 @@
 'use strict'
 
 const lodash = require('lodash')
-const {ApplicationError} = require('egg-freelog-base/error')
+const customParamRegExp = /^:[a-zA-Z0-9_]{1,100}$/
+const {GatewayRouterMatchError} = require('egg-freelog-base/error')
 
 module.exports = class GatewayUrlRouterMatch {
 
@@ -40,7 +41,7 @@ module.exports = class GatewayUrlRouterMatch {
         upstream.serverInfo = upstream.serverGroupInfo.servers.find(x => x.status === 1)
 
         if (!upstream.serverInfo) {
-            throw new ApplicationError('没有可路由的上游服务器', {url, upstream})
+            throw new GatewayRouterMatchError('没有可路由的上游服务器', {url, upstream})
         }
 
         return routerInfo
@@ -52,36 +53,24 @@ module.exports = class GatewayUrlRouterMatch {
     _getRouterMatchScore(router, urlPath) {
 
         let matchScore = 0
-        const regExp = /^\${(\d+)}$/
-        const routerSchemes = router.routerUrlRule.toLowerCase().split('/').filter(x => x !== "")
-        const urlPathSchemes = urlPath.toLowerCase().split('/').filter(x => x !== "")
+        const routerSchemes = router.routerUrlRule.split('/').filter(x => x !== "")
+        const urlPathSchemes = urlPath.split('/').filter(x => x !== "")
 
         if (urlPathSchemes.length < routerSchemes.length) {
-            router.matchScore = 0
+            router.matchScore = matchScore
             return router
         }
 
-        const routerUrl = [""], regMatchValues = []
+        const routerUrl = [""], customParamsMap = new Map()
         for (let i = 0, j = routerSchemes.length; i < j; i++) {
-
-            const isRegExpMatch = regExp.test(routerSchemes[i])
-            const regIndex = isRegExpMatch ? parseInt(RegExp.$1) : -1
-            const expStr = isRegExpMatch ? router.routerRegExp[regIndex] : null
-
-            if (isRegExpMatch && new RegExp(expStr).test(urlPathSchemes[i])) {
-                matchScore += 0.99
-                routerUrl.push(urlPathSchemes[i])
-                regMatchValues.push(urlPathSchemes[i])
-                continue
-            }
-            else if (isRegExpMatch) {
-                matchScore = 0
-                break
-            }
-            else if (routerSchemes[i] === urlPathSchemes[i]) {
+            if (routerSchemes[i].toLowerCase() === urlPathSchemes[i].toLowerCase()) {
                 matchScore += 1
                 routerUrl.push(routerSchemes[i])
-                continue
+            }
+            else if (customParamRegExp.test(routerSchemes[i])) {
+                matchScore += 0.99
+                routerUrl.push(urlPathSchemes[i])
+                customParamsMap.set(routerSchemes[i].substring(1), urlPathSchemes[i])
             }
             else {
                 matchScore = 0
@@ -90,7 +79,7 @@ module.exports = class GatewayUrlRouterMatch {
         }
         router.matchScore = matchScore
         router.routerUrl = routerUrl.join("/")
-        router.regExpMatchValues = regMatchValues
+        router.customParamsMap = customParamsMap
 
         return router
     }
@@ -99,32 +88,16 @@ module.exports = class GatewayUrlRouterMatch {
      * 获取上游路由URL
      */
     _getUpstreamRouterUrl(routerInfo, url) {
+        
         const {forwardUriScheme} = routerInfo.upstream
         const upstreamRouterUrl = forwardUriScheme.split('/').map(segment => {
-            if (/^\${{(\d+)}}$/.test(segment)) {
-                return routerInfo.regExpMatchValues[parseInt(RegExp.$1)]
+            if (customParamRegExp.test(segment)) {
+                return routerInfo.customParamsMap.has(segment.substring(1)) ? routerInfo.customParamsMap.get(segment.substring(1)) : ''
             } else {
                 return segment
             }
         }).join("/")
 
-        return url.replace(new RegExp(this._trimEnd(routerInfo.routerUrl, '/'), "i"), this._trimEnd(upstreamRouterUrl, '/'))
-    }
-
-    /**
-     * trim字符串
-     */
-    _trimEnd(str, trimStr) {
-        if (!trimStr) {
-            return str;
-        }
-        var temp = str;
-        while (true) {
-            if (temp.substr(temp.length - trimStr.length, trimStr.length) != trimStr) {
-                break;
-            }
-            temp = temp.substr(0, temp.length - trimStr.length);
-        }
-        return temp;
+        return url.replace(new RegExp(lodash.trimEnd(routerInfo.routerUrl, '/'), "i"), lodash.trimEnd(upstreamRouterUrl, '/'))
     }
 }

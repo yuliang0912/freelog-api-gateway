@@ -12,5 +12,5 @@ module.exports = app => {
         timestamps: {createdAt: 'createDate', updatedAt: 'updateDate'}
     })
 
-    return mongoose.model('api-mock-settings', ApiMockSchema)
+    return mongoose.model('api-mock-data', ApiMockSchema)
 }

@@ -10,7 +10,7 @@
 
 5.目前http代理使用request,可以自由替换为其他的库
 
-6.目前路由规则匹配是根据url-path计算分值来匹配,同样的路由,正则表达式匹配到的与非正则表达式匹配的路由分值略低一点.
+6.目前路由规则匹配是根据url-path计算分值来匹配,同样的路由,自定义参数匹配的路由比完全匹配的路由分值略低一点.
 
 7.项目目前根据公司内部使用场景实现.目前没有授权组件,即通过认证就可以获得授权.后续有需求可以拓展实现授权组件
 
@@ -20,11 +20,10 @@
 | 参数 | 说明 |
 | :--- | :--- |
 |routerPrefix|url前缀,一般获取urlPath的前两部分|
-|routerUrlRule|路由规则,如果需要支持正则表达式,则通过${routerRegExp-index}来定位|
-|routerRegExp|正则表达式,提供给路由规则使用,使用数组下标定位|
+|routerUrlRule|路由规则,path中的参数可以用:开头的字符数字下划线定义|
 |httpMethod|支持的http请求方法|
 |mockStatus|是否启动mock,如果启动,则需要参考mock相关配置|
-|httpComponentProcessRules|http请求管道中的处理组件规则配置|
+|httpComponentRuleIds|http请求管道中的处理组件规则配置|
 |upstream|上游服务器相关配置|
 
 #### upstream配置说明
@@ -35,28 +34,25 @@
 |method|请求上游服务器的http method,为空则默认和当前请求的method|
 |httpMethod|支持的http请求方法|
 |serverGroupId| 上游服务器分组ID |
-|forwardUriScheme|路由到上游服务器的路径.如果需要使用到匹配规则中的正则表达式匹配值,则通过${{index}}来获取,index为实际匹配到的正则值数组下标|
+|forwardUriScheme|路由到上游服务器的路径.自定义参数取值用:开头定义|
 
 
 ### 示例
 ```js
 {
 	"routerPrefix": "/v1/presentables/",
-	"routerUrlRule": "/v1/presentables/${0}/",
-	"routerRegExp": [
-		"^[0-9a-f]{24}$"
-	],
+	"routerUrlRule": "/v1/presentables/:id/",
 	"httpMethod": [
 		"GET",
 		"POST"
 	],
-	"httpComponentProcessRules": [],
+	"httpComponentRuleIds": [],
 	"upstream": {
 		"protocol": "http",
 		"port": 7005,
 		"method": null,
 		"serverGroupId": "5c175892e5c181401cd91988",
-		"forwardUriScheme": "/v1/presentables/${{0}}/"
+		"forwardUriScheme": "/v1/presentables/:id/"
 	},
 	"status": 1,
 	"mockStatus": 0
@@ -87,7 +83,7 @@
 
 ### 示例
 ```js
-{
+[{
 	"should": [
 		"jwt",
 		"internal-identity",
@@ -98,5 +94,5 @@
 		},
 		"jwt-node"
 	]
-}
+} , "node-jwt" ]
 ```

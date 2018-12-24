@@ -13,6 +13,7 @@ module.exports = (option, app) => {
 
         const {routerInfo} = ctx.gatewayInfo
         const {upstream} = await gatewayUrlRouterMatchHandler.getUpstreamInfo(routerInfo, ctx.url, ctx.method)
+        ctx.set('x-router-id', routerInfo._id)
 
         await httpRequestProxy.httpProxy(ctx, upstream).then(response => {
             ctx.proxyResponse = response
