@@ -1,8 +1,16 @@
 'use strict'
 
+const lodash = require('lodash')
+
 module.exports = app => {
 
     const mongoose = app.mongoose;
+
+    const toObjectOptions = {
+        transform(doc, ret, options) {
+            return Object.assign({routerId: doc.id}, lodash.omit(ret, ['_id']))
+        }
+    }
 
     const ApiRouterConfigSchema = new mongoose.Schema({
         routerPrefix: {type: String, required: true},
@@ -23,6 +31,8 @@ module.exports = app => {
         status: {type: Number, default: 1, enum: [0, 1], required: true}, //状态 1:启用 0:禁用
     }, {
         versionKey: false,
+        toJSON: toObjectOptions,
+        toObject: toObjectOptions,
         timestamps: {createdAt: 'createDate', updatedAt: 'updateDate'}
     })
 

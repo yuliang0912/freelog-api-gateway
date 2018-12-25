@@ -10,7 +10,6 @@ class ComponentHandler {
     constructor(app) {
         this.app = app
         this.componentsHandler = new ComponentsHandler(app)
-        this.httpComponentHandleRuleProvider = app.dal.httpComponentHandleRuleProvider
         return this.main.bind(this)
     }
 
@@ -19,22 +18,11 @@ class ComponentHandler {
      */
     async main(ctx, next) {
 
-        const {httpComponentRuleIds} = ctx.gatewayInfo.routerInfo
-        if (!httpComponentRuleIds.length) {
-            return await next()
-        }
-
-        const httpComponentMap = await this.httpComponentHandleRuleProvider.find({
-            _id: {$in: httpComponentRuleIds}, status: 1
-        }).then(list => new Map(list.map(x => [x.id, x])))
+        const {routerInfo} = ctx.gatewayInfo
 
         //多组规则按照定义的顺序依次循环处理
-        for (let i = 0, j = httpComponentRuleIds.length; i < j; i++) {
-            const httpComponent = httpComponentMap.get(httpComponentRuleIds[i])
-            if (!httpComponent) {
-                continue
-            }
-            const {httpComponentRules, componentConfig} = httpComponent
+        for (let i = 0, j = routerInfo.httpComponentRules.length; i < j; i++) {
+            const {httpComponentRules, componentConfig} = routerInfo.httpComponentRules[i]
             await this._eachCheckComponents(ctx, httpComponentRules, componentConfig, true).then(result => {
                 !result && this._componentHandleFailedHandle(ctx, httpComponentRules)
             })

@@ -13,7 +13,7 @@ module.exports = (ctx, error) => {
 
     const {code, statusCode} = error
 
-    const msg = `上游服务器服务器错误。${codeMsgMap[code] || ''}`
+    const msg = `上游服务器错误。${codeMsgMap[code] || ''}`
 
     ctx.status = statusCode || 404
 

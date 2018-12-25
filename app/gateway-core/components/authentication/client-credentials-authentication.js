@@ -8,9 +8,9 @@ const cryptoHelper = require('egg-freelog-base/app/extend/helper/crypto_helper')
 module.exports = class ClientCredentialsAuthenticationComponent {
 
     constructor(app) {
+        this.app = app
         this.comName = "client"
         this.comType = "authentication"
-        this.clientInfoProvider = app.dal.clientInfoProvider
     }
 
     /**
@@ -36,7 +36,7 @@ module.exports = class ClientCredentialsAuthenticationComponent {
             return comHandlerResult
         }
 
-        const clientInfo = await this.clientInfoProvider.findOne({clientId, status: 1})
+        const clientInfo = this.app.__cache__.clientInfo[clientId]
         if (!clientInfo) {
             comHandlerResult.error = new GatewayAuthenticationError("client认证失败,未获取到有效的clientInfo", {clientId})
             comHandlerResult.tips = "客户端认证失败"

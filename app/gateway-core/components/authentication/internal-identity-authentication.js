@@ -8,7 +8,6 @@ module.exports = class InternalIdentityAuthenticationComponent {
     constructor(app) {
         this.comName = "internal-identity"
         this.comType = "authentication"
-        this.clientInfoProvider = app.dal.clientInfoProvider
     }
 
     /**

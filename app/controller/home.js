@@ -4,11 +4,13 @@ const Controller = require('egg').Controller;
 
 module.exports = class HomeController extends Controller {
 
-    constructor({app}) {
-        super(...arguments)
+    /**
+     * 首页
+     * @param ctx
+     * @returns {Promise<void>}
+     */
+    async index(ctx) {
+        ctx.body = '<h1>freelog api gateway!</h1>'
     }
 
-    async index(ctx) {
-        ctx.success('<h1>freelog api gateway!</h1>')
-    }
 }

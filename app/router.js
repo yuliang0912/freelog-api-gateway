@@ -1,9 +1,10 @@
-'use strict';
-
-/**
- * restful wiki: http://eggjs.org/zh-cn/basics/router.html
- */
+'use strict'
 
 module.exports = app => {
-    app.router.get('/*', 'home.index')
+
+    app.router.all('/', 'home.index')
+    app.router.resources("router", "/gateway/routers", "router")
+
+    app.router.all('/*', (ctx, next) => {
+    })
 }

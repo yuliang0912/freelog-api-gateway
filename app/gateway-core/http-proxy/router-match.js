@@ -7,7 +7,7 @@ const {GatewayRouterMatchError} = require('egg-freelog-base/error')
 module.exports = class GatewayUrlRouterMatch {
 
     constructor(app) {
-        this.serverGroupProvider = app.dal.serverGroupProvider
+        //this.serverGroupProvider = app.dal.serverGroupProvider
     }
 
     /**
@@ -24,7 +24,7 @@ module.exports = class GatewayUrlRouterMatch {
             return null
         }
 
-        const matchRouterInfo = lodash.chain(routerList).map(router => this._getRouterMatchScore(router.toObject(), path)).orderBy('matchScore', 'desc').first().value()
+        const matchRouterInfo = lodash.chain(routerList).map(router => this._getRouterMatchScore(router, path)).orderBy('matchScore', 'desc').first().value()
 
         return matchRouterInfo.matchScore <= 0 ? null : matchRouterInfo
     }
@@ -36,7 +36,7 @@ module.exports = class GatewayUrlRouterMatch {
 
         const {upstream} = routerInfo
         upstream.forwardUri = this._getUpstreamRouterUrl(routerInfo, url)
-        upstream.serverGroupInfo = await this.serverGroupProvider.findById(upstream.serverGroupId)
+        //upstream.serverGroupInfo = await this.serverGroupProvider.findById(upstream.serverGroupId)
         upstream.method = upstream.method || method
         upstream.serverInfo = upstream.serverGroupInfo.servers.find(x => x.status === 1)
 
@@ -50,9 +50,10 @@ module.exports = class GatewayUrlRouterMatch {
     /**
      * 计算路由匹配分值
      */
-    _getRouterMatchScore(router, urlPath) {
+    _getRouterMatchScore(routerObject, urlPath) {
 
         let matchScore = 0
+        let router = routerObject.toObject ? routerObject.toObject() : routerObject
         const routerSchemes = router.routerUrlRule.split('/').filter(x => x !== "")
         const urlPathSchemes = urlPath.split('/').filter(x => x !== "")
 
@@ -88,7 +89,7 @@ module.exports = class GatewayUrlRouterMatch {
      * 获取上游路由URL
      */
     _getUpstreamRouterUrl(routerInfo, url) {
-        
+
         const {forwardUriScheme} = routerInfo.upstream
         const upstreamRouterUrl = forwardUriScheme.split('/').map(segment => {
             if (customParamRegExp.test(segment)) {

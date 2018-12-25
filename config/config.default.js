@@ -2,8 +2,10 @@
 
 const fs = require('fs')
 const path = require('path')
+const gatewayRouterIgnore = [ctx => ctx.path === "/", "/gateway"]
 
 module.exports = app => {
+
     return {
         cluster: {
             listen: {port: 8895}
@@ -27,31 +29,42 @@ module.exports = app => {
             }
         },
 
-        ua: {
-            enable: true
-        },
-
         bodyParser: {
             enable: true,
+            enableTypes: ['json', 'form', 'text']
         },
 
         mongoose: {
             url: "mongodb://127.0.0.1:27017/api-gateway"
         },
 
-        middleware: ['gatewayErrorHandler', 'freelogGatewayMain', 'httpComponentHandler',
-            'apiMockHandler', 'httpProxyHandler', 'proxyResponseHandler', 'freelogGatewayTerminus'],
+        customLoader: ['app/event-handler'],
 
-        multipart: {
-            autoFields: false,
-            defaultCharset: 'utf8',
-            fieldNameSize: 100,
-            fieldSize: '100kb',
-            fields: 20,
-            fileSize: '100mb',
-            files: 10,
-            fileExtensions: [],
-            whitelist: (fileName) => true,
+        middleware: ['gatewayErrorHandler', 'freelogGatewayMain', 'httpComponentHandler', 'apiMockHandler', 'httpProxyHandler', 'proxyResponseHandler'],
+
+        freelogGatewayMain: {
+            enable: true,
+            ignore: gatewayRouterIgnore
+        },
+
+        httpComponentHandler: {
+            enable: true,
+            ignore: gatewayRouterIgnore
+        },
+
+        apiMockHandler: {
+            enable: true,
+            ignore: gatewayRouterIgnore
+        },
+
+        httpProxyHandler: {
+            enable: true,
+            ignore: gatewayRouterIgnore
+        },
+
+        proxyResponseHandler: {
+            enable: true,
+            ignore: gatewayRouterIgnore
         },
 
         freelogBase: {

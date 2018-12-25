@@ -1,5 +1,6 @@
 'use strict'
 
+const lodash = require('lodash')
 const Request = require('request')
 
 module.exports = class HttpRequestProxy {
@@ -24,46 +25,33 @@ module.exports = class HttpRequestProxy {
             encoding: null
         }
 
+        if (!["GET", "HEAD", "DELETE"].includes(method)) {
+            if (ctx.is('multipart') && ctx.req.readable) {
+                options.timeout = 1800000; //文件流超时设置为30分钟
+            }
+            if (ctx.is('json')) {
+                options.body = ctx.request.body
+                options.json = true
+            }
+            else if (ctx.is('urlencoded')) {
+                options.form = ctx.request.body
+            }
+            else if (lodash.isBuffer(ctx.request.body) || lodash.isString(ctx.request.body)) {
+                options.body = ctx.request.body
+            }
+        }
         ctx.proxy = {type: "request", gatewayUri: options.uri, method}
 
         //设置HOST,不然代理网页的时候无法正常加载
         options.headers.host = serverInfo.serverIp
         options.headers.requestId = ctx.request.requestId
 
-        delete options.headers['content-length']
-
-        if (["POST", "PUT"].includes(method)) {
-            if (ctx.is('urlencoded')) {
-                options.form = ctx.request.body
-            }
-            else if (ctx.is('json')) {
-                options.body = ctx.request.body
-                options.json = true
-            }
-            else if (!this._isEmptyObject(ctx.request.body)) {
-                options.body = ctx.request.body
-            }
-            else if (ctx.is('multipart') && ctx.req.readable) {
-                options.timeout = 1800000; //文件流超时设置为30分钟
-            }
-        }
-
         return new Promise((resolve, reject) => {
+            delete options.headers['content-length'] //放最后.不然影响ctx.is函数
             const proxyServer = Request(options, (error, response) => error ? reject(error) : resolve(response))
-            if (ctx.req.readable && ["POST", "PUT"].includes(method)) {
+            if (ctx.req.readable && !["GET", "HEAD", "DELETE"].includes(method)) {
                 ctx.req.pipe(proxyServer)
             }
         })
-    }
-
-    /**
-     * 是否空的object对象
-     * @private
-     */
-    _isEmptyObject(obj) {
-        if (toString.call(obj) !== "[object Object]") {
-            return false
-        }
-        return Object.keys(obj).length === 0
     }
 }
