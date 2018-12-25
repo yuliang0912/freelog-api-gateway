@@ -1,0 +1,21 @@
+FROM node:10.5.0
+
+MAINTAINER yuliang <yu.liang@freelog.com>
+
+RUN mkdir -p /data/freelog-api-gateway
+
+WORKDIR /data/freelog-api-gateway
+
+COPY . /data/freelog-api-gateway
+
+RUN npm install
+
+ENV NODE_ENV test
+ENV EGG_SERVER_ENV test
+ENV PORT 6895
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+EXPOSE 6895
+
+CMD [ "npm", "start" ]
