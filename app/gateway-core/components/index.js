@@ -1,7 +1,7 @@
 'use strict'
 
 const Patrun = require('patrun')
-const {ArgumentError} = require('egg-freelog-base/error')
+const {GatewayArgumentError} = require('egg-freelog-base/error')
 const JsonWebTokenAuthenticationComponent = require('./authentication/jwt-authentication')
 const JsonWebTokenNodeAuthenticationComponent = require('./authentication/jwt-node-authentication')
 const NullIdentityAuthenticationComponent = require('./authentication/null-identity-authentication')
@@ -26,7 +26,7 @@ module.exports = class ComponentHandler {
     async componentHandle(ctx, comName, comConfig) {
         const component = this.patrun.find({comName})
         if (!component) {
-            throw new ArgumentError(`参数comName:${comName}错误,未找到对应的组件`)
+            throw new GatewayArgumentError(`参数comName:${comName}错误,未找到对应的组件`)
         }
         return component.handle(ctx, comConfig)
     }

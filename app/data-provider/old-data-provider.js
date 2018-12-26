@@ -9,4 +9,8 @@ module.exports = class OldDataProvider extends KnexBaseOperation {
         super(app.knex.gateway("apiroutes"))
         this.app = app
     }
+
+    async getClients() {
+        return this.app.knex.gateway('apps').where({status:0}).select()
+    }
 }

@@ -25,9 +25,9 @@ module.exports = class InternalIdentityAuthenticationComponent {
             return comHandlerResult
         }
 
+        var internalIdentityInfo = {}
         try {
-            const clientTokenInfo = JSON.parse(new Buffer(tokenInfo, 'base64').toString())
-            comHandlerResult.attachData = clientTokenInfo.userInfo
+            internalIdentityInfo = JSON.parse(new Buffer(tokenInfo, 'base64').toString())
         } catch (e) {
             comHandlerResult.error = new GatewayAuthenticationError("内部身份认证失败", {e})
             comHandlerResult.tips = "内部身份认证失败,数据解析失败"
@@ -35,8 +35,20 @@ module.exports = class InternalIdentityAuthenticationComponent {
         }
 
         comHandlerResult.handleResult = true
+        comHandlerResult.attachData = internalIdentityInfo
 
-        ctx.gatewayInfo.identityInfo.userInfo = comHandlerResult.attachData
+        //透传的认证信息级别低于经过组件认证过的信息级别
+        const gatewayIdentityInfo = ctx.gatewayInfo.identityInfo
+        const {userInfo, nodeInfo, clientInfo} = internalIdentityInfo
+        if (userInfo) {
+            gatewayIdentityInfo.userInfo = gatewayIdentityInfo.userInfo || userInfo
+        }
+        if (nodeInfo) {
+            gatewayIdentityInfo.nodeInfo = gatewayIdentityInfo.nodeInfo || nodeInfo
+        }
+        if (clientInfo) {
+            gatewayIdentityInfo.clientInfo = gatewayIdentityInfo.clientInfo || clientInfo
+        }
 
         return comHandlerResult
     }

@@ -7,7 +7,7 @@ module.exports = class CreateTestDataImport extends Subscription {
     static get schedule() {
         return {
             type: 'worker',
-            cron: '*/30 * * * * * *', //从0分钟开始 30秒同步一次路有数据
+            cron: '*/5 * * * * * *', //从0分钟开始 30秒同步一次路有数据
             immediate: true, //立即执行一次
             disable: false
         }
@@ -20,12 +20,21 @@ module.exports = class CreateTestDataImport extends Subscription {
         })
 
         const count = await this.app.dal.apiRouterProvider.count({})
-        if (count > 0) {
-            return
+        if (count === 0) {
+            this.app.dal.oldDataProvider.find({status: 0}).then(list => {
+                list.forEach(routerInfo => this.importData(routerInfo))
+            })
         }
-        this.app.dal.oldDataProvider.find({status: 0}).then(list => {
-            list.forEach(routerInfo => this.importData(routerInfo))
-        })
+
+        const clientCount = await this.app.dal.clientInfoProvider.count({})
+        if (clientCount === 0) {
+            await this.app.dal.oldDataProvider.getClients().then(list => {
+                list.forEach(clientInfo => {
+                    clientInfo.status = 1
+                    this.app.dal.clientInfoProvider.create(clientInfo)
+                })
+            }).catch(console.error)
+        }
     }
 
     //mysql导入到mongodb

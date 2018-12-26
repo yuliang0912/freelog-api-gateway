@@ -21,8 +21,7 @@ module.exports = app => {
     }, {
         versionKey: false,
         timestamps: {createdAt: 'createDate', updatedAt: 'updateDate'},
-        toJSON: toObjectOptions,
-        toObject: toObjectOptions
+        toJSON: toObjectOptions
     })
 
     return mongoose.model('client-info', ClientInfoSchema)

@@ -20,6 +20,7 @@ module.exports = class JsonWebTokenAuthenticationComponent {
         const comHandlerResult = new ComHandlerResult(this.comName, this.comType)
 
         const jwtStr = ctx.cookies.get('authInfo') || ctx.get('authorization')
+
         if (!jwtStr) {
             comHandlerResult.error = new GatewayAuthenticationError('JWT认证失败,未获取到JWT信息')
             comHandlerResult.tips = "用户JWT认证失败"
