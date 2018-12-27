@@ -38,7 +38,7 @@ class ComponentHandler {
 
         let data = {routeId: ctx.gatewayInfo.routerInfo.id}
         const {componentProcessResult} = ctx.gatewayInfo
-        const isShowDetailErrors = ctx.checkQuery('isShowDetailErrors').optional().toInt().value
+        const isShowDetailErrors = ctx.checkQuery('isShowDetailErrors').optional().default(1).toInt().value
         if (isShowDetailErrors) {
             data.httpComponentRules = httpComponentRules
             data.componentProcessResult = componentProcessResult
