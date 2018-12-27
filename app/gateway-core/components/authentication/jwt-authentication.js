@@ -18,10 +18,12 @@ module.exports = class JsonWebTokenAuthenticationComponent {
     async handle(ctx, config) {
 
         const comHandlerResult = new ComHandlerResult(this.comName, this.comType)
-        const jwtStr = ctx.cookies.get('authInfo') || ctx.get('authorization')
 
+        var jwtStr = ctx.cookies.get('authInfo') || ctx.get('authorization')
         if (!jwtStr) {
-            console.log(ctx.cookies, ctx.cookies.get('authInfo'), ctx.cookies.get('authinfo'))
+            jwtStr = this._getCookie(ctx.headers.cookie || '', 'authInfo')
+        }
+        if (!jwtStr) {
             comHandlerResult.error = new GatewayAuthenticationError('JWT认证失败,未获取到JWT信息')
             comHandlerResult.tips = "用户JWT认证失败"
             return comHandlerResult
@@ -62,6 +64,19 @@ module.exports = class JsonWebTokenAuthenticationComponent {
     _getExpire(expireSpan = 0) {
         const currTime = Math.round(new Date().getTime() / 1000)
         return currTime + expireSpan
+    }
+
+    /**
+     * egg经常获取不到cookie
+     * @private
+     */
+    _getCookie(cookie, name) {
+        let arr;
+        let reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = cookie.match(reg))
+            return unescape(arr[2]);
+        else
+            return null
     }
 }
 
