@@ -62,18 +62,5 @@ module.exports = class JsonWebTokenAuthenticationComponent {
         const currTime = Math.round(new Date().getTime() / 1000)
         return currTime + expireSpan
     }
-
-    /**
-     * egg经常获取不到cookie
-     * @private
-     */
-    _getCookie(cookie, name) {
-        let arr;
-        let reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = cookie.match(reg))
-            return unescape(arr[2]);
-        else
-            return null
-    }
 }
 

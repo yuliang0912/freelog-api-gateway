@@ -27,7 +27,7 @@ module.exports = class InternalIdentityAuthenticationComponent {
 
         var internalIdentityInfo = {}
         try {
-            internalIdentityInfo = JSON.parse(new Buffer(tokenInfo, 'base64').toString())
+            internalIdentityInfo = JSON.parse(Buffer.from(tokenInfo, "base64").toString())
         } catch (e) {
             comHandlerResult.error = new GatewayAuthenticationError("内部身份认证失败", {e})
             comHandlerResult.tips = "内部身份认证失败,数据解析失败"
