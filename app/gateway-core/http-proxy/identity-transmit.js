@@ -8,6 +8,6 @@ module.exports = (ctx) => {
         ctx.headers['auth-token'] = new Buffer(JSON.stringify(identityInfo)).toString('base64')
     }
     else {
-        delete ctx.headers['auth-token']
+        //delete ctx.headers['auth-token']
     }
 }
