@@ -54,7 +54,7 @@ module.exports = class ClientCredentialsAuthenticationComponent {
         comHandlerResult.handleResult = true
         comHandlerResult.attachData = {clientInfo}
 
-        ctx.gatewayInfo.identityInfo.clientInfo = lodash.pick(clientInfo, ['clientId', 'clientName'])
+        ctx.gatewayInfo.identityInfo.clientInfo = clientInfo
 
         return comHandlerResult
     }

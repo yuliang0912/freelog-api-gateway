@@ -7,7 +7,7 @@ module.exports = class CreateTestDataImport extends Subscription {
     static get schedule() {
         return {
             type: 'worker',
-            cron: '*/5 * * * * * *', //从0分钟开始 30秒同步一次路有数据
+            cron: '*/10 * * * * * *', //10秒同步一次路由数据
             immediate: true, //立即执行一次
             disable: false
         }

@@ -6,6 +6,9 @@ module.exports = (ctx) => {
 
     const {identityInfo} = ctx.gatewayInfo
     if (!lodash.isEqual(identityInfo, {})) {
+        if (identityInfo.clientInfo) {
+            identityInfo.clientInfo = lodash.pick(identityInfo.clientInfo, ['clientId', 'clientName'])
+        }
         ctx.headers['auth-token'] = Buffer.from(JSON.stringify(identityInfo)).toString("base64")
     }
     else {
