@@ -34,17 +34,17 @@ module.exports = class GatewayUrlRouterMatch {
      */
     async getUpstreamInfo(routerInfo, url, method) {
 
-        const newUpstream = Object.assign({}, routerInfo.upstream)
+        const {upstream} = routerInfo
 
-        newUpstream.forwardUri = this._getUpstreamRouterUrl(routerInfo, url)
-        newUpstream.method = newUpstream.method || method
-        newUpstream.serverInfo = newUpstream.serverGroupInfo.servers.find(x => x.status === 1)
+        upstream.forwardUri = this._getUpstreamRouterUrl(routerInfo, url)
+        upstream.method = upstream.method || method
+        upstream.serverInfo = upstream.serverGroupInfo.servers.find(x => x.status === 1)
 
-        if (!newUpstream.serverInfo) {
-            throw new GatewayRouterMatchError('没有可路由的上游服务器', {url, newUpstream})
+        if (!upstream.serverInfo) {
+            throw new GatewayRouterMatchError('没有可路由的上游服务器', {url, upstream})
         }
 
-        return newUpstream
+        return upstream
     }
 
     /**
@@ -53,9 +53,10 @@ module.exports = class GatewayUrlRouterMatch {
     _getRouterMatchScore(routerObject, urlPath) {
 
         let matchScore = 0
-        let router = routerObject.toObject ? routerObject.toObject() : routerObject
-        const routerSchemes = router.routerUrlRule.split('/').filter(x => x !== "")
-        const urlPathSchemes = urlPath.split('/').filter(x => x !== "")
+        const router = lodash.clone(routerObject)  //克隆一个新对象,防止全局变量在后面被并发修改导致错误
+
+        const urlPathSchemes = lodash.trim(urlPath, '/').split('/')
+        const routerSchemes = lodash.trim(router.routerUrlRule, '/').split('/')
 
         if (urlPathSchemes.length < routerSchemes.length) {
             router.matchScore = matchScore
@@ -90,7 +91,7 @@ module.exports = class GatewayUrlRouterMatch {
      */
     _getUpstreamRouterUrl(routerInfo, url) {
 
-        const {forwardUriScheme} = routerInfo.upstream
+        const {forwardUriScheme} = routerInfo
         const upstreamRouterUrl = forwardUriScheme.split('/').map(segment => {
             if (customParamRegExp.test(segment)) {
                 return routerInfo.customParamsMap.has(segment.substring(1)) ? routerInfo.customParamsMap.get(segment.substring(1)) : ''
