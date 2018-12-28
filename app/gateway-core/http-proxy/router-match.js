@@ -91,7 +91,7 @@ module.exports = class GatewayUrlRouterMatch {
      */
     _getUpstreamRouterUrl(routerInfo, url) {
 
-        const {forwardUriScheme} = routerInfo
+        const {forwardUriScheme} = routerInfo.upstream
         const upstreamRouterUrl = forwardUriScheme.split('/').map(segment => {
             if (customParamRegExp.test(segment)) {
                 return routerInfo.customParamsMap.has(segment.substring(1)) ? routerInfo.customParamsMap.get(segment.substring(1)) : ''
