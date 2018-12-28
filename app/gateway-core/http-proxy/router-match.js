@@ -34,17 +34,17 @@ module.exports = class GatewayUrlRouterMatch {
      */
     async getUpstreamInfo(routerInfo, url, method) {
 
-        const {upstream} = routerInfo
-        upstream.forwardUri = this._getUpstreamRouterUrl(routerInfo, url)
-        //upstream.serverGroupInfo = await this.serverGroupProvider.findById(upstream.serverGroupId)
-        upstream.method = upstream.method || method
-        upstream.serverInfo = upstream.serverGroupInfo.servers.find(x => x.status === 1)
+        const newUpstream = Object.assign({}, routerInfo.upstream)
 
-        if (!upstream.serverInfo) {
-            throw new GatewayRouterMatchError('没有可路由的上游服务器', {url, upstream})
+        newUpstream.forwardUri = this._getUpstreamRouterUrl(routerInfo, url)
+        newUpstream.method = newUpstream.method || method
+        newUpstream.serverInfo = newUpstream.serverGroupInfo.servers.find(x => x.status === 1)
+
+        if (!newUpstream.serverInfo) {
+            throw new GatewayRouterMatchError('没有可路由的上游服务器', {url, newUpstream})
         }
 
-        return routerInfo
+        return newUpstream
     }
 
     /**

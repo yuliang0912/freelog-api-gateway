@@ -14,11 +14,7 @@ module.exports = (option, app) => {
 
         const {routerInfo} = ctx.gatewayInfo
 
-        const {upstream} = await gatewayUrlRouterMatchHandler.getUpstreamInfo(routerInfo, ctx.url, ctx.method)
-
-        if (routerInfo.routerId.toString() === "5c2317767363e3002cc5933a") {
-            console.log(ctx.url, ctx.method, JSON.stringify(upstream))
-        }
+        const upstream = await gatewayUrlRouterMatchHandler.getUpstreamInfo(routerInfo, ctx.url, ctx.method)
 
         ctx.set('x-router-id', routerInfo.routerId)
 
