@@ -1,7 +1,7 @@
 'use strict'
 
 const ComHandlerResult = require('../com-handle-result')
-const {GatewayAuthenticationError} = require('egg-freelog-base/error')
+const {GatewayArgumentError, GatewayAuthenticationError} = require('egg-freelog-base/error')
 const cryptoHelper = require('egg-freelog-base/app/extend/helper/crypto_helper')
 
 module.exports = class InternalIdentityAuthenticationComponent {
@@ -19,15 +19,21 @@ module.exports = class InternalIdentityAuthenticationComponent {
 
         const tokenInfo = ctx.get('authentication')
         const comHandlerResult = new ComHandlerResult(this.comName, this.comType)
-
         if (!tokenInfo) {
             comHandlerResult.error = new GatewayAuthenticationError("内部身份认证失败", {tokenInfo})
             comHandlerResult.tips = "内部身份认证失败,未获取到有效内部身份"
             return comHandlerResult
         }
 
-        const gatewayIdentityInfo = ctx.gatewayInfo.identityInfo
-        if (!gatewayIdentityInfo.clientInfo) {
+        const clientId = ctx.checkHeader("clientid").notEmpty().toInt().value
+        if (!clientId) {
+            comHandlerResult.error = new GatewayArgumentError("参数校验错误", {clientId})
+            comHandlerResult.tips = "参数校验失败,details" + JSON.stringify(ctx.errors)
+            return comHandlerResult
+        }
+
+        const clientInfo = ctx.app.__cache__.clientInfo[clientId]
+        if (!clientInfo) {
             comHandlerResult.error = new GatewayAuthenticationError("内部身份认证失败,未获得client信息")
             comHandlerResult.tips = "内部身份认证失败,未获得client信息"
             return comHandlerResult
@@ -39,7 +45,7 @@ module.exports = class InternalIdentityAuthenticationComponent {
             comHandlerResult.tips = "内部身份认证失败,数据格式错误"
             return comHandlerResult
         }
-        if (cryptoHelper.hmacSha1(token, gatewayIdentityInfo.clientInfo.privateKey) !== sign) {
+        if (cryptoHelper.hmacSha1(token, clientInfo.privateKey) !== sign) {
             comHandlerResult.error = new GatewayAuthenticationError("内部身份认证失败")
             comHandlerResult.tips = "内部身份认证失败,签名校验失败"
             return comHandlerResult
@@ -58,16 +64,7 @@ module.exports = class InternalIdentityAuthenticationComponent {
         comHandlerResult.attachData = internalIdentityInfo
 
         //透传的认证信息级别低于经过组件认证过的信息级别
-        const {userInfo, nodeInfo, clientInfo} = internalIdentityInfo
-        if (userInfo) {
-            gatewayIdentityInfo.userInfo = gatewayIdentityInfo.userInfo || userInfo
-        }
-        if (nodeInfo) {
-            gatewayIdentityInfo.nodeInfo = gatewayIdentityInfo.nodeInfo || nodeInfo
-        }
-        if (clientInfo) {
-            gatewayIdentityInfo.clientInfo = gatewayIdentityInfo.clientInfo || clientInfo
-        }
+        ctx.gatewayInfo.identityInfo = Object.assign(internalIdentityInfo, ctx.gatewayInfo.identityInfo, {clientInfo})
 
         return comHandlerResult
     }

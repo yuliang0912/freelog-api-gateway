@@ -13,7 +13,13 @@ module.exports = (option, app) => {
     return async function (ctx, next) {
 
         const {routerInfo} = ctx.gatewayInfo
+
         const {upstream} = await gatewayUrlRouterMatchHandler.getUpstreamInfo(routerInfo, ctx.url, ctx.method)
+
+        if (routerInfo.routerId.toString() === "5c2317767363e3002cc5933a") {
+            console.log(ctx.url, ctx.method, JSON.stringify(upstream))
+        }
+
         ctx.set('x-router-id', routerInfo.routerId)
 
         identityTransmit(ctx)
