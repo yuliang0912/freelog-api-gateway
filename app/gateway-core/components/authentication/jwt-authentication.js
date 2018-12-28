@@ -26,7 +26,7 @@ module.exports = class JsonWebTokenAuthenticationComponent {
             return comHandlerResult
         }
 
-        const [header, payload, signature] = jwtStr.replace(/^Bearer $/, "").split('.')
+        const [header, payload, signature] = jwtStr.replace(/^(Bearer )?/i, '').split('.')
         if (!header || !payload || !signature) {
             comHandlerResult.error = new GatewayAuthenticationError('JWT认证失败,数据规则校验失败')
             comHandlerResult.tips = "用户JWT数据校验失败"
