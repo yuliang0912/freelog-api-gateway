@@ -50,11 +50,9 @@ module.exports = class GatewayUrlRouterMatch {
     /**
      * 计算路由匹配分值
      */
-    _getRouterMatchScore(routerObject, urlPath) {
+    _getRouterMatchScore(router, urlPath) {
 
         let matchScore = 0
-        const router = lodash.clone(routerObject)  //克隆一个新对象,防止全局变量在后面被并发修改导致错误
-
         const urlPathSchemes = lodash.trim(urlPath, '/').split('/')
         const routerSchemes = lodash.trim(router.routerUrlRule, '/').split('/')
 
