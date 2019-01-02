@@ -2,7 +2,7 @@
 
 const fs = require('fs')
 const path = require('path')
-const gatewayRouterIgnore = [ctx => ctx.path === "/", "/gateway"]
+const gatewayRouterIgnore = [ctx => ctx.path === "/", ctx => ctx.path.startsWith("/gateway")]
 
 module.exports = app => {
 

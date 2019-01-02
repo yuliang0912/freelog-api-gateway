@@ -29,7 +29,7 @@ module.exports = {
     getRouterListByPrefix(routerPrefix) {
         const routerPrefixGroup = this.__cache__.routerPrefixGroup
         const routerList = routerPrefixGroup ? routerPrefixGroup[routerPrefix.toLowerCase()] : []
-        return routerList.map(x => lodash.cloneDeep(x))
+        return routerList ? routerList.map(x => lodash.cloneDeep(x)) : []
     },
 
     /**
