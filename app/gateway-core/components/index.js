@@ -8,7 +8,7 @@ const NullIdentityAuthenticationComponent = require('./authentication/null-ident
 const InternalIdentityAuthenticationComponent = require('./authentication/internal-identity-authentication')
 const IpBlackWhiteListAuthenticationComponent = require('./authentication/ip-black-white-list-authentication')
 const ClientCredentialsAuthenticationComponent = require('./authentication/client-credentials-authentication')
-
+const ClientInternalIdentityAuthenticationComponent = require('./authentication/client-internal-identity-authentication')
 
 module.exports = class ComponentHandler {
 
@@ -45,7 +45,8 @@ module.exports = class ComponentHandler {
             new JsonWebTokenNodeAuthenticationComponent(app),
             new InternalIdentityAuthenticationComponent(app),
             new IpBlackWhiteListAuthenticationComponent(app),
-            new ClientCredentialsAuthenticationComponent(app)
+            new ClientCredentialsAuthenticationComponent(app),
+            new ClientInternalIdentityAuthenticationComponent(app)
         ]
 
         components.forEach(com => patrun.add({comName: com.comName}, com))

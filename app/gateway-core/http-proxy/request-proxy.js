@@ -40,7 +40,7 @@ module.exports = class HttpRequestProxy {
                 options.body = ctx.request.body
             }
         }
-        ctx.proxy = {type: "request", gatewayUri: options.uri, method}
+        ctx.proxyInfo = {type: "request", gatewayUri: options.uri, method}
 
         //设置HOST,不然代理网页的时候无法正常加载
         options.headers.host = serverInfo.serverIp
@@ -48,6 +48,7 @@ module.exports = class HttpRequestProxy {
 
         return new Promise((resolve, reject) => {
             delete options.headers['content-length'] //放最后.不然影响ctx.is函数
+            ctx.startProxyStartTime = Date.now()
             const proxyServer = Request(options, (error, response) => error ? reject(error) : resolve(response))
             if (ctx.req.readable && !["GET", "HEAD", "DELETE"].includes(method)) {
                 ctx.req.pipe(proxyServer)

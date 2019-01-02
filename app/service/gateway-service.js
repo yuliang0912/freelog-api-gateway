@@ -1,6 +1,5 @@
 'use strict'
 
-const lodash = require('lodash')
 const Service = require('egg').Service
 const {GatewayInfoUpdateEvent} = require('../enum/app-event-emitter-enum')
 
@@ -8,6 +7,7 @@ module.exports = class GatewayService extends Service {
 
     constructor({app}) {
         super(...arguments)
+        this.app = app
         this.apiRouterProvider = app.dal.apiRouterProvider
         this.clientInfoProvider = app.dal.clientInfoProvider
         this.serverGroupProvider = app.dal.serverGroupProvider
@@ -20,20 +20,8 @@ module.exports = class GatewayService extends Service {
      * @returns {Promise<*>}
      */
     async getRouterListByPrefix(routerPrefix, method) {
-
-        const routerPrefixGroup = this.app.__cache__.routerPrefixGroup
-        const routerPrefixRouters = routerPrefixGroup ? routerPrefixGroup[routerPrefix.toLowerCase()] : null
-
-        if (!routerPrefixRouters) {
-            return []
-        }
-        return routerPrefixRouters.reduce((acc, router) => {
-            if (router.httpMethod.some(m => m.toUpperCase() === "ALL" || m.toUpperCase() === method)) {
-                //克隆一个新对象,防止全局变量在后面被并发修改导致错误
-                acc.push(lodash.cloneDeep(router))
-            }
-            return acc
-        }, [])
+        return this.app.getRouterListByPrefix(routerPrefix)
+            .filter(x => x.httpMethod.some(m => m.toUpperCase() === "ALL" || m.toUpperCase() === method))
     }
 
     /**

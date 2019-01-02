@@ -21,9 +21,9 @@ module.exports = class ClientCredentialsAuthenticationComponent {
 
         const comHandlerResult = new ComHandlerResult(this.comName, this.comType)
 
-        const clientId = ctx.checkHeader("clientid").notEmpty().toInt().value
-        const timeLine = ctx.checkHeader("timeline").notEmpty().toInt().value
-        const sign = ctx.checkHeader("sign").notEmpty().value
+        const clientId = ctx.checkHeader("clientid").exist().notEmpty().toInt().value
+        const timeLine = ctx.checkHeader("timeline").exist().notEmpty().toInt().value
+        const sign = ctx.checkHeader("sign").exist().notEmpty().value
 
         if (ctx.errors.length) {
             comHandlerResult.error = new GatewayArgumentError("参数校验错误", {clientId, timeLine, sign})
@@ -32,12 +32,14 @@ module.exports = class ClientCredentialsAuthenticationComponent {
         }
 
         if (Math.abs(moment().format('X') - timeLine) > 180) {
-            comHandlerResult.error = new GatewayAuthenticationError("参数timeLine验证失败,timeLine校验不通过", {timeLine})
+            comHandlerResult.error = new GatewayAuthenticationError("参数timeLine验证失败,timeLine校验不通过", {
+                timeLine, currentTime: moment().format('X')
+            })
             comHandlerResult.tips = "客户端认证失败"
             return comHandlerResult
         }
 
-        const clientInfo = ctx.app.__cache__.clientInfo[clientId]
+        const clientInfo = this.app.getClientInfo(clientId)
         if (!clientInfo) {
             comHandlerResult.error = new GatewayAuthenticationError("client认证失败,未获取到有效的clientInfo", {clientId})
             comHandlerResult.tips = "客户端认证失败"
@@ -46,7 +48,9 @@ module.exports = class ClientCredentialsAuthenticationComponent {
 
         const text = ctx.url + "&timeline=" + timeLine
         if (cryptoHelper.hmacSha1(text, clientInfo.privateKey) !== sign) {
-            comHandlerResult.error = new GatewayAuthenticationError("client认证失败,签名不匹配", {clientId})
+            comHandlerResult.error = new GatewayAuthenticationError("client认证失败,签名不匹配", {
+                clientId, sign: cryptoHelper.hmacSha1(text, clientInfo.privateKey)
+            })
             comHandlerResult.tips = "客户端认证失败,签名不匹配"
             return comHandlerResult
         }
@@ -54,7 +58,7 @@ module.exports = class ClientCredentialsAuthenticationComponent {
         comHandlerResult.handleResult = true
         comHandlerResult.attachData = {clientInfo}
 
-        ctx.gatewayInfo.identityInfo.clientInfo = clientInfo
+        ctx.gatewayInfo.identityInfo.clientInfo = lodash.pick(clientInfo, ['clientId', 'clientName'])
 
         return comHandlerResult
     }

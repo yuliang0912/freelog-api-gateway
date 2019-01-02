@@ -38,11 +38,12 @@ class ComponentHandler {
 
         let data = {routeId: ctx.gatewayInfo.routerInfo.id}
         const {componentProcessResult} = ctx.gatewayInfo
-        const isShowDetailErrors = ctx.checkQuery('isShowDetailErrors').optional().default(1).toInt().value
-        if (isShowDetailErrors) {
-            data.httpComponentRules = httpComponentRules
-            data.componentProcessResult = componentProcessResult
-        }
+
+        // 目前先放开所有的组件处理错误结果
+        // const isShowDetailErrors = ctx.checkQuery('isShowDetailErrors').optional().toInt().default(1).value
+
+        data.httpComponentRules = httpComponentRules
+        data.componentProcessResult = componentProcessResult
 
         const lastHandleFailedResult = componentProcessResult.reverse().find(x => !x.handleResult)
 

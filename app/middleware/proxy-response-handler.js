@@ -1,5 +1,7 @@
 'use strict'
 
+const lodash = require('lodash')
+
 class ComponentHandler {
 
     constructor(app) {
@@ -22,7 +24,7 @@ class ComponentHandler {
          */
         if (!this._isJson(headers) && !this._isAttachment(headers)) {
             ctx.status = 500
-            ctx.error({msg: "上游API未返回协议格式", data: {proxy: ctx.proxy, body: body.toString()}})
+            ctx.error({msg: "上游API未按协议返回数据格式", data: {proxy: ctx.proxyInfo, body: body.toString()}})
         }
 
         ctx.body = body

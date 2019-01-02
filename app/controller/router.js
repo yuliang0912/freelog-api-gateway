@@ -37,7 +37,8 @@ module.exports = class RouterController extends Controller {
 
         const routerId = ctx.checkParams("id").isMongoObjectId().value
 
-        await this.apiRouterProvider.findById(routerId).then(ctx.success)
+        ctx.success(ctx.app.getRouterInfo(routerId))
+
     }
 
     /**
@@ -51,6 +52,8 @@ module.exports = class RouterController extends Controller {
 
         await this.apiRouterProvider.updateOne({_id: routerId}, {status: 0})
             .then(({nModified}) => ctx.success(nModified > 0))
+
+        this.syncRouterData(ctx).then()
     }
 
     /**
@@ -69,5 +72,14 @@ module.exports = class RouterController extends Controller {
      */
     async create(ctx) {
 
+        const body = ctx.request.body
+
+        const list = JSON.parse(body)
+
+        list.forEach(item => {
+            this.apiRouterProvider.create(item)
+        })
+
+        ctx.success(true)
     }
 }

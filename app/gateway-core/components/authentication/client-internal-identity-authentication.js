@@ -4,9 +4,10 @@ const ComHandlerResult = require('../com-handle-result')
 const {GatewayArgumentError, GatewayAuthenticationError} = require('egg-freelog-base/error')
 const cryptoHelper = require('egg-freelog-base/app/extend/helper/crypto_helper')
 
-module.exports = class InternalIdentityAuthenticationComponent {
+module.exports = class ClientInternalIdentityAuthenticationComponent {
 
     constructor(app) {
+        this.app = app
         this.comName = "client-internal-identity"
         this.comType = "authentication"
     }
@@ -25,14 +26,14 @@ module.exports = class InternalIdentityAuthenticationComponent {
             return comHandlerResult
         }
 
-        const clientId = ctx.checkHeader("clientid").notEmpty().toInt().value
+        const clientId = ctx.checkHeader("clientid").exist().toInt().value
         if (!clientId) {
             comHandlerResult.error = new GatewayArgumentError("参数校验错误", {clientId})
             comHandlerResult.tips = "参数校验失败,details" + JSON.stringify(ctx.errors)
             return comHandlerResult
         }
 
-        const clientInfo = ctx.app.__cache__.clientInfo[clientId]
+        const clientInfo = this.app.getClientInfo(clientId)
         if (!clientInfo) {
             comHandlerResult.error = new GatewayAuthenticationError("内部身份认证失败,未获得client信息")
             comHandlerResult.tips = "内部身份认证失败,未获得client信息"
@@ -46,7 +47,7 @@ module.exports = class InternalIdentityAuthenticationComponent {
             return comHandlerResult
         }
         if (cryptoHelper.hmacSha1(token, clientInfo.privateKey) !== sign) {
-            comHandlerResult.error = new GatewayAuthenticationError("内部身份认证失败")
+            comHandlerResult.error = new GatewayAuthenticationError("内部身份认证失败", {sign: cryptoHelper.hmacSha1(token, clientInfo.privateKey)})
             comHandlerResult.tips = "内部身份认证失败,签名校验失败"
             return comHandlerResult
         }
@@ -62,9 +63,9 @@ module.exports = class InternalIdentityAuthenticationComponent {
 
         comHandlerResult.handleResult = true
         comHandlerResult.attachData = internalIdentityInfo
-
+        
         //透传的认证信息级别低于经过组件认证过的信息级别
-        ctx.gatewayInfo.identityInfo = Object.assign(internalIdentityInfo, ctx.gatewayInfo.identityInfo, {clientInfo})
+        ctx.gatewayInfo.identityInfo = Object.assign(internalIdentityInfo, ctx.gatewayInfo.identityInfo)
 
         return comHandlerResult
     }

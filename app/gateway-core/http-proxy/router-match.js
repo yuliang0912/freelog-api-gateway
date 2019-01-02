@@ -91,11 +91,11 @@ module.exports = class GatewayUrlRouterMatch {
 
         const {forwardUriScheme} = routerInfo.upstream
         const upstreamRouterUrl = forwardUriScheme.split('/').map(segment => {
-            if (customParamRegExp.test(segment)) {
-                return routerInfo.customParamsMap.has(segment.substring(1)) ? routerInfo.customParamsMap.get(segment.substring(1)) : ''
-            } else {
+            if (!customParamRegExp.test(segment)) {
                 return segment
             }
+            const paramName = segment.substring(1)
+            return routerInfo.customParamsMap.has(paramName) ? routerInfo.customParamsMap.get(paramName) : ''
         }).join("/")
 
         return url.replace(new RegExp(lodash.trimEnd(routerInfo.routerUrl, '/'), "i"), lodash.trimEnd(upstreamRouterUrl, '/'))
