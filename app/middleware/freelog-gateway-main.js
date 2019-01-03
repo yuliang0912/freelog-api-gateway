@@ -26,11 +26,12 @@ module.exports = (option, app) => {
 
         const routerList = await ctx.service.gatewayService.getRouterListByPrefix(`/${first}/${second}/`, method)
 
-        const routerInfo = await gatewayUrlRouterMatchHandler.matchRouterInfo(routerList, path)
+        const routerInfo = await gatewayUrlRouterMatchHandler.matchRouterInfo(routerList, path, method)
         if (!routerInfo) {
             return routerNotMatchErrorHandler(ctx)
         }
 
+        ctx.set('x-router-id', routerInfo.routerId)
         ctx.gatewayInfo = {routerInfo, identityInfo: {}, componentProcessResult: []}
 
         await next()

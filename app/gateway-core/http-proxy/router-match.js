@@ -14,7 +14,7 @@ module.exports = class GatewayUrlRouterMatch {
      * 获取上游路由信息
      * @param routerList
      */
-    async matchRouterInfo(routerList, path) {
+    async matchRouterInfo(routerList, path, method) {
 
         if (!path.endsWith('/')) {
             path = path + '/'
@@ -24,7 +24,7 @@ module.exports = class GatewayUrlRouterMatch {
             return null
         }
 
-        const matchRouterInfo = lodash.chain(routerList).map(router => this._getRouterMatchScore(router, path)).orderBy('matchScore', 'desc').first().value()
+        const matchRouterInfo = lodash.chain(routerList).map(router => this._getRouterMatchScore(router, path, method)).orderBy('matchScore', 'desc').first().value()
 
         return matchRouterInfo.matchScore <= 0 ? null : matchRouterInfo
     }
@@ -50,7 +50,7 @@ module.exports = class GatewayUrlRouterMatch {
     /**
      * 计算路由匹配分值
      */
-    _getRouterMatchScore(router, urlPath) {
+    _getRouterMatchScore(router, urlPath, method) {
 
         let matchScore = 0
         const urlPathSchemes = lodash.trim(urlPath, '/').split('/')
@@ -68,7 +68,7 @@ module.exports = class GatewayUrlRouterMatch {
                 routerUrl.push(routerSchemes[i])
             }
             else if (customParamRegExp.test(routerSchemes[i])) {
-                matchScore += 0.99
+                matchScore += 0.8
                 routerUrl.push(urlPathSchemes[i])
                 customParamsMap.set(routerSchemes[i].substring(1), urlPathSchemes[i])
             }
@@ -76,6 +76,10 @@ module.exports = class GatewayUrlRouterMatch {
                 matchScore = 0
                 break
             }
+        }
+        //method完全匹配比ALL匹配分值更高
+        if (matchScore > 0 && router.httpMethod.includes(method)) {
+            matchScore += 0.1
         }
         router.matchScore = matchScore
         router.routerUrl = routerUrl.join("/")
