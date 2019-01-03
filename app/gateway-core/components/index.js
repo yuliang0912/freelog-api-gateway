@@ -2,6 +2,7 @@
 
 const Patrun = require('patrun')
 const {GatewayArgumentError} = require('egg-freelog-base/error')
+const RouterTrafficStatisticsComponent = require('./other/traffic-statistics')
 const JsonWebTokenAuthenticationComponent = require('./authentication/jwt-authentication')
 const JsonWebTokenNodeAuthenticationComponent = require('./authentication/jwt-node-authentication')
 const NullIdentityAuthenticationComponent = require('./authentication/null-identity-authentication')
@@ -40,6 +41,7 @@ module.exports = class ComponentHandler {
         const {app, patrun} = this
 
         const components = [
+            new RouterTrafficStatisticsComponent(app),
             new JsonWebTokenAuthenticationComponent(app),
             new NullIdentityAuthenticationComponent(app),
             new JsonWebTokenNodeAuthenticationComponent(app),
