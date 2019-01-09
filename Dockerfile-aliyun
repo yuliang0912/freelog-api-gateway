@@ -12,10 +12,10 @@ RUN npm install
 
 ENV NODE_ENV prod
 ENV EGG_SERVER_ENV prod
-ENV PORT 8895
+ENV PORT 8896
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-EXPOSE 8895
+EXPOSE 8896
 
 CMD [ "npm", "start" ]
