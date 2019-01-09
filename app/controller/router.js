@@ -1,5 +1,6 @@
 'use strict';
 
+const lodash = require('lodash')
 const Controller = require('egg').Controller;
 
 module.exports = class RouterController extends Controller {
@@ -39,6 +40,14 @@ module.exports = class RouterController extends Controller {
 
         ctx.success(ctx.app.getRouterInfo(routerId))
 
+        
+        this.apiRouterProvider.find({routerPrefix: '/test/v1/'}).each(router => {
+
+            const rule = '/' + lodash.trimStart(router.routerUrlRule, '/test')
+            const prefix = lodash.take(rule.split('/'), 3).join('/') + '/'
+
+            router.updateOne({routerUrlRule: rule, routerPrefix: prefix})
+        })
     }
 
     /**
