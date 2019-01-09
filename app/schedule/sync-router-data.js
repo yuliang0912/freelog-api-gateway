@@ -18,23 +18,6 @@ module.exports = class CreateTestDataImport extends Subscription {
         await this.ctx.service.gatewayService.getAllRouterInfo().catch(error => {
             console.log('路由配置信息同步失败', error)
         })
-
-        const count = await this.app.dal.apiRouterProvider.count({})
-        if (count === 0) {
-            this.app.dal.oldDataProvider.find({status: 0}).then(list => {
-                list.forEach(routerInfo => this.importData(routerInfo))
-            })
-        }
-
-        const clientCount = await this.app.dal.clientInfoProvider.count({})
-        if (clientCount === 0) {
-            await this.app.dal.oldDataProvider.getClients().then(list => {
-                list.forEach(clientInfo => {
-                    clientInfo.status = 1
-                    this.app.dal.clientInfoProvider.create(clientInfo)
-                })
-            }).catch(console.error)
-        }
     }
 
     //mysql导入到mongodb
