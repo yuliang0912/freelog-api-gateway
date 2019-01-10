@@ -15,8 +15,6 @@ module.exports = (ctx, error) => {
 
     const msg = `上游服务器错误。${codeMsgMap[code] || ''}`
 
-    console.log(error)
-
     ctx.status = statusCode || 404
 
     throw new GatewayUpstreamApiError(msg, {code, statusCode, error: error.stack || error.message})

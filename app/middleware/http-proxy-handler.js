@@ -25,6 +25,7 @@ module.exports = (option, app) => {
             ctx.proxyResponse = response
             ctx.set('x-proxy-time', Date.now() - ctx.startProxyStartTime)
         }).catch(error => httpRequestProxyErrorHandler(ctx, error))
+
         await next()
     }
 }
