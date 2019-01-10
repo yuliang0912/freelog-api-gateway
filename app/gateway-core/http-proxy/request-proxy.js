@@ -1,7 +1,7 @@
 'use strict'
 
 const lodash = require('lodash')
-const Request = require('request-promise')
+const Request = require('request')
 
 module.exports = class HttpRequestProxy {
 
