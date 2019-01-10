@@ -36,19 +36,19 @@ module.exports = class HttpRequestProxy {
             ctx.req.pipe(proxyServer)
         }
 
-        return new Promise(function (resolve, reject) {
-            proxyServer.on('response', resolve).on('error', reject).pipe(ctx.res)
-        })
-        //
-        // return new Promise((resolve, reject) => {
-        //     ctx.startProxyStartTime = Date.now()
-        //     ctx.proxyInfo = {type: "request", gatewayUri: options.uri, method}
-        //     delete options.headers['content-length'] //放最后.不然影响ctx.is函数
-        //     const proxyServer = Request(options, (error, response) => error ? reject(error) : resolve(response))
-        //     //网关不再解析body内容,直接通过流式传递
-        //     if (ctx.req.readable && !["GET", "HEAD", "DELETE"].includes(method)) {
-        //         ctx.req.pipe(proxyServer)
-        //     }
+        // return new Promise(function (resolve, reject) {
+        //     proxyServer.on('response', resolve).on('error', reject).pipe(ctx.res)
         // })
+        //
+        return new Promise((resolve, reject) => {
+            ctx.startProxyStartTime = Date.now()
+            ctx.proxyInfo = {type: "request", gatewayUri: options.uri, method}
+            delete options.headers['content-length'] //放最后.不然影响ctx.is函数
+            const proxyServer = Request(options, (error, response) => error ? reject(error) : resolve(response))
+            //网关不再解析body内容,直接通过流式传递
+            if (ctx.req.readable && !["GET", "HEAD", "DELETE"].includes(method)) {
+                ctx.req.pipe(proxyServer)
+            }
+        })
     }
 }

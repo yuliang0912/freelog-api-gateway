@@ -19,12 +19,12 @@ module.exports = (option, app) => {
         identityTransmit(ctx)
 
         //修改为直接pipe(ctx.res),如果进入此处,则所有中间件不能在处理控制body了
-        await httpRequestProxy.httpProxy(ctx, upstream).catch(error => httpRequestProxyErrorHandler(ctx, error))
+        //await httpRequestProxy.httpProxy(ctx, upstream).catch(error => httpRequestProxyErrorHandler(ctx, error))
 
-        // await httpRequestProxy.httpProxy(ctx, upstream).then(response => {
-        //     ctx.proxyResponse = response
-        //     ctx.set('x-proxy-time', Date.now() - ctx.startProxyStartTime)
-        // }).catch(error => httpRequestProxyErrorHandler(ctx, error))
-        //await next()
+        await httpRequestProxy.httpProxy(ctx, upstream).then(response => {
+            ctx.proxyResponse = response
+            ctx.set('x-proxy-time', Date.now() - ctx.startProxyStartTime)
+        }).catch(error => httpRequestProxyErrorHandler(ctx, error))
+        await next()
     }
 }
