@@ -31,7 +31,8 @@ module.exports = app => {
 
         bodyParser: {
             enable: true,
-            enableTypes: ['json', 'form', 'text']
+            enableTypes: ['json', 'form', 'text'],
+            ignore: ctx => !ctx.path.startsWith("/gateway/")
         },
 
         mongoose: {

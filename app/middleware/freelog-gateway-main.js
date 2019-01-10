@@ -17,14 +17,13 @@ module.exports = (option, app) => {
 
     return async function (ctx, next) {
 
-        const {path, method} = ctx
-        const [first, second] = lodash.trimStart(path.toLowerCase(), '/').split('/')
-
         if (!app.isLoadCompleteRouterInfo()) {
             throw Object.assign(new ApplicationError('网关正在初始化中'), {retCode: app.retCodeEnum.agentError})
         }
 
-        const routerList = await ctx.service.gatewayService.getRouterListByPrefix(`/${first}/${second}/`, method)
+        const {path, method} = ctx
+        const routerPrefix = lodash.split(path.toLowerCase(), '/', 3).join('/') + '/'
+        const routerList = await ctx.service.gatewayService.getRouterListByPrefix(routerPrefix, method)
 
         const routerInfo = await gatewayUrlRouterMatchHandler.matchRouterInfo(routerList, path, method)
         if (!routerInfo) {

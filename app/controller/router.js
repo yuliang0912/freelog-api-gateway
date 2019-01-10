@@ -1,6 +1,5 @@
 'use strict';
 
-const lodash = require('lodash')
 const Controller = require('egg').Controller;
 
 module.exports = class RouterController extends Controller {
@@ -63,23 +62,5 @@ module.exports = class RouterController extends Controller {
      */
     async syncRouterData(ctx) {
         await this.ctx.service.gatewayService.getAllRouterInfo().then(() => ctx.success('同步成功'))
-    }
-
-    /**
-     *  创建路由配置
-     * @param ctx
-     * @returns {Promise<void>}
-     */
-    async create(ctx) {
-
-        const body = ctx.request.body
-
-        const list = JSON.parse(body)
-
-        list.forEach(item => {
-            this.apiRouterProvider.create(item)
-        })
-
-        ctx.success(true)
     }
 }
