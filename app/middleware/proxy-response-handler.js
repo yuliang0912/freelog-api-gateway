@@ -14,6 +14,7 @@ class ComponentHandler {
      */
     async main(ctx, next) {
 
+
         const {proxyResponse} = ctx
         const {headers, statusCode, body} = proxyResponse
 

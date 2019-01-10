@@ -1,6 +1,7 @@
 'use strict';
 
 const Controller = require('egg').Controller;
+const Request = require('request')
 
 module.exports = class RouterController extends Controller {
 
@@ -37,7 +38,20 @@ module.exports = class RouterController extends Controller {
 
         const routerId = ctx.checkParams("id").isMongoObjectId().value
 
-        ctx.success(ctx.app.getRouterInfo(routerId))
+        Request('https://image.freelog.com/preview/25609166-8608-4d90-9248-9bedeaa71918.jpg')
+            .pipe(ctx.res)
+            .on('end', function () {
+                console.log('end')
+            })
+
+        await new Promise(function (resolve) {
+            setTimeout(function () {
+                resolve()
+            }, 3000)
+        })
+
+
+        //ctx.success(ctx.app.getRouterInfo(routerId))
     }
 
     /**
