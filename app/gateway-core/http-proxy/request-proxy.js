@@ -23,6 +23,7 @@ module.exports = class HttpRequestProxy {
             timeout: 30000, //默认30秒
             encoding: null
         }
+        delete options.headers['content-length']
         options.headers.requestId = ctx.request.requestId
 
         ctx.startProxyStartTime = Date.now()
@@ -30,18 +31,17 @@ module.exports = class HttpRequestProxy {
 
         return new Promise((resolve, reject) => {
             const proxyServer = Request(options, (error, response) => error ? reject(error) : resolve(response))
-            //网关不再解析body内容,直接通过流式传递
             if (ctx.req.readable && !["GET", "HEAD", "DELETE"].includes(method)) {
                 ctx.req.pipe(proxyServer)
             }
         })
 
+        //暂不启用直接pipe到ctx.res方案,一般大文件传输才需要考虑
+        // const proxyServer = Request(options)
+        // if (ctx.req.readable && !["GET", "HEAD", "DELETE"].includes(method)) {
+        //     ctx.req.pipe(proxyServer)
+        // }
         // return new Promise((resolve, reject) => {
-        //     const proxyServer = Request(options)
-        //     //网关不再解析body内容,直接通过流式传递
-        //     if (ctx.req.readable && !["GET", "HEAD", "DELETE"].includes(method)) {
-        //         ctx.req.pipe(proxyServer)
-        //     }
         //     proxyServer.on('response', resolve).on('error', reject).pipe(ctx.res)
         // })
     }
