@@ -5,28 +5,20 @@ const customParamRegExp = /^:[a-zA-Z0-9_]{1,100}$/
 const {GatewayRouterMatchError} = require('egg-freelog-base/error')
 
 module.exports = class GatewayUrlRouterMatch {
-
-    constructor(app) {
-        //this.serverGroupProvider = app.dal.serverGroupProvider
-    }
-
+    
     /**
      * 获取上游路由信息
      * @param routerList
      */
     async matchRouterInfo(routerList, path, method) {
 
-        if (!path.endsWith('/')) {
-            path = path + '/'
-        }
-
         if (!routerList.length) {
             return null
         }
 
-        const matchRouterInfo = lodash.chain(routerList).map(router => this._getRouterMatchScore(router, path, method)).orderBy('matchScore', 'desc').first().value()
+        const matchRouterInfo = lodash.maxBy(routerList.map(router => this._getRouterMatchScore(router, path, method)), x => x.matchScore)
 
-        return matchRouterInfo.matchScore <= 0 ? null : matchRouterInfo
+        return matchRouterInfo && matchRouterInfo.matchScore > 0 ? matchRouterInfo : null
     }
 
     /**
