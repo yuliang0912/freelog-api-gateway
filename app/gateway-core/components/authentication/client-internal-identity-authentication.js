@@ -63,7 +63,7 @@ module.exports = class ClientInternalIdentityAuthenticationComponent {
 
         comHandlerResult.handleResult = true
         comHandlerResult.attachData = internalIdentityInfo
-        
+
         //透传的认证信息级别低于经过组件认证过的信息级别
         ctx.gatewayInfo.identityInfo = Object.assign(internalIdentityInfo, ctx.gatewayInfo.identityInfo)
 

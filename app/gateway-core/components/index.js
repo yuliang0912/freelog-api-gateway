@@ -6,7 +6,7 @@ const RouterTrafficStatisticsComponent = require('./other/traffic-statistics')
 const JsonWebTokenAuthenticationComponent = require('./authentication/jwt-authentication')
 const JsonWebTokenNodeAuthenticationComponent = require('./authentication/jwt-node-authentication')
 const NullIdentityAuthenticationComponent = require('./authentication/null-identity-authentication')
-const InternalIdentityAuthenticationComponent = require('./authentication/internal-identity-authentication')
+const RefuseAllRequestAuthorizationComponent = require('./authorization/refuse-all-request-authorization')
 const IpBlackWhiteListAuthenticationComponent = require('./authentication/ip-black-white-list-authentication')
 const ClientCredentialsAuthenticationComponent = require('./authentication/client-credentials-authentication')
 const ClientInternalIdentityAuthenticationComponent = require('./authentication/client-internal-identity-authentication')
@@ -44,8 +44,8 @@ module.exports = class ComponentHandler {
             new RouterTrafficStatisticsComponent(app),
             new JsonWebTokenAuthenticationComponent(app),
             new NullIdentityAuthenticationComponent(app),
+            new RefuseAllRequestAuthorizationComponent(app),
             new JsonWebTokenNodeAuthenticationComponent(app),
-            new InternalIdentityAuthenticationComponent(app),
             new IpBlackWhiteListAuthenticationComponent(app),
             new ClientCredentialsAuthenticationComponent(app),
             new ClientInternalIdentityAuthenticationComponent(app)

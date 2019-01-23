@@ -1,5 +1,6 @@
 'use strict'
 
+const lodash = require('lodash')
 const ComHandlerResult = require('../com-handle-result')
 const {GatewayAuthenticationError} = require('egg-freelog-base/error')
 const cryptoHelper = require('egg-freelog-base/app/extend/helper/crypto_helper')
@@ -49,6 +50,14 @@ module.exports = class JsonWebTokenAuthenticationComponent {
 
         comHandlerResult.handleResult = true
         comHandlerResult.attachData = payloadObject
+
+
+        if (lodash.isString(payloadObject.userName)) {
+            payloadObject.userName = decodeURIComponent(payloadObject.userName)
+        }
+        if (lodash.isString(payloadObject.nickname)) {
+            payloadObject.nickname = decodeURIComponent(payloadObject.nickname)
+        }
 
         ctx.gatewayInfo.identityInfo.userInfo = payloadObject
 
