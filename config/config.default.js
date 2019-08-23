@@ -39,7 +39,7 @@ module.exports = app => {
             url: "mongodb://127.0.0.1:27017/api-gateway"
         },
 
-        customLoader: ['app/event-handler'],
+        customFileLoader: ['app/event-handler'],
 
         middleware: ['gatewayErrorHandler', 'freelogGatewayMain', 'httpComponentHandler', 'apiMockHandler', 'httpProxyHandler', 'proxyResponseHandler'],
 

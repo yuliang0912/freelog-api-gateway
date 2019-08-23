@@ -19,6 +19,7 @@ module.exports = class RouterController extends Controller {
 
         const keywords = ctx.checkQuery('keywords').optional().value
         const status = ctx.checkQuery('status').optional().toInt().in([0, 1]).default(1).value
+        ctx.validateParams()
 
         const condition = {status}
         if (keywords) {
@@ -37,7 +38,7 @@ module.exports = class RouterController extends Controller {
     async show(ctx) {
 
         const routerId = ctx.checkParams("id").isMongoObjectId().value
-        ctx.validate()
+        ctx.validateParams()
 
         ctx.success(ctx.app.getRouterInfo(routerId))
     }
@@ -50,6 +51,7 @@ module.exports = class RouterController extends Controller {
     async destroy(ctx) {
 
         const routerId = ctx.checkParams("id").isMongoObjectId().value
+        ctx.validateParams()
 
         await this.apiRouterProvider.updateOne({_id: routerId}, {status: 0})
             .then(({nModified}) => ctx.success(nModified > 0))
