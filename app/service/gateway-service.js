@@ -41,8 +41,6 @@ module.exports = class GatewayService extends Service {
         return Promise.all([task1, task2, task3, task4]).then(([routers, clientInfos, serverGroups, rules]) => {
             return this._buildRouterInfo(routers, clientInfos, serverGroups, rules)
         }).then(gatewayInfo => {
-            //发送路由信息到所有的cluster-app上
-            app.messenger.sendToApp(GatewayInfoUpdateEvent, gatewayInfo)
             return gatewayInfo
         })
     }

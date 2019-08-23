@@ -25,5 +25,5 @@ CMD [ "npm", "start" ]
 # docker rm freelog-api-gateway
 # docker rmi freelog-api-gateway
 # cd /mnt/hgfs/share/freelog-api-gateway
-# docker build -t freelog-api-gateway -f=/mnt/hgfs/share/freelog-api-gateway/Dockerfile-deve .
+# docker build -t freelog-api-gateway -f=Dockerfile-deve .
 # docker run --name="freelog-api-gateway" -p 8895:8895 -d  freelog-api-gateway

@@ -29,6 +29,7 @@ class ComponentHandler {
         }
 
         await next()
+
     }
 
     /**

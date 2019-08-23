@@ -1,7 +1,7 @@
 'use strict';
 
 const Controller = require('egg').Controller;
-const Request = require('request')
+const {GatewayInfoUpdateEvent} = require('../enum/app-event-emitter-enum')
 
 module.exports = class RouterController extends Controller {
 
@@ -37,21 +37,9 @@ module.exports = class RouterController extends Controller {
     async show(ctx) {
 
         const routerId = ctx.checkParams("id").isMongoObjectId().value
+        ctx.validate()
 
-        Request('https://image.freelog.com/preview/25609166-8608-4d90-9248-9bedeaa71918.jpg')
-            .pipe(ctx.res)
-            .on('end', function () {
-                console.log('end')
-            })
-
-        await new Promise(function (resolve) {
-            setTimeout(function () {
-                resolve()
-            }, 3000)
-        })
-
-
-        //ctx.success(ctx.app.getRouterInfo(routerId))
+        ctx.success(ctx.app.getRouterInfo(routerId))
     }
 
     /**
@@ -75,6 +63,9 @@ module.exports = class RouterController extends Controller {
      * @returns {Promise<void>}
      */
     async syncRouterData(ctx) {
-        await this.ctx.service.gatewayService.getAllRouterInfo().then(() => ctx.success('同步成功'))
+        await this.ctx.service.gatewayService.getAllRouterInfo().then(gatewayInfo => {
+            //发送路由信息到所有的cluster-app上
+            this.app.messenger.sendToApp(GatewayInfoUpdateEvent, gatewayInfo)
+        }).then(() => ctx.success('同步成功')).catch(ctx.error)
     }
 }

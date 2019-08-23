@@ -14,7 +14,7 @@ module.exports = class RouterTrafficStatisticsComponent {
     }
 
     /**
-     * client证书认证组件处理函数
+     * 流量统计组件处理函数
      */
     async handle(ctx, config) {
 
