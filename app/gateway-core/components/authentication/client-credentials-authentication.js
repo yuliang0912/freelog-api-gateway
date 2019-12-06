@@ -51,6 +51,7 @@ module.exports = class ClientCredentialsAuthenticationComponent {
             comHandlerResult.error = new GatewayAuthenticationError("client认证失败,签名不匹配", {
                 clientId, sign: cryptoHelper.hmacSha1(text, clientInfo.privateKey)
             })
+            console.log(text, clientInfo.privateKey, sign, cryptoHelper.hmacSha1(text, clientInfo.privateKey))
             comHandlerResult.tips = "客户端认证失败,签名不匹配"
             return comHandlerResult
         }

@@ -8,7 +8,7 @@ module.exports = class CreateTestDataImport extends Subscription {
     static get schedule() {
         return {
             type: 'worker',
-            cron: '*/10 * * * * *', //10秒同步一次路由数据
+            cron: '* */1 * * * *', //10秒同步一次路由数据
             immediate: true, //立即执行一次
             disable: false
         }
@@ -22,5 +22,11 @@ module.exports = class CreateTestDataImport extends Subscription {
         }).catch(error => {
             console.log('路由配置信息同步失败', error)
         })
+        // this.ctx.dal.apiRouterProvider.find({}).then(list => {
+        //     list.forEach(item => {
+        //         item.updateOne({'upstream.port': item.upstream.port + 2000}).then()
+        //     })
+        //     console.log(list.length)
+        // })
     }
 }
