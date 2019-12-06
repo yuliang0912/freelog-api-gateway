@@ -23,7 +23,7 @@ module.exports = class RouterDataUpdateEventHandler {
             })
             router.routerPrefix = router.routerPrefix.toLowerCase()
             router.httpComponentRules = rules
-            router.upstream.serverGroupInfo = serverGroup[router.upstream.serverGroupId]
+            router.upstream.serverGroupInfo = serverGroup[router.upstream.serverGroupName]
         })
 
         this.app.__cache__.routerPrefixGroup = lodash.groupBy(gatewayInfo.routers, 'routerPrefix')
