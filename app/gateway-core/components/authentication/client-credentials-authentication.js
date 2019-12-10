@@ -1,5 +1,6 @@
 'use strict'
 
+const URL = require('url')
 const lodash = require('lodash')
 const moment = require("moment")
 const ComHandlerResult = require('../com-handle-result')
@@ -46,7 +47,8 @@ module.exports = class ClientCredentialsAuthenticationComponent {
             return comHandlerResult
         }
 
-        const text = ctx.url + "&timeline=" + timeLine
+        const text = URL.parse(ctx.url).path + "&timeline=" + timeLine
+
         if (cryptoHelper.hmacSha1(text, clientInfo.privateKey) !== sign) {
             comHandlerResult.error = new GatewayAuthenticationError("client认证失败,签名不匹配", {
                 clientId, sign: cryptoHelper.hmacSha1(text, clientInfo.privateKey)
