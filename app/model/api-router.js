@@ -16,7 +16,7 @@ module.exports = app => {
         routerPrefix: {type: String, required: true},
         routerUrlRule: {type: String, required: true},
         upstream: {
-            serverGroupId: {type: String, required: true},
+            serverGroupName: {type: String, required: true},
             protocol: {type: String, default: 'http', required: true},
             port: {type: Number, required: true},
             forwardUriScheme: {type: String, required: true},

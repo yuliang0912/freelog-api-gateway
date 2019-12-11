@@ -57,7 +57,7 @@ module.exports = class GatewayService extends Service {
         const gatewayInfo = {routers: [], clientInfo: {}, serverGroup: {}, httpComponentRule: {}}
 
         clientInfos.forEach(x => gatewayInfo.clientInfo[x.clientId] = x.toObject())
-        serverGroups.forEach(x => gatewayInfo.serverGroup[x._id] = x.toObject())
+        serverGroups.forEach(x => gatewayInfo.serverGroup[x.groupName] = x.toObject()) //groupName
         rules.forEach(x => gatewayInfo.httpComponentRule[x._id] = x.toObject())
         gatewayRouters.forEach(x => gatewayInfo.routers.push(x.toObject()))
 
