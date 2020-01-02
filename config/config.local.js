@@ -3,6 +3,6 @@
 module.exports = {
 
     mongoose: {
-        url: "mongodb://119.23.45.143:27018/api-gateway"
+        url: "mongodb://112.74.140.101:27017/api-gateway"
     }
 }
