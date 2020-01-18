@@ -21,36 +21,9 @@ module.exports = class CreateTestDataImport extends Subscription {
         let {app} = this
         await this.ctx.service.gatewayService.getAllRouterInfo().then(gatewayInfo => {
             app.messenger.sendToApp(GatewayInfoUpdateEvent, gatewayInfo)
-            //rebuildRouterData(gatewayInfo.routers)
         }).catch(error => {
             console.log('路由配置信息同步失败', error)
         })
-
-        function rebuildRouterData(routers) {
-            routers.forEach(item => {
-                let serverName = null
-                if (item.upstream.port === 5001) {
-                    serverName = 'api-resource-service.development'
-                }
-                else if (item.upstream.port === 5005) {
-                    serverName = 'api-node-service.development'
-                }
-                else if (item.upstream.port === 5008) {
-                    serverName = 'api-auth-service.development'
-                }
-                else if (item.upstream.port === 5011) {
-                    serverName = 'api-identity-service.development'
-                }
-                else if (item.upstream.port === 5018) {
-                    serverName = 'api-statistics-service.development'
-                }
-                else if (item.upstream.port === 5777) {
-                    serverName = 'web-site-node-home.development'
-                }
-                serverName && app.dal.apiRouterProvider.updateOne({_id: item.routerId}, {'upstream.serverGroupName': serverName}).then()
-            })
-        }
     }
-
 
 }
