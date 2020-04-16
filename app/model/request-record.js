@@ -1,8 +1,16 @@
 'use strict'
 
+const lodash = require('lodash')
+
 module.exports = app => {
 
     const mongoose = app.mongoose;
+
+    const toObjectOptions = {
+        transform(doc, ret, options) {
+            return lodash.omit(ret, ['_id'])
+        }
+    }
 
     const RequestRecordSchema = new mongoose.Schema({
         requestId: {type: String, unique: true, required: true},
@@ -18,6 +26,8 @@ module.exports = app => {
         resContentLength: {type: Number, required: false, default: 0},//响应内容长度
         createDate: {type: Date, default: Date.now, required: true},
     }, {
+        toJSON: toObjectOptions,
+        toObject: toObjectOptions,
         versionKey: false,
         timestamps: false
     })
