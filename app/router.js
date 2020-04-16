@@ -2,14 +2,15 @@
 
 module.exports = app => {
 
-    //首页
-    app.router.all('/', 'home.index')
+    const {router, controller} = app
 
-    //同步路由信息
-    app.router.get("/gateway/routers/syncRouterData", "router.syncRouterData")
+    //首页或者网关自身API. 中间件的使用详见config中的启用与忽略
+    router.all('/', 'home.index')
+    router.get("/gateway/routers/syncRouterData", controller.router.syncRouterData)
+    router.get("/gateway/trafficStatistics/requestRecords", controller.trafficStatistics.requestRecords)
 
     //restful
-    app.router.resources("router", "/gateway/routers", "router")
+    router.resources("router", "/gateway/routers", "router")
 
     //其他默认当网关代理处理
     app.router.all('/*', (ctx, next) => null)

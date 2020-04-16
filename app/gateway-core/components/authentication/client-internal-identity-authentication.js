@@ -3,13 +3,16 @@
 const ComHandlerResult = require('../com-handle-result')
 const {GatewayArgumentError, GatewayAuthenticationError} = require('egg-freelog-base/error')
 const cryptoHelper = require('egg-freelog-base/app/extend/helper/crypto_helper')
+const {RequestBefore} = require('../../../enum/router-component-level-enum')
+const {Authentication} = require('../../../enum/router-component-type-enum')
 
 module.exports = class ClientInternalIdentityAuthenticationComponent {
 
     constructor(app) {
         this.app = app
         this.comName = "client-internal-identity"
-        this.comType = "authentication"
+        this.comType = Authentication
+        this.comLevel = RequestBefore
     }
 
     /**

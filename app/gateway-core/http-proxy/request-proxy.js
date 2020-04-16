@@ -1,6 +1,7 @@
 'use strict'
 
 const Request = require('request')
+const Promise = require('bluebird')
 
 module.exports = class HttpRequestProxy {
 
@@ -23,15 +24,22 @@ module.exports = class HttpRequestProxy {
             timeout: 30000, //默认30秒
             encoding: null
         }
-        delete options.headers['content-length']
-        options.headers.requestId = ctx.request.requestId
+        options.headers['traceId'] = ctx.traceId
+        options.headers['requestId'] = ctx.requestId
 
-        ctx.startProxyStartTime = Date.now()
+        delete options.headers['content-length']
+
         ctx.proxyInfo = {type: "request", gatewayUri: options.uri, method}
+        ctx.startRquestTime = Date.now()
+
+        return this._httpRequest(ctx, options).finally(() => ctx.startResponseTime = Date.now())
+    }
+
+    async _httpRequest(ctx, options) {
 
         return new Promise((resolve, reject) => {
             const proxyServer = Request(options, (error, response) => error ? reject(error) : resolve(response))
-            if (ctx.req.readable && !["GET", "HEAD", "DELETE"].includes(method)) {
+            if (ctx.req.readable && !["GET", "HEAD", "DELETE"].includes(options.method)) {
                 ctx.req.pipe(proxyServer)
             }
         })

@@ -2,8 +2,9 @@
 
 module.exports = {
 
-    beforeRequest: "beforeRequest",
+    RequestBefore: "RequestBefore",
 
-    inProcessing: "inProcessing"
+    inProcessing: "inProcessing",
 
+    ResponseAfter: "ResponseAfter"
 }

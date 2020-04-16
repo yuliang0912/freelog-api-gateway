@@ -30,6 +30,7 @@ module.exports = (option, app) => {
         const routerList = await ctx.service.gatewayService.getRouterListByPrefix(routerPrefix, method)
 
         const routerInfo = await gatewayUrlRouterMatchHandler.matchRouterInfo(routerList, path, method)
+
         if (!routerInfo) {
             return routerNotMatchErrorHandler(ctx)
         }

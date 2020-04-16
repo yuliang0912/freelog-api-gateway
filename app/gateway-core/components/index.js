@@ -1,8 +1,10 @@
 'use strict'
 
 const Patrun = require('patrun')
+const ComHandlerResult = require('./com-handle-result')
 const {GatewayArgumentError} = require('egg-freelog-base/error')
 const RouterTrafficStatisticsComponent = require('./other/traffic-statistics')
+const RequestRecordHandlerComponent = require('./other/request-record-handler')
 const JsonWebTokenAuthenticationComponent = require('./authentication/jwt-authentication')
 const JsonWebTokenNodeAuthenticationComponent = require('./authentication/jwt-node-authentication')
 const NullIdentityAuthenticationComponent = require('./authentication/null-identity-authentication')
@@ -10,6 +12,7 @@ const RefuseAllRequestAuthorizationComponent = require('./authorization/refuse-a
 const IpBlackWhiteListAuthenticationComponent = require('./authentication/ip-black-white-list-authentication')
 const ClientCredentialsAuthenticationComponent = require('./authentication/client-credentials-authentication')
 const ClientInternalIdentityAuthenticationComponent = require('./authentication/client-internal-identity-authentication')
+
 
 module.exports = class ComponentHandler {
 
@@ -24,10 +27,13 @@ module.exports = class ComponentHandler {
      * @param comName
      * @param ctx
      */
-    async componentHandle(ctx, comName, comConfig) {
+    async componentHandle(ctx, comName, comLevel, comConfig) {
         const component = this.patrun.find({comName})
         if (!component) {
             throw new GatewayArgumentError(`参数comName:${comName}错误,未找到对应的组件`)
+        }
+        if (component.comLevel !== comLevel) {
+            return new ComHandlerResult(component.comName, component.comType, true)
         }
         return component.handle(ctx, comConfig)
     }
@@ -41,6 +47,7 @@ module.exports = class ComponentHandler {
         const {app, patrun} = this
 
         const components = [
+            new RequestRecordHandlerComponent(app),
             new RouterTrafficStatisticsComponent(app),
             new JsonWebTokenAuthenticationComponent(app),
             new NullIdentityAuthenticationComponent(app),

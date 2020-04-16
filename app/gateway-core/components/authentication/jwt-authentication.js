@@ -4,12 +4,15 @@ const lodash = require('lodash')
 const ComHandlerResult = require('../com-handle-result')
 const {GatewayAuthenticationError} = require('egg-freelog-base/error')
 const cryptoHelper = require('egg-freelog-base/app/extend/helper/crypto_helper')
+const {RequestBefore} = require('../../../enum/router-component-level-enum')
+const {Authentication} = require('../../../enum/router-component-type-enum')
 
 module.exports = class JsonWebTokenAuthenticationComponent {
 
     constructor(app) {
         this.comName = "jwt"
-        this.comType = "authentication"
+        this.comType = Authentication
+        this.comLevel = RequestBefore
         this.publicKey = app.config.RasSha256Key.identity.publicKey
     }
 
@@ -50,14 +53,6 @@ module.exports = class JsonWebTokenAuthenticationComponent {
 
         comHandlerResult.handleResult = true
         comHandlerResult.attachData = payloadObject
-
-
-        if (lodash.isString(payloadObject.userName)) {
-            payloadObject.userName = decodeURIComponent(payloadObject.userName)
-        }
-        if (lodash.isString(payloadObject.nickname)) {
-            payloadObject.nickname = decodeURIComponent(payloadObject.nickname)
-        }
 
         ctx.gatewayInfo.identityInfo.userInfo = payloadObject
 

@@ -41,14 +41,14 @@ module.exports = app => {
 
         customFileLoader: ['app/event-handler'],
 
-        middleware: ['gatewayErrorHandler', 'freelogGatewayMain', 'httpComponentHandler', 'apiMockHandler', 'httpProxyHandler', 'proxyResponseHandler'],
+        middleware: ['gatewayErrorHandler', 'freelogGatewayMain', 'httpComponentRequestBeforeHandler', 'apiMockHandler', 'httpProxyHandler', 'proxyResponseHandler', 'httpComponentResponseAfterHandler'],
 
         freelogGatewayMain: {
             enable: true,
             ignore: gatewayRouterIgnore
         },
 
-        httpComponentHandler: {
+        httpComponentRequestBeforeHandler: {
             enable: true,
             ignore: gatewayRouterIgnore
         },
@@ -64,6 +64,11 @@ module.exports = app => {
         },
 
         proxyResponseHandler: {
+            enable: true,
+            ignore: gatewayRouterIgnore
+        },
+
+        httpComponentResponseAfterHandler: {
             enable: true,
             ignore: gatewayRouterIgnore
         },

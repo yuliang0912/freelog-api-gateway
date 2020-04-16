@@ -13,7 +13,8 @@ module.exports = (option, app) => {
         try {
             ctx.error = ctx.error.bind(ctx)
             ctx.success = ctx.success.bind(ctx)
-            ctx.request.requestId = uuid.v4().replace(/-/g, '')
+            ctx.requestId = uuid.v4().replace(/-/g, '').substr(0, 12) //请求ID由代理服务器分配
+            ctx.traceId = ctx.get('traceId') || uuid.v4().replace(/-/g, '').substr(2, 12) //链路追踪ID如果请求方不传递,则自动生成一个
 
             if (ctx.request.bodyParserError) {
                 throw new ArgumentError('bodyParse数据转换异常,请检查传入的数据是否符合接口规范', {

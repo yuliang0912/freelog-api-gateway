@@ -5,15 +5,15 @@ module.exports = {
     /**
      * 认证
      */
-    authentication: "authentication",
+    Authentication: "authentication",
 
     /**
      * 授权
      */
-    authorization: "authorization",
+    Authorization: "authorization",
 
     /**
      * 统计
      */
-    statistics: "statistics"
+    Statistics: "statistics"
 }

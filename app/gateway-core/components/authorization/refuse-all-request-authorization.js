@@ -1,12 +1,15 @@
 'use strict'
 
 const ComHandlerResult = require('../com-handle-result')
+const {RequestBefore} = require('../../../enum/router-component-level-enum')
+const {Authorization} = require('../../../enum/router-component-type-enum')
 
 module.exports = class RefuseAllRequestAuthorizationComponent {
 
     constructor(app) {
         this.comName = "refuse-all-request"
-        this.comType = "authorization"
+        this.comType = Authorization
+        this.comLevel = RequestBefore
     }
 
     /**

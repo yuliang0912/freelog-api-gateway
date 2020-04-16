@@ -2,14 +2,18 @@
 
 const queue = require('async/queue')
 const ComHandlerResult = require('../com-handle-result')
+const {ResponseAfter} = require('../../../enum/router-component-level-enum')
+const {Statistics} = require('../../../enum/router-component-type-enum')
 
 module.exports = class RouterTrafficStatisticsComponent {
 
     constructor(app) {
         this.app = app
         this.comName = "traffic-statistics"
-        this.comType = "statistics"
+        this.comType = Statistics
+        this.comLevel = ResponseAfter
         this.queue = queue(this.trafficStatisticsHandle.bind(this), 50)
+        this.requestRecordProvider = app.dal.requestRecordProvider
         this.routerTrafficStatisticsProvider = app.dal.routerTrafficStatisticsProvider
     }
 
@@ -18,9 +22,7 @@ module.exports = class RouterTrafficStatisticsComponent {
      */
     async handle(ctx, config) {
 
-        const {routerId, routerUrlRule} = ctx.gatewayInfo.routerInfo
-
-        this.queue.push({routerId, routerUrlRule}, this.errorHandle.bind(this))
+        this.queue.push(ctx, this.errorHandle.bind(this))
 
         return new ComHandlerResult(this.comName, this.comType, true)
     }
@@ -30,12 +32,30 @@ module.exports = class RouterTrafficStatisticsComponent {
      * @param routerId
      * @param routerUrlRule
      */
-    async trafficStatisticsHandle({routerId, routerUrlRule}) {
-        await this.routerTrafficStatisticsProvider.findOneAndUpdate({
+    async trafficStatisticsHandle(ctx) {
+
+        const {requestId, traceId, url, method, proxyResponse, gatewayInfo = {}} = ctx
+        const {identityInfo = {}} = gatewayInfo
+        const {routerId, upstream, routerUrlRule} = gatewayInfo.routerInfo
+
+        const recordInfo = {
+            requestId, traceId, routerId, method,
+            requestUrl: url,
+            forwardUrl: upstream.forwardUri,
+            serverGroupName: upstream.serverGroupName,
+            serviceResponseTime: (ctx.startResponseTime - ctx.startRquestTime),
+            reqContentLength: ctx.get('content-length') || 0,
+            resContentLength: proxyResponse.headers['content-length'] || 0,
+            userId: identityInfo.userInfo ? identityInfo.userInfo.userId : 0
+        }
+
+        this.routerTrafficStatisticsProvider.findOneAndUpdate({
             routerId, routerUrlRule
         }, {$inc: {totalCount: 1}}, {new: true}).then(data => {
             return data || this.routerTrafficStatisticsProvider.create({routerId, routerUrlRule, totalCount: 1})
         })
+
+        this.requestRecordProvider.create(recordInfo)
     }
 
     /**

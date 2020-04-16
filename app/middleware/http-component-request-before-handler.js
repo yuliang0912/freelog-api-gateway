@@ -4,6 +4,7 @@ const lodash = require('lodash')
 const ComponentsHandler = require('../gateway-core/components/index')
 const componentsInvokeErrorHandler = require('../gateway-core/error-handler/component-invoke-error-handler')
 const {GatewayAuthenticationError, GatewayAuthorizationError} = require('egg-freelog-base/error')
+const {RequestBefore} = require('../enum/router-component-level-enum')
 
 class ComponentHandler {
 
@@ -60,7 +61,7 @@ class ComponentHandler {
      */
     async _componentHandle(ctx, componentName, comConfig) {
 
-        const comHandlerResult = await this.componentsHandler.componentHandle(ctx, componentName, comConfig)
+        const comHandlerResult = await this.componentsHandler.componentHandle(ctx, componentName, RequestBefore, comConfig)
             .catch(error => componentsInvokeErrorHandler(ctx, componentName, error))
 
         ctx.gatewayInfo.componentProcessResult.push(comHandlerResult)
