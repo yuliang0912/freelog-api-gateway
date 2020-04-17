@@ -24,6 +24,7 @@ module.exports = app => {
         userId: {type: Number, required: false, default: 0}, //请求者的身份信息
         reqContentLength: {type: Number, required: false, default: 0},//请求内容长度
         resContentLength: {type: Number, required: false, default: 0},//响应内容长度
+        resStatusCode: {type: Number, required: false, default: 0},//响应http状态码
         createDate: {type: Date, default: Date.now, required: true},
     }, {
         toJSON: toObjectOptions,

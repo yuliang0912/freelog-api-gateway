@@ -34,9 +34,10 @@ module.exports = class RouterTrafficStatisticsComponent {
      */
     async trafficStatisticsHandle(ctx) {
 
-        const {requestId, traceId, url, method, proxyResponse, gatewayInfo = {}} = ctx
+        const {requestId, traceId, url, method, proxyResponse = {}, gatewayInfo = {}} = ctx
         const {identityInfo = {}} = gatewayInfo
         const {routerId, upstream, routerUrlRule} = gatewayInfo.routerInfo
+        const {statusCode = -1, headers = {}} = proxyResponse
 
         const recordInfo = {
             requestId, traceId, routerId, method,
@@ -45,7 +46,8 @@ module.exports = class RouterTrafficStatisticsComponent {
             serverGroupName: upstream.serverGroupName,
             serviceResponseTime: (ctx.startResponseTime - ctx.startRquestTime),
             reqContentLength: ctx.get('content-length') || 0,
-            resContentLength: proxyResponse.headers['content-length'] || 0,
+            resContentLength: headers['content-length'] || 0,
+            resStatusCode: statusCode,
             userId: identityInfo.userInfo ? identityInfo.userInfo.userId : 0
         }
 

@@ -13,6 +13,7 @@ const IpBlackWhiteListAuthenticationComponent = require('./authentication/ip-bla
 const ClientCredentialsAuthenticationComponent = require('./authentication/client-credentials-authentication')
 const ClientInternalIdentityAuthenticationComponent = require('./authentication/client-internal-identity-authentication')
 
+const {RequestBefore, ResponseAfter} = require('../../enum/router-component-level-enum')
 
 module.exports = class ComponentHandler {
 
@@ -27,15 +28,28 @@ module.exports = class ComponentHandler {
      * @param comName
      * @param ctx
      */
-    async componentHandle(ctx, comName, comLevel, comConfig) {
+    async componentHandle(ctx, comName, comConfig) {
+
         const component = this.patrun.find({comName})
         if (!component) {
             throw new GatewayArgumentError(`参数comName:${comName}错误,未找到对应的组件`)
         }
-        if (component.comLevel !== comLevel) {
+        let validComLevel = (ctx.proxyInfo || ctx.proxyResponse) ? ResponseAfter : RequestBefore
+
+        if (component.comLevel !== validComLevel) {
             return new ComHandlerResult(component.comName, component.comType, true)
         }
+
         return component.handle(ctx, comConfig)
+    }
+
+    /**
+     * 根据组件名获取组件
+     * @param comName
+     * @returns {*}
+     */
+    getProxyComponent(comName) {
+        return this.patrun.find({comName})
     }
 
     /**

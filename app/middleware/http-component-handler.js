@@ -3,8 +3,8 @@
 const lodash = require('lodash')
 const ComponentsHandler = require('../gateway-core/components/index')
 const componentsInvokeErrorHandler = require('../gateway-core/error-handler/component-invoke-error-handler')
-const {GatewayAuthenticationError, GatewayAuthorizationError} = require('egg-freelog-base/error')
-const {RequestBefore} = require('../enum/router-component-level-enum')
+const {GatewayAuthenticationError, GatewayAuthorizationError, GatewayComponentInvokingError} = require('egg-freelog-base/error')
+const {Authentication, Authorization} = require('../enum/router-component-type-enum')
 
 class ComponentHandler {
 
@@ -19,8 +19,29 @@ class ComponentHandler {
      */
     async main(ctx, next) {
 
-        const {routerInfo} = ctx.gatewayInfo
+        //请求前的组件处理
+        await this._invokingHttpComponents(ctx)
 
+        try {
+            await next()
+        } catch (error) {
+            throw error
+        } finally {
+            //响应后的组件处理
+            await this._invokingHttpComponents(ctx)
+        }
+    }
+
+    /**
+     * 调用http组件
+     * @param ctx
+     * @returns {Promise<void>}
+     * @private
+     */
+    async _invokingHttpComponents(ctx, comLevel) {
+
+        const {routerInfo} = ctx.gatewayInfo
+        ctx.currentComLevel = comLevel
         //多组规则按照定义的顺序依次循环处理
         for (let i = 0, j = routerInfo.httpComponentRules.length; i < j; i++) {
             const {httpComponentRules, componentConfig} = routerInfo.httpComponentRules[i]
@@ -28,9 +49,6 @@ class ComponentHandler {
                 !result && this._componentHandleFailedHandle(ctx, httpComponentRules)
             })
         }
-
-        await next()
-
     }
 
     /**
@@ -50,10 +68,15 @@ class ComponentHandler {
         const lastHandleFailedResult = componentProcessResult.reverse().find(x => !x.handleResult)
 
         //目前只有认证与授权.后续如果有流量限制熔断等再拓展
-        if (lastHandleFailedResult.comType === "authentication") {
+        if (lastHandleFailedResult.comType === Authentication) {
             throw new GatewayAuthenticationError("认证失败", data)
         }
-        throw new GatewayAuthorizationError("授权失败", data)
+        if (lastHandleFailedResult.comType === Authorization) {
+            throw new GatewayAuthorizationError("授权失败", data)
+        }
+        else {
+            throw new GatewayComponentInvokingError("组件调用异常", data)
+        }
     }
 
     /**
@@ -61,7 +84,7 @@ class ComponentHandler {
      */
     async _componentHandle(ctx, componentName, comConfig) {
 
-        const comHandlerResult = await this.componentsHandler.componentHandle(ctx, componentName, RequestBefore, comConfig)
+        const comHandlerResult = await this.componentsHandler.componentHandle(ctx, componentName, comConfig)
             .catch(error => componentsInvokeErrorHandler(ctx, componentName, error))
 
         ctx.gatewayInfo.componentProcessResult.push(comHandlerResult)
