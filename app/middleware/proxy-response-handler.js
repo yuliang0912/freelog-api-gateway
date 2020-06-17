@@ -1,6 +1,7 @@
 'use strict'
 
 const lodash = require('lodash')
+const stream = require('stream')
 
 class ComponentHandler {
 
@@ -15,7 +16,7 @@ class ComponentHandler {
     async main(ctx, next) {
 
         const {proxyResponse} = ctx
-        const {headers, statusCode, body} = proxyResponse
+        const {headers, rawHeaders, statusCode, body} = proxyResponse
 
         if (statusCode >= 500 && statusCode < 600) {
             ctx.error({msg: "上游API服务器异常", data: {proxy: ctx.proxyInfo, body: body.toString()}})
@@ -29,9 +30,12 @@ class ComponentHandler {
         //     ctx.error({msg: "上游API未按协议返回数据格式", data: {proxy: ctx.proxyInfo, body: body.toString()}})
         // }
 
+        for (let i = 0, j = rawHeaders.length; i < j; i += 2) {
+            ctx.set(rawHeaders[i], rawHeaders[i + 1]);
+        }
+
         ctx.body = body
         ctx.status = statusCode
-        Object.keys(headers).forEach(header => ctx.set(header, headers[header]))
 
         await next()
     }
