@@ -19,9 +19,9 @@ module.exports = (option, app) => {
     return async function (ctx, next) {
 
         if (!app.isLoadCompleteRouterInfo()) {
-            await ctx.service.gatewayService.getAllRouterInfo().then(gatewayInfo => {
-                app.messenger.sendToApp(GatewayInfoUpdateEvent, gatewayInfo)
-            })
+            // await ctx.service.gatewayService.getAllRouterInfo().then(gatewayInfo => {
+            //     app.messenger.sendToApp(GatewayInfoUpdateEvent, gatewayInfo)
+            // })
             throw Object.assign(new ApplicationError('网关正在初始化中'), {retCode: app.retCodeEnum.agentError})
         }
 

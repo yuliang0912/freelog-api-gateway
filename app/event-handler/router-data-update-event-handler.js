@@ -16,7 +16,7 @@ module.exports = class RouterDataUpdateEventHandler {
 
         const {routers, clientInfo, serverGroup, httpComponentRule} = gatewayInfo
 
-        routers.forEach(router => {
+        for (const router of routers) {
             const rules = []
             router.httpComponentRuleIds.forEach(ruleId => {
                 Reflect.has(httpComponentRule, ruleId) && rules.push(httpComponentRule[ruleId])
@@ -24,7 +24,7 @@ module.exports = class RouterDataUpdateEventHandler {
             router.routerPrefix = router.routerPrefix.toLowerCase()
             router.httpComponentRules = rules
             router.upstream.serverGroupInfo = serverGroup[router.upstream.serverGroupName]
-        })
+        }
 
         this.app.__cache__.routerPrefixGroup = lodash.groupBy(gatewayInfo.routers, 'routerPrefix')
         this.app.__cache__.routerList = routers
