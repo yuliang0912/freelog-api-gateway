@@ -73,8 +73,7 @@ class ComponentHandler {
         }
         if (lastHandleFailedResult.comType === Authorization) {
             throw new GatewayAuthorizationError("授权失败", data)
-        }
-        else {
+        } else {
             throw new GatewayComponentInvokingError("组件调用异常", data)
         }
     }
@@ -97,27 +96,46 @@ class ComponentHandler {
      */
     async _objectConditionHandle(ctx, objectCondition, comConfig) {
 
-        const keys = Object.keys(objectCondition)
-        for (let i = 0; i < keys.length; i++) {
-            var key = keys[i]
+        for (const [key, value] of Object.entries(objectCondition)) {
             switch (key.toLowerCase()) {
                 case "must":
-                    const mustResult = await this._eachCheckComponents(ctx, objectCondition[key], comConfig, true)
+                    const mustResult = await this._eachCheckComponents(ctx, value, comConfig, true)
                     if (!mustResult) {
                         return false
                     }
                     break
                 case "should":
-                    const shouldResult = await this._eachCheckComponents(ctx, objectCondition[key], comConfig, false)
+                    const shouldResult = await this._eachCheckComponents(ctx, value, comConfig, false)
                     if (!shouldResult) {
                         return false
                     }
                     break;
                 default:
                     console.warn("不被支持的关键字" + key)
-                    break
+                    break;
             }
         }
+        // const keys = Object.keys(objectCondition)
+        // for (let i = 0; i < keys.length; i++) {
+        //     var key = keys[i]
+        //     switch (key.toLowerCase()) {
+        //         case "must":
+        //             const mustResult = await this._eachCheckComponents(ctx, objectCondition[key], comConfig, true)
+        //             if (!mustResult) {
+        //                 return false
+        //             }
+        //             break
+        //         case "should":
+        //             const shouldResult = await this._eachCheckComponents(ctx, objectCondition[key], comConfig, false)
+        //             if (!shouldResult) {
+        //                 return false
+        //             }
+        //             break;
+        //         default:
+        //             console.warn("不被支持的关键字" + key)
+        //             break
+        //     }
+        // }
         return true
     }
 
