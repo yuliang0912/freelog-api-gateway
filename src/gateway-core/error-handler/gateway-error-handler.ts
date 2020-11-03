@@ -1,6 +1,6 @@
 import {provide, scope, ScopeEnum, Context} from 'midway'
 import {GatewayRouterMatchError, GatewayComponentInvokingError, GatewayUpstreamApiError} from 'egg-freelog-base'
-import {IGatewayErrorHandler} from "../../../interface";
+import {IGatewayErrorHandler} from "../../interface";
 
 @provide()
 @scope(ScopeEnum.Singleton)

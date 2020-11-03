@@ -1,8 +1,8 @@
 import {provide, inject, scope, ScopeEnum, Context} from 'midway';
 import {
     ICommonComponentHandler, IComponentHandleResult
-} from '../../../../interface';
-import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../../enum';
+} from '../../../interface';
+import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../enum';
 
 @scope(ScopeEnum.Singleton)
 @provide(`gateway_com_${RouterComponentNameEnum.Null_Identity_Authentication}`)

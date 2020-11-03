@@ -1,8 +1,8 @@
 import {provide, inject, config, scope, ScopeEnum, Context} from 'midway';
-import {ICommonComponentHandler, IComponentHandleResult} from '../../../../interface';
+import {ICommonComponentHandler, IComponentHandleResult} from '../../../interface';
 import {GatewayArgumentError, GatewayAuthenticationError} from 'egg-freelog-base';
 import {rsaSha256Verify, base64Decode} from 'egg-freelog-base/app/extend/helper/crypto_helper';
-import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../../enum';
+import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../enum';
 
 @scope(ScopeEnum.Singleton)
 @provide(`gateway_com_${RouterComponentNameEnum.JWT_Authentication}`)

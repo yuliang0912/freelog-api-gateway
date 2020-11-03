@@ -1,5 +1,5 @@
 import {Context, provide, scope, ScopeEnum} from 'midway'
-import {IHttpRequestProxy, UpstreamInfo} from "../../../interface";
+import {IHttpRequestProxy, UpstreamInfo} from "../../interface";
 
 const Request = require('request')
 const Promise = require('bluebird')

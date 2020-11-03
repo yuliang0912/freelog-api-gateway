@@ -5,8 +5,8 @@ import {hmacSha1} from 'egg-freelog-base/app/extend/helper/crypto_helper';
 import {GatewayArgumentError, GatewayAuthenticationError} from 'egg-freelog-base';
 import {
     ICommonComponentHandler, IComponentHandleResult, IGatewayConfigService
-} from "../../../../interface";
-import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../../enum';
+} from "../../../interface";
+import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../enum';
 
 @scope(ScopeEnum.Singleton)
 @provide(`gateway_com_${RouterComponentNameEnum.Client_Authentication}`)

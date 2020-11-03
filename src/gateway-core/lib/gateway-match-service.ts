@@ -1,6 +1,6 @@
 import {scope, provide, ScopeEnum} from 'midway';
 import {isArray, isEmpty, trim, trimEnd} from 'lodash';
-import {IGatewayMatchService, RouterInfo} from "../../../interface";
+import {IGatewayMatchService, RouterInfo} from "../../interface";
 
 @provide()
 @scope(ScopeEnum.Singleton)

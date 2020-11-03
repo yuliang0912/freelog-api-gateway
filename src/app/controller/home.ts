@@ -1,6 +1,6 @@
 import {ArgumentError} from 'egg-freelog-base/error';
 import {LoginUser, UnLoginUser} from 'egg-freelog-base/app/enum/identity-type';
-import {IGatewayConfigService, IGatewayService} from "../../../interface";
+import {IGatewayConfigService, IGatewayService} from "../../interface";
 
 export default class HomeController {
 

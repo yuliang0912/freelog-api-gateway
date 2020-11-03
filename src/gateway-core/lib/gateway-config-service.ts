@@ -3,7 +3,7 @@ import {isArray, cloneDeep, groupBy} from 'lodash';
 import {
     ClientInfo, HttpComponentHandleRule,
     IGatewayConfigService, RouterInfo, ServerGroupInfo
-} from "../../../interface";
+} from "../../interface";
 
 @provide()
 @scope(ScopeEnum.Singleton)

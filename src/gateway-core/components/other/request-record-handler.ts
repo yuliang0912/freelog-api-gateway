@@ -1,9 +1,9 @@
 import {provide, inject, scope, ScopeEnum, Context} from 'midway';
 import {
     ICommonComponentHandler, IComponentHandleResult
-} from '../../../../interface';
+} from '../../../interface';
 import {queue} from 'async';
-import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../../enum';
+import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../enum';
 
 @scope(ScopeEnum.Singleton)
 @provide(`gateway_com_${RouterComponentNameEnum.Request_record}`)

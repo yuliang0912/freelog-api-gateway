@@ -1,7 +1,7 @@
 import {queue} from 'async';
 import {provide, inject, scope, ScopeEnum, Context} from 'midway';
-import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../../enum';
-import {ICommonComponentHandler, IComponentHandleResult, IRequestContextGatewayInfo} from '../../../../interface';
+import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../enum';
+import {ICommonComponentHandler, IComponentHandleResult, IRequestContextGatewayInfo} from '../../../interface';
 
 @scope(ScopeEnum.Singleton)
 @provide(`gateway_com_${RouterComponentNameEnum.Traffic_Statistics}`)

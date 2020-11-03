@@ -3,7 +3,7 @@ import {inject, provide, scope, ScopeEnum} from 'midway';
 import {
     ClientInfo, HttpComponentHandleRule,
     IGatewayConfigService, IGatewayService, RouterInfo, ServerGroupInfo
-} from "../../../interface";
+} from "../../interface";
 
 @provide()
 @scope(ScopeEnum.Singleton)

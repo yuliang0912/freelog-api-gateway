@@ -5,7 +5,7 @@ import {
     IHttpRequestProxy,
     IIdentityTransmit,
     IRequestContextGatewayInfo
-} from '../../../interface';
+} from '../../interface';
 
 module.exports = (options?: object) => {
 

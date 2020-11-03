@@ -2,7 +2,7 @@ import {split} from 'lodash';
 import {GatewayArgumentError} from 'egg-freelog-base'
 import {
     IGatewayConfigService, IGatewayErrorHandler, IGatewayMatchService, IRequestContextGatewayInfo
-} from "../../../interface";
+} from "../../interface";
 
 module.exports = (options?: object) => {
 

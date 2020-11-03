@@ -1,4 +1,4 @@
-import {IGatewayService} from "../../../interface";
+import {IGatewayService} from "../../interface";
 
 const Subscription = require('egg').Subscription;
 

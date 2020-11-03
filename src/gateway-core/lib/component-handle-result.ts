@@ -1,6 +1,6 @@
 import {provide, scope, ScopeEnum} from 'midway';
-import {IComponentHandleResult} from "../../../interface";
-import {RouterComponentNameEnum, RouterComponentTypeEnum} from "../../../enum";
+import {IComponentHandleResult} from "../../interface";
+import {RouterComponentNameEnum, RouterComponentTypeEnum} from "../../enum";
 
 @provide()
 @scope(ScopeEnum.Prototype)

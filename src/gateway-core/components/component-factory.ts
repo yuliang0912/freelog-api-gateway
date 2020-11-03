@@ -1,6 +1,6 @@
 import {IApplicationContext, providerWrapper} from "midway";
-import {RouterComponentNameEnum} from "../../../enum";
-import {ICommonComponentHandler} from "../../../interface";
+import {RouterComponentNameEnum} from "../../enum";
+import {ICommonComponentHandler} from "../../interface";
 
 export function adapterFactory(context: IApplicationContext) {
     return (gatewayComName: RouterComponentNameEnum): ICommonComponentHandler => {

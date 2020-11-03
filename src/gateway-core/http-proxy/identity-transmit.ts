@@ -1,6 +1,6 @@
 import {Context, scope, provide, ScopeEnum} from 'midway';
 import {isEqual, isObject} from 'lodash';
-import {IIdentityTransmit} from '../../../interface';
+import {IIdentityTransmit} from '../../interface';
 
 @scope(ScopeEnum.Singleton)
 @provide()

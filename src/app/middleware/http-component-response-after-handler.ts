@@ -4,8 +4,8 @@ import {
     HttpComponentHandleRule, HttpComponentRuleInfo,
     ICommonComponentHandler, IComponentHandleResult,
     IGatewayErrorHandler, IRequestContextGatewayInfo, RouterInfo
-} from "../../../interface";
-import {RouterComponentLevelEnum, RouterComponentNameEnum, RouterComponentTypeEnum} from "../../../enum";
+} from "../../interface";
+import {RouterComponentLevelEnum, RouterComponentNameEnum, RouterComponentTypeEnum} from "../../enum";
 import {GatewayArgumentError, GatewayAuthenticationError, GatewayAuthorizationError} from 'egg-freelog-base';
 
 
