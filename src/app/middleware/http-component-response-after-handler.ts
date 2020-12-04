@@ -1,4 +1,3 @@
-import {Context} from 'midway';
 import {isArray, isEmpty, isObject, isString} from 'lodash';
 import {
     HttpComponentHandleRule, HttpComponentRuleInfo,
@@ -6,7 +5,13 @@ import {
     IGatewayErrorHandler, IRequestContextGatewayInfo, RouterInfo
 } from "../../interface";
 import {RouterComponentLevelEnum, RouterComponentNameEnum, RouterComponentTypeEnum} from "../../enum";
-import {GatewayArgumentError, GatewayAuthenticationError, GatewayAuthorizationError} from 'egg-freelog-base';
+import {
+    FreelogApplication,
+    FreelogContext,
+    GatewayArgumentError,
+    GatewayAuthenticationError,
+    GatewayAuthorizationError
+} from 'egg-freelog-base';
 
 
 class HttpComponentResponseAfterHandler {
@@ -15,7 +20,7 @@ class HttpComponentResponseAfterHandler {
         return this.main.bind(this);
     }
 
-    async main(ctx, next) {
+    async main(ctx: FreelogContext, next) {
 
         const routerInfo = ctx.gatewayInfo.routerInfo as RouterInfo;
         for (const httpComponentRule of routerInfo.httpComponentRules) {
@@ -31,7 +36,7 @@ class HttpComponentResponseAfterHandler {
      * @param httpComponentRules
      * @param isEvery
      */
-    async recursionInvokingGatewayComponents(ctx: Context, comList: Array<string | string[] | object>, comConfig?: object, isEvery: boolean = false) {
+    async recursionInvokingGatewayComponents(ctx: FreelogContext, comList: Array<string | string[] | object>, comConfig?: object, isEvery: boolean = false) {
 
         if (isEmpty(comList ?? [])) {
             return true;
@@ -62,7 +67,7 @@ class HttpComponentResponseAfterHandler {
      * @param objectCondition
      * @param comConfig
      */
-    async objectComRuleConditionAnalysisHandle(ctx: Context, objectCondition: HttpComponentRuleInfo, comConfig): Promise<boolean> {
+    async objectComRuleConditionAnalysisHandle(ctx: FreelogContext, objectCondition: HttpComponentRuleInfo, comConfig): Promise<boolean> {
 
         for (const [operator, comList] of Object.entries(objectCondition)) {
             switch (operator.toLowerCase()) {
@@ -91,7 +96,7 @@ class HttpComponentResponseAfterHandler {
      * @param comName
      * @param comConfig
      */
-    async gatewayComponentInvokingHandle(ctx: Context, comName: RouterComponentNameEnum, comConfig?: object): Promise<boolean> {
+    async gatewayComponentInvokingHandle(ctx: FreelogContext, comName: RouterComponentNameEnum, comConfig?: object): Promise<boolean> {
 
         const gatewayErrorHandler: IGatewayErrorHandler = ctx.requestContext.get('gatewayErrorHandler');
         const gatewayComHandlerFactory: (comName: RouterComponentNameEnum) => ICommonComponentHandler = ctx.requestContext.get('gatewayComHandlerFactory')
@@ -116,7 +121,7 @@ class HttpComponentResponseAfterHandler {
     /**
      * 组件处理不通过
      */
-    gatewayComponentResponseFailedHandle(ctx: Context, httpComponentHandleRule: HttpComponentHandleRule): void {
+    gatewayComponentResponseFailedHandle(ctx: FreelogContext, httpComponentHandleRule: HttpComponentHandleRule): void {
 
         const gatewayInfo = ctx.gatewayInfo as IRequestContextGatewayInfo;
 
@@ -137,6 +142,6 @@ class HttpComponentResponseAfterHandler {
     }
 }
 
-module.exports = (option?: object) => {
+export default function httpComponentRequestAfterHandlerMiddleware(_options: object | null, _app: FreelogApplication): any {
     return new HttpComponentResponseAfterHandler();
 }

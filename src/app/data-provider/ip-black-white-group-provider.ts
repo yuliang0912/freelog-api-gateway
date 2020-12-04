@@ -1,9 +1,9 @@
 import {provide, inject, scope, ScopeEnum} from 'midway';
-import * as MongoBaseOperation from 'egg-freelog-base/lib/database/mongo-base-operation';
+import {MongodbOperation} from 'egg-freelog-base'
 
 @provide()
 @scope(ScopeEnum.Singleton)
-export default class IpBlackWhiteGroupProvider extends MongoBaseOperation {
+export default class IpBlackWhiteGroupProvider extends MongodbOperation<any> {
     constructor(@inject('model.IpBlackWhiteGroup') model) {
         super(model);
     }

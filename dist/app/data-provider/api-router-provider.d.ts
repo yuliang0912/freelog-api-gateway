@@ -1,4 +1,5 @@
-import * as MongoBaseOperation from 'egg-freelog-base/lib/database/mongo-base-operation';
-export default class ApiRouterProvider extends MongoBaseOperation {
+import { MongodbOperation } from 'egg-freelog-base';
+import { RouterInfo } from "../../interface";
+export default class ApiRouterProvider extends MongodbOperation<RouterInfo> {
     constructor(model: any);
 }

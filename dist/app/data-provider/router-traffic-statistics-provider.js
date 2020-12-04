@@ -13,8 +13,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const midway_1 = require("midway");
-const MongoBaseOperation = require("egg-freelog-base/lib/database/mongo-base-operation");
-let RouterTrafficStatisticsProvider = class RouterTrafficStatisticsProvider extends MongoBaseOperation {
+const egg_freelog_base_1 = require("egg-freelog-base");
+let RouterTrafficStatisticsProvider = class RouterTrafficStatisticsProvider extends egg_freelog_base_1.MongodbOperation {
     constructor(model) {
         super(model);
     }
@@ -26,4 +26,4 @@ RouterTrafficStatisticsProvider = __decorate([
     __metadata("design:paramtypes", [Object])
 ], RouterTrafficStatisticsProvider);
 exports.default = RouterTrafficStatisticsProvider;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicm91dGVyLXRyYWZmaWMtc3RhdGlzdGljcy1wcm92aWRlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9hcHAvZGF0YS1wcm92aWRlci9yb3V0ZXItdHJhZmZpYy1zdGF0aXN0aWNzLXByb3ZpZGVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7O0FBQUEsbUNBQXlEO0FBQ3pELHlGQUF5RjtBQUl6RixJQUFxQiwrQkFBK0IsR0FBcEQsTUFBcUIsK0JBQWdDLFNBQVEsa0JBQWtCO0lBQzNFLFlBQXFELEtBQUs7UUFDdEQsS0FBSyxDQUFDLEtBQUssQ0FBQyxDQUFDO0lBQ2pCLENBQUM7Q0FDSixDQUFBO0FBSm9CLCtCQUErQjtJQUZuRCxnQkFBTyxFQUFFO0lBQ1QsY0FBSyxDQUFDLGtCQUFTLENBQUMsU0FBUyxDQUFDO0lBRVYsV0FBQSxlQUFNLENBQUMsK0JBQStCLENBQUMsQ0FBQTs7R0FEbkMsK0JBQStCLENBSW5EO2tCQUpvQiwrQkFBK0IifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicm91dGVyLXRyYWZmaWMtc3RhdGlzdGljcy1wcm92aWRlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9hcHAvZGF0YS1wcm92aWRlci9yb3V0ZXItdHJhZmZpYy1zdGF0aXN0aWNzLXByb3ZpZGVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7O0FBQUEsbUNBQXlEO0FBQ3pELHVEQUFpRDtBQUlqRCxJQUFxQiwrQkFBK0IsR0FBcEQsTUFBcUIsK0JBQWdDLFNBQVEsbUNBQXFCO0lBQzlFLFlBQXFELEtBQUs7UUFDdEQsS0FBSyxDQUFDLEtBQUssQ0FBQyxDQUFDO0lBQ2pCLENBQUM7Q0FDSixDQUFBO0FBSm9CLCtCQUErQjtJQUZuRCxnQkFBTyxFQUFFO0lBQ1QsY0FBSyxDQUFDLGtCQUFTLENBQUMsU0FBUyxDQUFDO0lBRVYsV0FBQSxlQUFNLENBQUMsK0JBQStCLENBQUMsQ0FBQTs7R0FEbkMsK0JBQStCLENBSW5EO2tCQUpvQiwrQkFBK0IifQ==

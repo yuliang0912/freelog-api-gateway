@@ -1,4 +1,4 @@
-import { Context } from "midway";
+import { FreelogContext } from "egg-freelog-base";
 import { RouterComponentLevelEnum, RouterComponentNameEnum, RouterComponentTypeEnum } from "./enum";
 export interface UpstreamInfo {
     serverGroupName: string;
@@ -77,9 +77,9 @@ export interface IGatewayMatchService {
     generateUpstreamRouterUrl(routerInfo: RouterInfo, url: string): string;
 }
 export interface IGatewayErrorHandler {
-    routerNotMatchErrorHandle(ctx: Context): void;
-    componentInvokingErrorHandle(ctx: Context, componentName: string, error: Error): void;
-    httpRequestProxyErrorHandle(ctx: Context, error: any): void;
+    routerNotMatchErrorHandle(ctx: FreelogContext): void;
+    componentInvokingErrorHandle(ctx: FreelogContext, componentName: string, error: Error): void;
+    httpRequestProxyErrorHandle(ctx: FreelogContext, error: any): void;
 }
 export interface IGatewayComponentHandler {
     componentHandle(comName: string, comLevel: RouterComponentLevelEnum, comConfig?: object): Promise<any>;
@@ -88,7 +88,7 @@ export interface ICommonComponentHandler {
     comName: RouterComponentNameEnum;
     comType: RouterComponentTypeEnum;
     comLevel: RouterComponentLevelEnum;
-    handle(ctx: Context, config?: object): Promise<IComponentHandleResult>;
+    handle(ctx: FreelogContext, config?: object): Promise<IComponentHandleResult>;
 }
 export interface IComponentHandleResult {
     comName: string;
@@ -115,8 +115,8 @@ export interface IRequestContextGatewayInfo {
     componentProcessResults: IComponentHandleResult[];
 }
 export interface IHttpRequestProxy {
-    httpProxy(ctx: Context, upstreamRouterInfo: UpstreamInfo): Promise<any>;
+    httpProxy(ctx: FreelogContext, upstreamRouterInfo: UpstreamInfo): Promise<any>;
 }
 export interface IIdentityTransmit {
-    transmit(ctx: Context): void;
+    transmit(ctx: FreelogContext): void;
 }

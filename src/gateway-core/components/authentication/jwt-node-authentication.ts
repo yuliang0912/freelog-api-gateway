@@ -1,7 +1,6 @@
-import {provide, inject, config, scope, ScopeEnum, Context} from 'midway';
-import {GatewayArgumentError, GatewayAuthenticationError} from 'egg-freelog-base';
+import {provide, inject, config, scope, ScopeEnum} from 'midway';
+import {GatewayArgumentError, GatewayAuthenticationError, CryptoHelper, FreelogContext} from 'egg-freelog-base';
 import {ICommonComponentHandler, IComponentHandleResult} from "../../../interface";
-import {rsaSha256Verify, base64Decode} from 'egg-freelog-base/app/extend/helper/crypto_helper';
 import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../enum';
 
 @scope(ScopeEnum.Singleton)
@@ -17,7 +16,7 @@ export class JwtNodeAuthentication implements ICommonComponentHandler {
     @inject()
     componentHandleResult: IComponentHandleResult;
 
-    async handle(ctx: Context, config?: object): Promise<IComponentHandleResult> {
+    async handle(ctx: FreelogContext, config?: object): Promise<IComponentHandleResult> {
 
         const comHandlerResult = this.componentHandleResult.build(this.comName, this.comType);
         const jwtStr = ctx.cookies.get('nodeInfo', {signed: false});
@@ -32,13 +31,13 @@ export class JwtNodeAuthentication implements ICommonComponentHandler {
                 .setTips('节点JWT数据校验失败');
         }
 
-        const isVerify = rsaSha256Verify(`${header}.${payload}`, signature, this.RasSha256Key?.node?.publicKey ?? '');
+        const isVerify = CryptoHelper.rsaSha256Verify(`${header}.${payload}`, signature, this.RasSha256Key?.node?.publicKey ?? '');
         if (!isVerify) {
             return comHandlerResult.setError(new GatewayAuthenticationError(ctx.gettext('node-authentication-failed')))
                 .setTips('节点JWT数据校验失败');
         }
 
-        const payloadObject = JSON.parse(base64Decode(payload));
+        const payloadObject = JSON.parse(CryptoHelper.base64Decode(payload));
         if (payloadObject.expire < this._getExpire()) {
             return comHandlerResult.setError(new GatewayAuthenticationError(ctx.gettext('node-authentication-failed')))
                 .setTips('节点JWT数据校验失败,数据已过期');

@@ -1,13 +1,13 @@
-import {Context} from 'midway';
+import {FreelogContext, ApiInvokingError, FreelogApplication} from "egg-freelog-base";
 
-module.exports = (options?: object) => {
+export default function proxyResponseHandlerMiddleware(_options: object | null, _app: FreelogApplication): any {
 
-    return async function (ctx: Context, next) {
+    return async function (ctx: FreelogContext, next) {
         const {proxyResponse} = ctx;
         const {headers, statusCode, body} = proxyResponse;
 
         if (statusCode >= 500 && statusCode < 600) {
-            ctx.error({msg: "上游API服务器异常", data: {proxy: ctx.proxyInfo, body: body.toString()}})
+            ctx.error(new ApiInvokingError('上游API服务器异常', {proxy: ctx.proxyInfo, body: body.toString()}));
         }
 
         /**

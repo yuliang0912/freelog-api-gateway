@@ -1,4 +1,5 @@
 import {isArray} from 'lodash';
+import {MongodbOperation} from 'egg-freelog-base';
 import {inject, provide, scope, ScopeEnum} from 'midway';
 import {
     ClientInfo, HttpComponentHandleRule,
@@ -10,15 +11,15 @@ import {
 export class GatewayService implements IGatewayService {
 
     @inject()
-    apiRouterProvider;
-    @inject()
-    clientInfoProvider;
-    @inject()
-    serverGroupProvider;
-    @inject()
-    httpComponentHandleRuleProvider;
-    @inject()
     gatewayConfigService: IGatewayConfigService;
+    @inject()
+    apiRouterProvider: MongodbOperation<RouterInfo>;
+    @inject()
+    clientInfoProvider: MongodbOperation<ClientInfo>;
+    @inject()
+    serverGroupProvider: MongodbOperation<ServerGroupInfo>;
+    @inject()
+    httpComponentHandleRuleProvider: MongodbOperation<HttpComponentHandleRule>;
 
     async updateRouterConfig(): Promise<boolean> {
 

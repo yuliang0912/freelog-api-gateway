@@ -36,10 +36,6 @@ export default (appInfo: EggAppInfo) => {
         url: 'mongodb://127.0.0.1:27017/api-gateway'
     };
 
-    config.middleware = [
-        'errorHandler', 'identityAuthentication'
-    ];
-
     config.middleware = ['gatewayErrorHandler', 'freelogGatewayMain', 'httpComponentRequestBeforeHandler', 'apiMockHandler', 'httpProxyHandler', 'proxyResponseHandler', 'httpComponentResponseAfterHandler'];
 
     config.freelogGatewayMain = {

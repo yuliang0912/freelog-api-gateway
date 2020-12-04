@@ -30,8 +30,11 @@ export class HttpRequestProxy implements IHttpRequestProxy {
         }
         options.headers['traceId'] = ctx.traceId;
         options.headers['requestId'] = ctx.requestId;
+        if (!options.headers['Accept-Language'] && !options.headers['accept-language']) {
+            options.headers['Accept-Language'] = 'zh-CN,zh;q=0.5'
+        }
 
-        delete options.headers['content-length']
+        delete options.headers['content-length'];
 
         ctx.proxyInfo = {type: "request", gatewayUri: options.uri, method: options.method};
         ctx.startRquestTime = Date.now();

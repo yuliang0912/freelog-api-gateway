@@ -1,5 +1,6 @@
 import {queue} from 'async';
-import {provide, inject, scope, ScopeEnum, Context} from 'midway';
+import {FreelogContext} from 'egg-freelog-base';
+import {provide, inject, scope, ScopeEnum} from 'midway';
 import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../enum';
 import {ICommonComponentHandler, IComponentHandleResult, IRequestContextGatewayInfo} from '../../../interface';
 
@@ -20,7 +21,7 @@ export class TrafficStatisticsHandler implements ICommonComponentHandler {
     componentHandleResult: IComponentHandleResult;
 
 
-    async handle(ctx: Context, config?: object): Promise<IComponentHandleResult> {
+    async handle(ctx: FreelogContext, config?: object): Promise<IComponentHandleResult> {
 
         this.taskQueue.push(ctx, this.errorHandle.bind(this));
 
@@ -33,7 +34,7 @@ export class TrafficStatisticsHandler implements ICommonComponentHandler {
      * @param routerId
      * @param routerUrlRule
      */
-    async trafficStatisticsHandle(ctx: Context) {
+    async trafficStatisticsHandle(ctx: FreelogContext) {
 
         const gatewayInfo = ctx.gatewayInfo as IRequestContextGatewayInfo;
         const {requestId, traceId, url, method, proxyResponse} = ctx;

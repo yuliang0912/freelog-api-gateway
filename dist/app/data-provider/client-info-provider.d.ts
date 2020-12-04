@@ -1,4 +1,5 @@
-import * as MongoBaseOperation from 'egg-freelog-base/lib/database/mongo-base-operation';
-export default class ClientInfoProvider extends MongoBaseOperation {
+import { MongodbOperation } from 'egg-freelog-base';
+import { ClientInfo } from "../../interface";
+export default class ClientInfoProvider extends MongodbOperation<ClientInfo> {
     constructor(model: any);
 }

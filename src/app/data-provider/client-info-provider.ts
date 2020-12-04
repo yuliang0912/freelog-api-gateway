@@ -1,9 +1,10 @@
 import {provide, inject, scope, ScopeEnum} from 'midway';
-import * as MongoBaseOperation from 'egg-freelog-base/lib/database/mongo-base-operation';
+import {MongodbOperation} from 'egg-freelog-base'
+import {ClientInfo} from "../../interface";
 
 @provide()
 @scope(ScopeEnum.Singleton)
-export default class ClientInfoProvider extends MongoBaseOperation {
+export default class ClientInfoProvider extends MongodbOperation<ClientInfo> {
     constructor(@inject('model.ClientInfo') model) {
         super(model);
     }

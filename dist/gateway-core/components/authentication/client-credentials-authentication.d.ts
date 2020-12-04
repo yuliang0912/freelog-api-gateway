@@ -1,4 +1,4 @@
-import { Context } from 'midway';
+import { FreelogContext } from 'egg-freelog-base';
 import { ICommonComponentHandler, IComponentHandleResult, IGatewayConfigService } from "../../../interface";
 import { RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum } from '../../../enum';
 export declare class ClientCredentialsAuthentication implements ICommonComponentHandler {
@@ -7,5 +7,5 @@ export declare class ClientCredentialsAuthentication implements ICommonComponent
     comLevel: RouterComponentLevelEnum;
     gatewayConfigService: IGatewayConfigService;
     componentHandleResult: IComponentHandleResult;
-    handle(ctx: Context, config?: object): Promise<IComponentHandleResult>;
+    handle(ctx: FreelogContext, config?: object): Promise<IComponentHandleResult>;
 }

@@ -1,10 +1,14 @@
-import {scope, provide, ScopeEnum} from 'midway';
-import {MongooseModelBase, IMongooseModelBase} from './mongoose-model-base';
+import {scope, provide, ScopeEnum, plugin} from 'midway';
+import {MongooseModelBase, IMongooseModelBase} from 'egg-freelog-base';
 import {omit} from "lodash";
 
 @scope(ScopeEnum.Singleton)
 @provide('model.ServerGroup')
 export class ServerGroup extends MongooseModelBase implements IMongooseModelBase {
+
+    constructor(@plugin('mongoose') mongoose) {
+        super(mongoose);
+    }
 
     buildMongooseModel() {
 

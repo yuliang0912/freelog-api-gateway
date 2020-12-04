@@ -1,6 +1,5 @@
-import {ArgumentError} from 'egg-freelog-base/error';
-import {LoginUser, UnLoginUser} from 'egg-freelog-base/app/enum/identity-type';
 import {IGatewayConfigService, IGatewayService} from "../../interface";
+import {visitorIdentityValidator, IdentityTypeEnum, ArgumentError, FreelogContext} from 'egg-freelog-base';
 
 export default class HomeController {
 
@@ -30,7 +29,8 @@ export default class HomeController {
      * 访问记录
      * @param ctx
      */
-    async requestRecords(ctx) {
+    @visitorIdentityValidator(IdentityTypeEnum.LoginUser | IdentityTypeEnum.UnLoginUser)
+    async requestRecords(ctx: FreelogContext) {
 
         const page = ctx.checkQuery("page").optional().toInt().gt(0).default(1).value
         const pageSize = ctx.checkQuery("pageSize").optional().toInt().gt(0).lt(101).default(10).value
@@ -41,7 +41,7 @@ export default class HomeController {
         const requestUrl = ctx.checkQuery('requestUrl').optional().value
         const userId = ctx.checkQuery("userId").optional().toInt().gt(0).value
 
-        ctx.validateParams().validateVisitorIdentity(LoginUser | UnLoginUser)
+        ctx.validateParams()
 
         if (serviceResponseTime && !operator) {
             throw new ArgumentError('组合参数serviceResponseTime,operator校验失败')

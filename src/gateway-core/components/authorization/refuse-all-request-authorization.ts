@@ -4,6 +4,7 @@ import {
 } from '../../../interface';
 
 import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../enum';
+import {FreelogContext} from "egg-freelog-base";
 
 @scope(ScopeEnum.Singleton)
 @provide(`gateway_com_${RouterComponentNameEnum.Refuse_All_Request_Authorization}`)
@@ -16,7 +17,7 @@ export class RefuseAllRequestAuthorization implements ICommonComponentHandler {
     @inject()
     componentHandleResult: IComponentHandleResult;
 
-    async handle(config?: object): Promise<IComponentHandleResult> {
+    async handle(ctx: FreelogContext, config?: object): Promise<IComponentHandleResult> {
 
         return this.componentHandleResult.build(this.comName, this.comType).setHandleResult(false).setTips('未授权的请求');
 

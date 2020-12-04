@@ -13,8 +13,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const midway_1 = require("midway");
-const MongoBaseOperation = require("egg-freelog-base/lib/database/mongo-base-operation");
-let IpBlackWhiteGroupProvider = class IpBlackWhiteGroupProvider extends MongoBaseOperation {
+const egg_freelog_base_1 = require("egg-freelog-base");
+let IpBlackWhiteGroupProvider = class IpBlackWhiteGroupProvider extends egg_freelog_base_1.MongodbOperation {
     constructor(model) {
         super(model);
     }
@@ -26,4 +26,4 @@ IpBlackWhiteGroupProvider = __decorate([
     __metadata("design:paramtypes", [Object])
 ], IpBlackWhiteGroupProvider);
 exports.default = IpBlackWhiteGroupProvider;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaXAtYmxhY2std2hpdGUtZ3JvdXAtcHJvdmlkZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvYXBwL2RhdGEtcHJvdmlkZXIvaXAtYmxhY2std2hpdGUtZ3JvdXAtcHJvdmlkZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7QUFBQSxtQ0FBeUQ7QUFDekQseUZBQXlGO0FBSXpGLElBQXFCLHlCQUF5QixHQUE5QyxNQUFxQix5QkFBMEIsU0FBUSxrQkFBa0I7SUFDckUsWUFBK0MsS0FBSztRQUNoRCxLQUFLLENBQUMsS0FBSyxDQUFDLENBQUM7SUFDakIsQ0FBQztDQUNKLENBQUE7QUFKb0IseUJBQXlCO0lBRjdDLGdCQUFPLEVBQUU7SUFDVCxjQUFLLENBQUMsa0JBQVMsQ0FBQyxTQUFTLENBQUM7SUFFVixXQUFBLGVBQU0sQ0FBQyx5QkFBeUIsQ0FBQyxDQUFBOztHQUQ3Qix5QkFBeUIsQ0FJN0M7a0JBSm9CLHlCQUF5QiJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaXAtYmxhY2std2hpdGUtZ3JvdXAtcHJvdmlkZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvYXBwL2RhdGEtcHJvdmlkZXIvaXAtYmxhY2std2hpdGUtZ3JvdXAtcHJvdmlkZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7QUFBQSxtQ0FBeUQ7QUFDekQsdURBQWlEO0FBSWpELElBQXFCLHlCQUF5QixHQUE5QyxNQUFxQix5QkFBMEIsU0FBUSxtQ0FBcUI7SUFDeEUsWUFBK0MsS0FBSztRQUNoRCxLQUFLLENBQUMsS0FBSyxDQUFDLENBQUM7SUFDakIsQ0FBQztDQUNKLENBQUE7QUFKb0IseUJBQXlCO0lBRjdDLGdCQUFPLEVBQUU7SUFDVCxjQUFLLENBQUMsa0JBQVMsQ0FBQyxTQUFTLENBQUM7SUFFVixXQUFBLGVBQU0sQ0FBQyx5QkFBeUIsQ0FBQyxDQUFBOztHQUQ3Qix5QkFBeUIsQ0FJN0M7a0JBSm9CLHlCQUF5QiJ9

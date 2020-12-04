@@ -1,8 +1,7 @@
 import {parse} from 'url';
 import {isEmpty, pick} from 'lodash';
-import {provide, inject, scope, ScopeEnum, Context} from 'midway';
-import {hmacSha1} from 'egg-freelog-base/app/extend/helper/crypto_helper';
-import {GatewayArgumentError, GatewayAuthenticationError} from 'egg-freelog-base';
+import {provide, inject, scope, ScopeEnum} from 'midway';
+import {GatewayArgumentError, GatewayAuthenticationError, CryptoHelper, FreelogContext} from 'egg-freelog-base';
 import {
     ICommonComponentHandler, IComponentHandleResult, IGatewayConfigService
 } from "../../../interface";
@@ -21,7 +20,7 @@ export class ClientCredentialsAuthentication implements ICommonComponentHandler 
     @inject()
     componentHandleResult: IComponentHandleResult;
 
-    async handle(ctx: Context, config?: object): Promise<IComponentHandleResult> {
+    async handle(ctx: FreelogContext, config?: object): Promise<IComponentHandleResult> {
 
         const comHandlerResult = this.componentHandleResult.build(this.comName, this.comType);
         const clientId = ctx.checkHeader("clientid").exist().notEmpty().toInt().value;
@@ -47,9 +46,9 @@ export class ClientCredentialsAuthentication implements ICommonComponentHandler 
         }
 
         const text = `${parse(ctx.url).path}&timeline=${timeLine}`;
-        if (hmacSha1(text, clientInfo.privateKey) !== sign) {
+        if (CryptoHelper.hmacSha1(text, clientInfo.privateKey) !== sign) {
             return comHandlerResult.setError(new GatewayAuthenticationError(ctx.gettext('params-validate-failed', 'sign'), {
-                clientId, sign: hmacSha1(text, clientInfo.privateKey)
+                clientId, sign: CryptoHelper.hmacSha1(text, clientInfo.privateKey)
             })).setTips('签名校验失败');
         }
 

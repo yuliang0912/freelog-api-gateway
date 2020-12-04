@@ -1,12 +1,12 @@
 import {split} from 'lodash';
-import {GatewayArgumentError} from 'egg-freelog-base'
+import {FreelogApplication, FreelogContext, GatewayArgumentError} from 'egg-freelog-base'
 import {
     IGatewayConfigService, IGatewayErrorHandler, IGatewayMatchService, IRequestContextGatewayInfo
 } from "../../interface";
 
-module.exports = (options?: object) => {
+export default function freelogGatewayMainMiddleware(_options: object | null, _app: FreelogApplication): any {
 
-    return async function (ctx, next) {
+    return async function (ctx: FreelogContext, next) {
 
         const gatewayErrorHandler: IGatewayErrorHandler = ctx.requestContext.get('gatewayErrorHandler');
         const gatewayMatchService: IGatewayMatchService = ctx.requestContext.get('gatewayMatchService');

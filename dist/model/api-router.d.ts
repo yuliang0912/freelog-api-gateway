@@ -1,5 +1,6 @@
-import { MongooseModelBase, IMongooseModelBase } from './mongoose-model-base';
+import { MongooseModelBase, IMongooseModelBase } from 'egg-freelog-base';
 export declare class ApiRouter extends MongooseModelBase implements IMongooseModelBase {
+    constructor(mongoose: any);
     buildMongooseModel(): any;
     static get toObjectOptions(): {
         getters: boolean;

@@ -1,10 +1,14 @@
 import {omit} from 'lodash';
-import {scope, provide, ScopeEnum} from 'midway';
-import {MongooseModelBase, IMongooseModelBase} from './mongoose-model-base';
+import {scope, provide, ScopeEnum, plugin} from 'midway';
+import {MongooseModelBase, IMongooseModelBase} from 'egg-freelog-base';
 
 @scope(ScopeEnum.Singleton)
 @provide('model.IpBlackWhiteGroup')
 export class IpBlackWhiteGroup extends MongooseModelBase implements IMongooseModelBase {
+
+    constructor(@plugin('mongoose') mongoose) {
+        super(mongoose);
+    }
 
     buildMongooseModel() {
         const IpSchema = new this.mongoose.Schema({

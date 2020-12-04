@@ -1,6 +1,6 @@
-import { Context } from 'midway';
 import { ICommonComponentHandler, IComponentHandleResult } from '../../../interface';
 import { RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum } from '../../../enum';
+import { FreelogContext } from "egg-freelog-base";
 export declare class RequestRecordHandler implements ICommonComponentHandler {
     comName: RouterComponentNameEnum;
     comType: RouterComponentTypeEnum;
@@ -8,7 +8,7 @@ export declare class RequestRecordHandler implements ICommonComponentHandler {
     taskQueue: any;
     logger: any;
     componentHandleResult: IComponentHandleResult;
-    handle(ctx: Context, config?: object): Promise<IComponentHandleResult>;
+    handle(ctx: FreelogContext, config?: object): Promise<IComponentHandleResult>;
     /**
      * 流量统计数据保存
      * @param routerId

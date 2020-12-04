@@ -1,5 +1,5 @@
-import { Context } from 'midway';
 import { IIdentityTransmit } from '../../interface';
+import { FreelogContext } from "egg-freelog-base";
 export declare class identityTransmit implements IIdentityTransmit {
-    transmit(ctx: Context): void;
+    transmit(ctx: FreelogContext): void;
 }

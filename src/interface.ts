@@ -1,4 +1,4 @@
-import {Context} from "midway";
+import {FreelogContext} from "egg-freelog-base";
 import {RouterComponentLevelEnum, RouterComponentNameEnum, RouterComponentTypeEnum} from "./enum";
 
 export interface UpstreamInfo {
@@ -102,11 +102,11 @@ export interface IGatewayMatchService {
 
 export interface IGatewayErrorHandler {
 
-    routerNotMatchErrorHandle(ctx: Context): void;
+    routerNotMatchErrorHandle(ctx: FreelogContext): void;
 
-    componentInvokingErrorHandle(ctx: Context, componentName: string, error: Error): void;
+    componentInvokingErrorHandle(ctx: FreelogContext, componentName: string, error: Error): void;
 
-    httpRequestProxyErrorHandle(ctx: Context, error): void;
+    httpRequestProxyErrorHandle(ctx: FreelogContext, error): void;
 }
 
 export interface IGatewayComponentHandler {
@@ -119,7 +119,7 @@ export interface ICommonComponentHandler {
     comType: RouterComponentTypeEnum;
     comLevel: RouterComponentLevelEnum;
 
-    handle(ctx: Context, config?: object): Promise<IComponentHandleResult>;
+    handle(ctx: FreelogContext, config?: object): Promise<IComponentHandleResult>;
 }
 
 export interface IComponentHandleResult {
@@ -157,9 +157,9 @@ export interface IRequestContextGatewayInfo {
 
 export interface IHttpRequestProxy {
 
-    httpProxy(ctx: Context, upstreamRouterInfo: UpstreamInfo): Promise<any>;
+    httpProxy(ctx: FreelogContext, upstreamRouterInfo: UpstreamInfo): Promise<any>;
 }
 
 export interface IIdentityTransmit {
-    transmit(ctx: Context): void;
+    transmit(ctx: FreelogContext): void;
 }

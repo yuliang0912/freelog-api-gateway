@@ -1,4 +1,3 @@
-import {Context} from 'midway';
 import {
     IGatewayErrorHandler,
     IGatewayMatchService,
@@ -6,10 +5,11 @@ import {
     IIdentityTransmit,
     IRequestContextGatewayInfo
 } from '../../interface';
+import {FreelogApplication, FreelogContext} from "egg-freelog-base";
 
-module.exports = (options?: object) => {
+export default function httpProxyHandlerMiddleware(_options: object | null, _app: FreelogApplication): any {
 
-    return async function (ctx: Context, next) {
+    return async function (ctx: FreelogContext, next) {
 
         const gatewayInfo = ctx.gatewayInfo as IRequestContextGatewayInfo;
         const identityTransmit: IIdentityTransmit = ctx.requestContext.get('identityTransmit');

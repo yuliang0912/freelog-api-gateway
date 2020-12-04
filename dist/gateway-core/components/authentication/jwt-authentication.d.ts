@@ -1,5 +1,5 @@
-import { Context } from 'midway';
 import { ICommonComponentHandler, IComponentHandleResult } from '../../../interface';
+import { FreelogContext } from 'egg-freelog-base';
 import { RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum } from '../../../enum';
 export declare class JwtAuthentication implements ICommonComponentHandler {
     comName: RouterComponentNameEnum;
@@ -7,7 +7,7 @@ export declare class JwtAuthentication implements ICommonComponentHandler {
     comLevel: RouterComponentLevelEnum;
     RasSha256Key: any;
     componentHandleResult: IComponentHandleResult;
-    handle(ctx: Context, config?: object): Promise<IComponentHandleResult>;
+    handle(ctx: FreelogContext, config?: object): Promise<IComponentHandleResult>;
     /**
      * 获取有效期
      */

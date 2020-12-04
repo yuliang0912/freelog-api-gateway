@@ -1,9 +1,10 @@
-import {provide, inject, scope, ScopeEnum, Context} from 'midway';
+import {provide, inject, scope, ScopeEnum} from 'midway';
 import {
     ICommonComponentHandler, IComponentHandleResult
 } from '../../../interface';
 import {queue} from 'async';
 import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../enum';
+import {FreelogContext} from "egg-freelog-base";
 
 @scope(ScopeEnum.Singleton)
 @provide(`gateway_com_${RouterComponentNameEnum.Request_record}`)
@@ -19,7 +20,7 @@ export class RequestRecordHandler implements ICommonComponentHandler {
     @inject()
     componentHandleResult: IComponentHandleResult;
 
-    async handle(ctx: Context, config?: object): Promise<IComponentHandleResult> {
+    async handle(ctx: FreelogContext, config?: object): Promise<IComponentHandleResult> {
 
         const {routerId, routerUrlRule} = ctx.gatewayInfo.routerInfo;
 

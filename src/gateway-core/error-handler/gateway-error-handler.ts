@@ -1,5 +1,10 @@
-import {provide, scope, ScopeEnum, Context} from 'midway'
-import {GatewayRouterMatchError, GatewayComponentInvokingError, GatewayUpstreamApiError} from 'egg-freelog-base'
+import {provide, scope, ScopeEnum} from 'midway'
+import {
+    GatewayRouterMatchError,
+    GatewayComponentInvokingError,
+    GatewayUpstreamApiError,
+    FreelogContext
+} from 'egg-freelog-base'
 import {IGatewayErrorHandler} from "../../interface";
 
 @provide()
@@ -9,7 +14,7 @@ export class GatewayErrorHandler implements IGatewayErrorHandler {
     /**
      * 未匹配到路由错误处理
      */
-    routerNotMatchErrorHandle(ctx: Context) {
+    routerNotMatchErrorHandle(ctx: FreelogContext) {
         ctx.status = 404;
         throw new GatewayRouterMatchError('网关服务未能匹配到可用的路由', {path: ctx.path, method: ctx.method});
     }
@@ -19,7 +24,7 @@ export class GatewayErrorHandler implements IGatewayErrorHandler {
      * @param componentName
      * @param error
      */
-    componentInvokingErrorHandle(ctx: Context, componentName: string, error: Error) {
+    componentInvokingErrorHandle(ctx: FreelogContext, componentName: string, error: Error) {
         ctx.status = 500;
         throw new GatewayComponentInvokingError('网关处理组件执行异常', {componentName, error: error.stack || error.message});
     }
@@ -28,7 +33,7 @@ export class GatewayErrorHandler implements IGatewayErrorHandler {
      * 发起http代理请求异常
      * @param error
      */
-    httpRequestProxyErrorHandle(ctx: Context, error) {
+    httpRequestProxyErrorHandle(ctx: FreelogContext, error) {
 
         const {code, statusCode} = error
 

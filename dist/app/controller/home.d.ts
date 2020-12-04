@@ -1,3 +1,4 @@
+import { FreelogContext } from 'egg-freelog-base';
 export default class HomeController {
     /**
      * 首页
@@ -14,7 +15,7 @@ export default class HomeController {
      * 访问记录
      * @param ctx
      */
-    requestRecords(ctx: any): Promise<void>;
+    requestRecords(ctx: FreelogContext): Promise<void>;
     /**
      * 同步路由数据
      * @param ctx

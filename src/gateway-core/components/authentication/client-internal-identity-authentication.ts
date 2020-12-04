@@ -1,6 +1,5 @@
-import {provide, inject, scope, ScopeEnum, Context} from 'midway';
-import {hmacSha1} from 'egg-freelog-base/app/extend/helper/crypto_helper';
-import {GatewayArgumentError, GatewayAuthenticationError} from 'egg-freelog-base';
+import {provide, inject, scope, ScopeEnum} from 'midway';
+import {GatewayArgumentError, GatewayAuthenticationError, CryptoHelper, FreelogContext} from 'egg-freelog-base';
 import {
     ICommonComponentHandler, IComponentHandleResult, IGatewayConfigService
 } from '../../../interface';
@@ -19,7 +18,7 @@ export class ClientInternalIdentityAuthentication implements ICommonComponentHan
     @inject()
     componentHandleResult: IComponentHandleResult;
 
-    async handle(ctx: Context, config?: object): Promise<IComponentHandleResult> {
+    async handle(ctx: FreelogContext, config?: object): Promise<IComponentHandleResult> {
 
         const tokenInfo = ctx.get('authentication');
         const comHandlerResult = this.componentHandleResult.build(this.comName, this.comType);
@@ -44,7 +43,7 @@ export class ClientInternalIdentityAuthentication implements ICommonComponentHan
             return comHandlerResult.setError(new GatewayAuthenticationError(ctx.gettext('params-format-validate-failed', 'authentication')))
                 .setTips('内部身份认证失败,身份数据格式错误');
         }
-        if (hmacSha1(token, clientInfo.privateKey) !== sign) {
+        if (CryptoHelper.hmacSha1(token, clientInfo.privateKey) !== sign) {
             return comHandlerResult.setError(new GatewayAuthenticationError(ctx.gettext('params-validate-failed', 'sign'), {token}));
         }
 
