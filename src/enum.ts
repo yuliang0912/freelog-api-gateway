@@ -35,6 +35,8 @@ export enum RouterComponentNameEnum {
 
     Refuse_All_Request_Authorization = 'refuse-all-request',
 
+    AdminAccountAuthorization = 'admin-account',
+
     Traffic_Statistics = 'traffic-statistics',
 
     Request_record = 'request-record'

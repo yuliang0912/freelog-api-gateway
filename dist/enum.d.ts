@@ -25,6 +25,7 @@ export declare enum RouterComponentNameEnum {
     JWT_Node_Authentication = "jwt-node",
     Null_Identity_Authentication = "null-identity",
     Refuse_All_Request_Authorization = "refuse-all-request",
+    AdminAccountAuthorization = "admin-account",
     Traffic_Statistics = "traffic-statistics",
     Request_record = "request-record"
 }

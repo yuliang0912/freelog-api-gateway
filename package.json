@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "async": "^3.2.0",
+    "axios": "^0.21.0",
     "bluebird": "^3.7.1",
     "egg-freelog-base": "^3.0.17",
     "egg-scripts": "^2.10.0",
@@ -34,7 +35,7 @@
     "stop": "egg-scripts stop --title=freelog-api-gateway",
     "start_build": "npm run build && cross-env NODE_ENV=development midway-bin dev",
     "clean": "midway-bin clean",
-    "dev": "cross-env NODE_ENV=local  port=8895 midway-bin dev --ts",
+    "dev": "cross-env NODE_ENV=local port=8895 midway-bin dev --ts",
     "debug": "cross-env NODE_ENV=local midway-bin debug --ts",
     "test": "npm run lint && midway-bin test --ts",
     "cov": "midway-bin cov --ts",
