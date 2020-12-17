@@ -49,6 +49,9 @@ export class HttpRequestProxy implements IHttpRequestProxy {
             if (ctx.req.readable && !["GET", "HEAD", "DELETE"].includes(options.method)) {
                 ctx.req.pipe(proxyServer);
             }
+            if (ctx.res.writable) {
+                proxyServer.pipe(ctx.res);
+            }
         })
 
         //暂不启用直接pipe到ctx.res方案,一般大文件传输才需要考虑
