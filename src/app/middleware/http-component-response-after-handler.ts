@@ -76,19 +76,19 @@ class HttpComponentResponseAfterHandler {
                     if (!mustResult) {
                         return false;
                     }
-                    break;
+                    continue;
                 case 'should':
                     const shouldResult = await this.recursionInvokingGatewayComponents(ctx, comList, comConfig, false);
                     if (!shouldResult) {
                         return false;
                     }
-                    break;
+                    continue;
                 default:
                     console.warn(`不被支持的逻辑操作关键字:${operator}`);
-                    break;
+                    return false;
             }
-            return true;
         }
+        return true;
     }
 
     /**
