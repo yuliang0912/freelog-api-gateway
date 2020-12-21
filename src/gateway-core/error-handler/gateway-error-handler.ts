@@ -16,7 +16,9 @@ export class GatewayErrorHandler implements IGatewayErrorHandler {
      */
     routerNotMatchErrorHandle(ctx: FreelogContext) {
         ctx.status = 404;
-        throw new GatewayRouterMatchError('网关服务未能匹配到可用的路由', {path: ctx.path, method: ctx.method});
+        throw new GatewayRouterMatchError(`网关服务未能匹配到可用的路由,path(${ctx.method}:${ctx.path})`, {
+            path: ctx.path, method: ctx.method
+        });
     }
 
     /**
