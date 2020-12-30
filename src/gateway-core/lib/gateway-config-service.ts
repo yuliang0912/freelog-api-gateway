@@ -82,6 +82,9 @@ export class GatewayConfigService implements IGatewayConfigService {
 
             }
             router.routerPrefix = router.routerPrefix.toLowerCase();
+            if (!router.upstream.serverGroupName) {
+                continue;
+            }
             router.upstream.serverGroupInfo = serverGroups.find(x => x.groupName === router.upstream.serverGroupName);
             if (!router.upstream.serverGroupInfo) {
                 console.log('serverGroup not found,serverGroupName:' + router.upstream.serverGroupName);

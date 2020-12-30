@@ -82,6 +82,8 @@ export interface IGatewayConfigService {
  */
 export interface IGatewayService {
 
+    getMockData(routeId: string): Promise<any>;
+
     updateRouterConfig(): Promise<boolean>;
 
     findRouters(condition: object): Promise<RouterInfo[]>;

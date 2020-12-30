@@ -5,11 +5,14 @@ import {
     ClientInfo, HttpComponentHandleRule,
     IGatewayConfigService, IGatewayService, RouterInfo, ServerGroupInfo
 } from "../../interface";
+import ApiMockDataProvider from '../data-provider/api-mock-data-provider';
 
 @provide()
 @scope(ScopeEnum.Singleton)
 export class GatewayService implements IGatewayService {
 
+    @inject()
+    apiMockDataProvider: ApiMockDataProvider;
     @inject()
     gatewayConfigService: IGatewayConfigService;
     @inject()
@@ -20,6 +23,10 @@ export class GatewayService implements IGatewayService {
     serverGroupProvider: MongodbOperation<ServerGroupInfo>;
     @inject()
     httpComponentHandleRuleProvider: MongodbOperation<HttpComponentHandleRule>;
+
+    async getMockData(routeId: string): Promise<any> {
+        return this.apiMockDataProvider.findOne({routeId})
+    }
 
     async updateRouterConfig(): Promise<boolean> {
 

@@ -1,8 +1,0 @@
-{
-  "extends": [
-    "tslint-midway-contrib"
-  ],
-  "rules": {
-    "no-bitwise": false
-  }
-}

@@ -66,6 +66,7 @@ export interface IGatewayConfigService {
  * 读取原始DB数据
  */
 export interface IGatewayService {
+    getMockData(routeId: string): Promise<any>;
     updateRouterConfig(): Promise<boolean>;
     findRouters(condition: object): Promise<RouterInfo[]>;
     findClients(condition: object): Promise<ClientInfo[]>;
