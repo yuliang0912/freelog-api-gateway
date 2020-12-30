@@ -13,7 +13,7 @@ export class ApiMockDataModel extends MongooseModelBase implements IMongooseMode
     buildMongooseModel() {
 
         const ApiMockDataSchema = new this.mongoose.Schema({
-            routeId: {type: String, unique: true, required: true},
+            routerId: {type: String, required: true},
             contentType: {type: String, required: true},
             mockData: {type: this.mongoose.Schema.Types.Mixed, required: true},
             status: {type: Number, default: 1, enum: [0, 1], required: true}
@@ -23,7 +23,7 @@ export class ApiMockDataModel extends MongooseModelBase implements IMongooseMode
             toJSON: ApiMockDataModel.toObjectOptions
         });
 
-        ApiMockDataSchema.index({routeId: 1}, {unique: true});
+        ApiMockDataSchema.index({routerId: 1}, {unique: true});
 
         return this.mongoose.model('api-mock-datas', ApiMockDataSchema);
     }

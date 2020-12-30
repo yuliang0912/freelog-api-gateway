@@ -8,7 +8,7 @@ export declare class GatewayService implements IGatewayService {
     clientInfoProvider: MongodbOperation<ClientInfo>;
     serverGroupProvider: MongodbOperation<ServerGroupInfo>;
     httpComponentHandleRuleProvider: MongodbOperation<HttpComponentHandleRule>;
-    getMockData(routeId: string): Promise<any>;
+    getMockData(routerId: string): Promise<any>;
     updateRouterConfig(): Promise<boolean>;
     findRouters(condition: object): Promise<RouterInfo[]>;
     findClients(condition: object): Promise<ClientInfo[]>;

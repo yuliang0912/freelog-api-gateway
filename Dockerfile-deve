@@ -8,7 +8,7 @@ WORKDIR /data/freelog-api-gateway
 
 COPY . /data/freelog-api-gateway
 
-RUN npm install
+RUN npm install --production
 
 ENV NODE_ENV deve
 ENV EGG_SERVER_ENV deve

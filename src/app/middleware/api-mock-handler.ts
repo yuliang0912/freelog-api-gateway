@@ -10,7 +10,7 @@ export default function apiMockHandlerMiddleware(_options: object | null, _app: 
         }
 
         const gatewayService: IGatewayService = ctx.requestContext.get('gatewayService');
-        const mockData = await gatewayService.getMockData(ctx.gatewayInfo.routerInfo.routeId)
+        const mockData = await gatewayService.getMockData(ctx.gatewayInfo.routerInfo.routerId)
 
         ctx.body = mockData.mockData;
         ctx.set('content-type', mockData.contentType);

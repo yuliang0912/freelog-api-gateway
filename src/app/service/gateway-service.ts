@@ -24,8 +24,8 @@ export class GatewayService implements IGatewayService {
     @inject()
     httpComponentHandleRuleProvider: MongodbOperation<HttpComponentHandleRule>;
 
-    async getMockData(routeId: string): Promise<any> {
-        return this.apiMockDataProvider.findOne({routeId})
+    async getMockData(routerId: string): Promise<any> {
+        return this.apiMockDataProvider.findOne({routerId});
     }
 
     async updateRouterConfig(): Promise<boolean> {
