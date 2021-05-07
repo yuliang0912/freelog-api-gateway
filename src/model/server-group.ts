@@ -1,6 +1,6 @@
 import {scope, provide, ScopeEnum, plugin} from 'midway';
 import {MongooseModelBase, IMongooseModelBase} from 'egg-freelog-base';
-import {omit} from "lodash";
+import {omit} from 'lodash';
 
 @scope(ScopeEnum.Singleton)
 @provide('model.ServerGroup')
@@ -38,6 +38,6 @@ export class ServerGroup extends MongooseModelBase implements IMongooseModelBase
             transform(doc, ret, options) {
                 return Object.assign({groupId: doc.id}, omit(ret, ['_id']));
             }
-        }
+        };
     }
 }

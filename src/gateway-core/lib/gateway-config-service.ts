@@ -3,7 +3,7 @@ import {isArray, cloneDeep, groupBy} from 'lodash';
 import {
     ClientInfo, HttpComponentHandleRule,
     IGatewayConfigService, RouterInfo, ServerGroupInfo
-} from "../../interface";
+} from '../../interface';
 
 @provide()
 @scope(ScopeEnum.Singleton)
@@ -45,11 +45,12 @@ export class GatewayConfigService implements IGatewayConfigService {
     /**
      * 根据URL路由前缀获取路由分组信息
      * @param routerPrefix
+     * @param httpMethod
      */
     getRouterListByPrefix(routerPrefix: string, httpMethod: string): RouterInfo[] {
 
         function filterHttpMethod(router: RouterInfo): boolean {
-            return router.httpMethod.some(x => x.toUpperCase() === 'ALL' || x.toUpperCase() === httpMethod.toUpperCase())
+            return router.httpMethod.some(x => x.toUpperCase() === 'ALL' || x.toUpperCase() === httpMethod.toUpperCase());
         }
 
         return this._routerPrefixGroup.get(routerPrefix)?.filter(filterHttpMethod).map(cloneDeep) ?? [];
@@ -114,7 +115,7 @@ export class GatewayConfigService implements IGatewayConfigService {
             this._routerMap.set(router.routerId, router);
         }
         for (const clientInfo of clientInfos) {
-            this._clientMap.set(clientInfo.clientId, clientInfo)
+            this._clientMap.set(clientInfo.clientId, clientInfo);
         }
         for (const [routerPrefix, routerGroup] of Object.entries(groupBy(routers, 'routerPrefix'))) {
             this._routerPrefixGroup.set(routerPrefix, routerGroup);

@@ -1,6 +1,6 @@
 import {provide, inject, scope, ScopeEnum} from 'midway';
-import {MongodbOperation} from 'egg-freelog-base'
-import {ClientInfo} from "../../interface";
+import {MongodbOperation} from 'egg-freelog-base';
+import {ClientInfo} from '../../interface';
 
 @provide()
 @scope(ScopeEnum.Singleton)

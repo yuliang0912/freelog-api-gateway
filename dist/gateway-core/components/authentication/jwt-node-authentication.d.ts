@@ -1,5 +1,5 @@
 import { FreelogContext } from 'egg-freelog-base';
-import { ICommonComponentHandler, IComponentHandleResult } from "../../../interface";
+import { ICommonComponentHandler, IComponentHandleResult } from '../../../interface';
 import { RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum } from '../../../enum';
 export declare class JwtNodeAuthentication implements ICommonComponentHandler {
     comName: RouterComponentNameEnum;

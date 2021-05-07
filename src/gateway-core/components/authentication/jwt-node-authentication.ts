@@ -1,6 +1,6 @@
 import {provide, inject, config, scope, ScopeEnum} from 'midway';
 import {GatewayArgumentError, GatewayAuthenticationError, CryptoHelper, FreelogContext} from 'egg-freelog-base';
-import {ICommonComponentHandler, IComponentHandleResult} from "../../../interface";
+import {ICommonComponentHandler, IComponentHandleResult} from '../../../interface';
 import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../enum';
 
 @scope(ScopeEnum.Singleton)
@@ -25,7 +25,7 @@ export class JwtNodeAuthentication implements ICommonComponentHandler {
                 .setTips('JWT认证失败,未获取到JWT信息');
         }
 
-        const [header, payload, signature] = jwtStr.replace(/^(Bearer )?/i, '').split('.')
+        const [header, payload, signature] = jwtStr.replace(/^(Bearer )?/i, '').split('.');
         if (!header || !payload || !signature) {
             return comHandlerResult.setError(new GatewayAuthenticationError(ctx.gettext('params-format-validate-failed', 'authInfo or authentication')))
                 .setTips('节点JWT数据校验失败');
@@ -52,7 +52,7 @@ export class JwtNodeAuthentication implements ICommonComponentHandler {
      * 获取有效期
      */
     _getExpire(expireSpan = 0) {
-        const currTime = Math.round(new Date().getTime() / 1000)
-        return currTime + expireSpan
+        const currTime = Math.round(new Date().getTime() / 1000);
+        return currTime + expireSpan;
     }
 }

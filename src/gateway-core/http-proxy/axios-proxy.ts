@@ -1,5 +1,5 @@
-import {Context, provide, scope, ScopeEnum} from 'midway'
-import {IHttpRequestProxy, UpstreamInfo} from "../../interface";
+import {Context, provide, scope, ScopeEnum} from 'midway';
+import {IHttpRequestProxy, UpstreamInfo} from '../../interface';
 
 
 @scope(ScopeEnum.Singleton)
@@ -14,7 +14,7 @@ export class AxiosProxy implements IHttpRequestProxy {
      */
     async httpProxy(ctx: Context, upstreamRouterInfo: UpstreamInfo) {
 
-        const {protocol, method, port, serverGroupInfo, forwardUrl} = upstreamRouterInfo
+        const {protocol, method, port, serverGroupInfo, forwardUrl} = upstreamRouterInfo;
         const serverInfo = serverGroupInfo.servers.find(x => x.status === 1);
 
         const options = {
@@ -25,19 +25,19 @@ export class AxiosProxy implements IHttpRequestProxy {
             gzip: false, //无需解压响应的内容
             timeout: 30000, //默认30秒
             encoding: null
-        }
+        };
         options.headers['traceId'] = ctx.traceId;
         options.headers['requestId'] = ctx.requestId;
         if (!options.headers['Accept-Language'] && !options.headers['accept-language']) {
-            options.headers['Accept-Language'] = 'zh-CN,zh;q=0.5'
+            options.headers['Accept-Language'] = 'zh-CN,zh;q=0.5';
         }
 
         delete options.headers['content-length'];
 
-        ctx.proxyInfo = {type: "request", gatewayUri: options.uri, method: options.method};
+        ctx.proxyInfo = {type: 'request', gatewayUri: options.uri, method: options.method};
         ctx.startRquestTime = Date.now();
 
-        return this._httpRequest(ctx, options).finally(() => ctx.startResponseTime = Date.now())
+        return this._httpRequest(ctx, options).finally(() => ctx.startResponseTime = Date.now());
     }
 
     async _httpRequest(ctx: Context, options) {

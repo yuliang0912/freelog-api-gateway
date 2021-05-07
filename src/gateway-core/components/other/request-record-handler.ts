@@ -4,7 +4,7 @@ import {
 } from '../../../interface';
 import {queue} from 'async';
 import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../enum';
-import {FreelogContext} from "egg-freelog-base";
+import {FreelogContext} from 'egg-freelog-base';
 
 @scope(ScopeEnum.Singleton)
 @provide(`gateway_com_${RouterComponentNameEnum.Request_record}`)
@@ -46,8 +46,8 @@ export class RequestRecordHandler implements ICommonComponentHandler {
      */
     errorHandle(error) {
         if (error instanceof Error) {
-            console.log("end-of-cycle-event-handler", '事件执行异常', ...arguments);
-            this.logger.error("end-of-cycle-event-handler", '事件执行异常', ...arguments);
+            console.log(`gateway_com_${RouterComponentNameEnum.Request_record}`, '事件执行异常', ...arguments);
+            this.logger.error(`gateway_com_${RouterComponentNameEnum.Request_record}`, '事件执行异常', ...arguments);
         }
     }
 }

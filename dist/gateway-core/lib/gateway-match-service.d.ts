@@ -1,4 +1,4 @@
-import { IGatewayMatchService, RouterInfo } from "../../interface";
+import { IGatewayMatchService, RouterInfo } from '../../interface';
 export declare class GatewayMatchService implements IGatewayMatchService {
     readonly customParamRegExp: RegExp;
     /**

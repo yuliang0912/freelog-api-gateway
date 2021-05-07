@@ -1,4 +1,4 @@
-import {IGatewayService} from "../../interface";
+import {IGatewayService} from '../../interface';
 
 const Subscription = require('egg').Subscription;
 
@@ -10,7 +10,7 @@ module.exports = class SyncGatewayConfigJob extends Subscription {
             cron: '*/30 * * * * *', //30秒同步一次路由数据
             immediate: true, //立即执行一次
             disable: false
-        }
+        };
     }
 
     //定时同步DB中的路由信息到内存中,由于数据量不大,所以全部拉取
@@ -22,7 +22,7 @@ module.exports = class SyncGatewayConfigJob extends Subscription {
                 console.log('同步失败');
             }
         }).catch(error => {
-            console.log('路由配置同步异常.', error, '================end======================')
-        })
+            console.log('路由配置同步异常.', error, '================end======================');
+        });
     }
-}
+};

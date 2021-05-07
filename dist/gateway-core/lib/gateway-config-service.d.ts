@@ -1,4 +1,4 @@
-import { ClientInfo, HttpComponentHandleRule, IGatewayConfigService, RouterInfo, ServerGroupInfo } from "../../interface";
+import { ClientInfo, HttpComponentHandleRule, IGatewayConfigService, RouterInfo, ServerGroupInfo } from '../../interface';
 export declare class GatewayConfigService implements IGatewayConfigService {
     private _isSetGatewayInfo;
     private _latestUpdateDate;
@@ -23,6 +23,7 @@ export declare class GatewayConfigService implements IGatewayConfigService {
     /**
      * 根据URL路由前缀获取路由分组信息
      * @param routerPrefix
+     * @param httpMethod
      */
     getRouterListByPrefix(routerPrefix: string, httpMethod: string): RouterInfo[];
     /**

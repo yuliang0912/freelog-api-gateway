@@ -27,7 +27,7 @@ export class ClientInternalIdentityAuthentication implements ICommonComponentHan
                 .setTips('内部身份认证失败,未获取到有效内部身份');
         }
 
-        const clientId = ctx.checkHeader("clientid").exist().notEmpty().toInt().value;
+        const clientId = ctx.checkHeader('clientid').exist().notEmpty().toInt().value;
         if (!clientId) {
             return comHandlerResult.setError(new GatewayArgumentError(ctx.gettext('params-required-validate-failed', 'clientId')))
                 .setTips('缺少参数clientid');

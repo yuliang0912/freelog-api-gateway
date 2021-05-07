@@ -4,7 +4,7 @@ import {inject, provide, scope, ScopeEnum} from 'midway';
 import {
     ClientInfo, HttpComponentHandleRule,
     IGatewayConfigService, IGatewayService, RouterInfo, ServerGroupInfo
-} from "../../interface";
+} from '../../interface';
 import ApiMockDataProvider from '../data-provider/api-mock-data-provider';
 
 @provide()
@@ -64,7 +64,7 @@ export class GatewayService implements IGatewayService {
 
     toObjects(target: object | object[]) {
         if (isArray(target)) {
-            return target.map(x => (<any>x).toObject())
+            return target.map(x => (<any>x).toObject());
         }
         return (<any>target)?.toObject();
     }

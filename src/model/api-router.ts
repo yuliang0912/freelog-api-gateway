@@ -49,7 +49,7 @@ export class ApiRouter extends MongooseModelBase implements IMongooseModelBase {
             getters: true,
             virtuals: true,
             transform(doc, ret, options) {
-                return Object.assign({routerId: doc.id}, omit(ret, ['_id']))
+                return Object.assign({routerId: doc.id}, omit(ret, ['_id']));
             }
         };
     }

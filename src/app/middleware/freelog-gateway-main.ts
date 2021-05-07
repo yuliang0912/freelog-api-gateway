@@ -1,8 +1,8 @@
 import {split} from 'lodash';
-import {FreelogApplication, FreelogContext, GatewayArgumentError} from 'egg-freelog-base'
+import {FreelogApplication, FreelogContext, GatewayArgumentError} from 'egg-freelog-base';
 import {
     IGatewayConfigService, IGatewayErrorHandler, IGatewayMatchService, IRequestContextGatewayInfo
-} from "../../interface";
+} from '../../interface';
 
 export default function freelogGatewayMainMiddleware(_options: object | null, _app: FreelogApplication): any {
 
@@ -35,6 +35,6 @@ export default function freelogGatewayMainMiddleware(_options: object | null, _a
 
         ctx.success(routerInfo);
 
-        await next()
-    }
+        await next();
+    };
 }

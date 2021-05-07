@@ -4,7 +4,7 @@ import {
 } from '../../../interface';
 
 import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../enum';
-import {FreelogContext} from "egg-freelog-base";
+import {FreelogContext} from 'egg-freelog-base';
 
 @scope(ScopeEnum.Singleton)
 @provide(`gateway_com_${RouterComponentNameEnum.Refuse_All_Request_Authorization}`)

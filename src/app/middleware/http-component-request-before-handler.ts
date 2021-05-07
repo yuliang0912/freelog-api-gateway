@@ -4,8 +4,8 @@ import {
     ICommonComponentHandler,
     IComponentHandleResult,
     IGatewayErrorHandler, IRequestContextGatewayInfo, RouterInfo
-} from "../../interface";
-import {RouterComponentLevelEnum, RouterComponentNameEnum, RouterComponentTypeEnum} from "../../enum";
+} from '../../interface';
+import {RouterComponentLevelEnum, RouterComponentNameEnum, RouterComponentTypeEnum} from '../../enum';
 import {
     FreelogApplication,
     FreelogContext,
@@ -26,9 +26,9 @@ class HttpComponentRequestBeforeHandler {
         for (const httpComponentRule of routerInfo.httpComponentRules) {
             await this.recursionInvokingGatewayComponents(ctx, httpComponentRule.httpComponentRules, httpComponentRule.componentConfig, true).then(result => {
                 !result && this.gatewayComponentResponseFailedHandle(ctx, httpComponentRule);
-            })
+            });
         }
-        await next()
+        await next();
     }
 
     /**
@@ -136,10 +136,10 @@ class HttpComponentRequestBeforeHandler {
 
         //目前只有认证与授权.后续如果有流量限制熔断等再拓展
         if (lastHandleFailedResult.comType === RouterComponentTypeEnum.Authentication) {
-            throw new GatewayAuthenticationError("认证失败", data)
+            throw new GatewayAuthenticationError('认证失败', data);
         }
 
-        throw new GatewayAuthorizationError("授权失败", data)
+        throw new GatewayAuthorizationError('授权失败', data);
     }
 }
 

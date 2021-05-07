@@ -1,22 +1,22 @@
 export enum RouterComponentLevelEnum {
-    RequestBefore = "RequestBefore",
-    InProcessing = "PnProcessing",
-    ResponseAfter = "ResponseAfter"
+    RequestBefore = 'RequestBefore',
+    InProcessing = 'PnProcessing',
+    ResponseAfter = 'ResponseAfter'
 }
 
 export enum RouterComponentTypeEnum {
     /**
      * 认证
      */
-    Authentication = "authentication",
+    Authentication = 'authentication',
     /**
      * 授权
      */
-    Authorization = "authorization",
+    Authorization = 'authorization',
     /**
      * 统计
      */
-    Statistics = "statistics"
+    Statistics = 'statistics'
 }
 
 export enum RouterComponentNameEnum {

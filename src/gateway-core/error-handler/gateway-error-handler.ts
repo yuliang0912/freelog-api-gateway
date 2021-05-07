@@ -1,11 +1,11 @@
-import {provide, scope, ScopeEnum} from 'midway'
+import {provide, scope, ScopeEnum} from 'midway';
 import {
     GatewayRouterMatchError,
     GatewayComponentInvokingError,
     GatewayUpstreamApiError,
     FreelogContext
-} from 'egg-freelog-base'
-import {IGatewayErrorHandler} from "../../interface";
+} from 'egg-freelog-base';
+import {IGatewayErrorHandler} from '../../interface';
 
 @provide()
 @scope(ScopeEnum.Singleton)
@@ -23,6 +23,7 @@ export class GatewayErrorHandler implements IGatewayErrorHandler {
 
     /**
      * 组件调用异常处理
+     * @param ctx
      * @param componentName
      * @param error
      */
@@ -33,17 +34,18 @@ export class GatewayErrorHandler implements IGatewayErrorHandler {
 
     /**
      * 发起http代理请求异常
+     * @param ctx
      * @param error
      */
     httpRequestProxyErrorHandle(ctx: FreelogContext, error) {
 
-        const {code, statusCode} = error
+        const {code, statusCode} = error;
 
         const msg = `上游服务器错误。${this.getHttpRequestProxyErrorMsg(code)}`;
 
         ctx.status = statusCode || 404;
 
-        throw new GatewayUpstreamApiError(msg, {code, statusCode, error: error.stack || error.message})
+        throw new GatewayUpstreamApiError(msg, {code, statusCode, error: error.stack || error.message});
     }
 
     /**
@@ -52,10 +54,10 @@ export class GatewayErrorHandler implements IGatewayErrorHandler {
      */
     getHttpRequestProxyErrorMsg(errorCode: string) {
         const codeMsgMap = {
-            ETIMEDOU: "连接已经超时",
-            ESOCKETTIMEDOUT: "连接已经超时",
-            ECONNREFUSED: "不能连接到目标服务器",
-            HTTPSTATUSCODEERROR: "http状态码错误"
+            ETIMEDOU: '连接已经超时',
+            ESOCKETTIMEDOUT: '连接已经超时',
+            ECONNREFUSED: '不能连接到目标服务器',
+            HTTPSTATUSCODEERROR: 'http状态码错误'
         };
         return codeMsgMap[errorCode] ?? '';
     }

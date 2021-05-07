@@ -5,7 +5,7 @@ import {MongooseModelBase, IMongooseModelBase} from 'egg-freelog-base';
 @scope(ScopeEnum.Singleton)
 @provide('model.RequestRecord')
 export class RequestRecord extends MongooseModelBase implements IMongooseModelBase {
-    
+
     constructor(@plugin('mongoose') mongoose) {
         super(mongoose);
     }

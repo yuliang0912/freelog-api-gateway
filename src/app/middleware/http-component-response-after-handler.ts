@@ -3,8 +3,8 @@ import {
     HttpComponentHandleRule, HttpComponentRuleInfo,
     ICommonComponentHandler, IComponentHandleResult,
     IGatewayErrorHandler, IRequestContextGatewayInfo, RouterInfo
-} from "../../interface";
-import {RouterComponentLevelEnum, RouterComponentNameEnum, RouterComponentTypeEnum} from "../../enum";
+} from '../../interface';
+import {RouterComponentLevelEnum, RouterComponentNameEnum, RouterComponentTypeEnum} from '../../enum';
 import {
     FreelogApplication,
     FreelogContext,
@@ -26,9 +26,9 @@ class HttpComponentResponseAfterHandler {
         for (const httpComponentRule of routerInfo.httpComponentRules) {
             await this.recursionInvokingGatewayComponents(ctx, httpComponentRule.httpComponentRules, httpComponentRule.componentConfig, true).then(result => {
                 !result && this.gatewayComponentResponseFailedHandle(ctx, httpComponentRule);
-            })
+            });
         }
-        await next()
+        await next();
     }
 
     /**
@@ -99,7 +99,7 @@ class HttpComponentResponseAfterHandler {
     async gatewayComponentInvokingHandle(ctx: FreelogContext, comName: RouterComponentNameEnum, comConfig?: object): Promise<boolean> {
 
         const gatewayErrorHandler: IGatewayErrorHandler = ctx.requestContext.get('gatewayErrorHandler');
-        const gatewayComHandlerFactory: (comName: RouterComponentNameEnum) => ICommonComponentHandler = ctx.requestContext.get('gatewayComHandlerFactory')
+        const gatewayComHandlerFactory: (comName: RouterComponentNameEnum) => ICommonComponentHandler = ctx.requestContext.get('gatewayComHandlerFactory');
         const comHandler = gatewayComHandlerFactory(comName);
 
         if (!comHandler) {
@@ -135,10 +135,10 @@ class HttpComponentResponseAfterHandler {
 
         //目前只有认证与授权.后续如果有流量限制熔断等再拓展
         if (lastHandleFailedResult.comType === RouterComponentTypeEnum.Authentication) {
-            throw new GatewayAuthenticationError("认证失败", data)
+            throw new GatewayAuthenticationError('认证失败', data);
         }
 
-        throw new GatewayAuthorizationError("授权失败", data)
+        throw new GatewayAuthorizationError('授权失败', data);
     }
 }
 

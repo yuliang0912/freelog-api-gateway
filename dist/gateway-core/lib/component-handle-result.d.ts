@@ -1,5 +1,5 @@
-import { IComponentHandleResult } from "../../interface";
-import { RouterComponentNameEnum, RouterComponentTypeEnum } from "../../enum";
+import { IComponentHandleResult } from '../../interface';
+import { RouterComponentNameEnum, RouterComponentTypeEnum } from '../../enum';
 export declare class ComponentHandleResult implements IComponentHandleResult {
     comName: string;
     comType: RouterComponentTypeEnum;

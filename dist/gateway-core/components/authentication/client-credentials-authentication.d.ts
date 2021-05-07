@@ -1,5 +1,5 @@
 import { FreelogContext } from 'egg-freelog-base';
-import { ICommonComponentHandler, IComponentHandleResult, IGatewayConfigService } from "../../../interface";
+import { ICommonComponentHandler, IComponentHandleResult, IGatewayConfigService } from '../../../interface';
 import { RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum } from '../../../enum';
 export declare class ClientCredentialsAuthentication implements ICommonComponentHandler {
     comName: RouterComponentNameEnum;

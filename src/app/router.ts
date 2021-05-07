@@ -8,4 +8,4 @@ module.exports = ({router, controller}) => {
 
     //其他默认当网关代理处理
     router.all('/*', (ctx, next) => null);
-}
+};

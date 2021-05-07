@@ -1,5 +1,5 @@
 import { Context } from 'midway';
-import { IHttpRequestProxy, UpstreamInfo } from "../../interface";
+import { IHttpRequestProxy, UpstreamInfo } from '../../interface';
 export declare class HttpRequestProxy implements IHttpRequestProxy {
     /**
      * httpClient请求处理

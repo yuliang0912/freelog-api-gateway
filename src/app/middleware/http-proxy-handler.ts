@@ -5,7 +5,7 @@ import {
     IIdentityTransmit,
     IRequestContextGatewayInfo
 } from '../../interface';
-import {FreelogApplication, FreelogContext} from "egg-freelog-base";
+import {FreelogApplication, FreelogContext} from 'egg-freelog-base';
 
 export default function httpProxyHandlerMiddleware(_options: object | null, _app: FreelogApplication): any {
 
@@ -29,6 +29,6 @@ export default function httpProxyHandlerMiddleware(_options: object | null, _app
 
         ctx.set('x-service-response-time', (startResponseTime - startRequestTime).toString());
 
-        await next()
-    }
+        await next();
+    };
 }

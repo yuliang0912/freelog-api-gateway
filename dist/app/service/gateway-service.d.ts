@@ -1,5 +1,5 @@
 import { MongodbOperation } from 'egg-freelog-base';
-import { ClientInfo, HttpComponentHandleRule, IGatewayConfigService, IGatewayService, RouterInfo, ServerGroupInfo } from "../../interface";
+import { ClientInfo, HttpComponentHandleRule, IGatewayConfigService, IGatewayService, RouterInfo, ServerGroupInfo } from '../../interface';
 import ApiMockDataProvider from '../data-provider/api-mock-data-provider';
 export declare class GatewayService implements IGatewayService {
     apiMockDataProvider: ApiMockDataProvider;

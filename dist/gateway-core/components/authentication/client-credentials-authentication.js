@@ -23,9 +23,9 @@ let ClientCredentialsAuthentication = class ClientCredentialsAuthentication {
     }
     async handle(ctx, config) {
         const comHandlerResult = this.componentHandleResult.build(this.comName, this.comType);
-        const clientId = ctx.checkHeader("clientid").exist().notEmpty().toInt().value;
-        const timeLine = ctx.checkHeader("timeline").exist().notEmpty().toInt().value;
-        const sign = ctx.checkHeader("sign").exist().notEmpty().value;
+        const clientId = ctx.checkHeader('clientid').exist().notEmpty().toInt().value;
+        const timeLine = ctx.checkHeader('timeline').exist().notEmpty().toInt().value;
+        const sign = ctx.checkHeader('sign').exist().notEmpty().value;
         const currentUnixTime = Math.round(new Date().getTime() / 1000);
         if (!lodash_1.isEmpty(ctx.errors)) {
             return comHandlerResult.setError(new egg_freelog_base_1.GatewayArgumentError(ctx.gettext('params-validate-failed', 'clientId,timeline,sign'), {

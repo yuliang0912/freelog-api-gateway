@@ -49,7 +49,7 @@ export class TrafficStatisticsHandler implements ICommonComponentHandler {
             reqContentLength: ctx.get('content-length') ?? 0,
             resContentLength: proxyResponse.headers['content-length'] ?? 0,
             userId: gatewayInfo.identityInfo.userInfo?.['userId'] ?? 0
-        }
+        };
 
         this.routerTrafficStatisticsProvider?.findOneAndUpdate({
             routerId, routerUrlRule
@@ -66,7 +66,7 @@ export class TrafficStatisticsHandler implements ICommonComponentHandler {
      */
     errorHandle(error) {
         if (error instanceof Error) {
-            console.log("end-of-cycle-event-handler", '事件执行异常', ...arguments);
+            console.log('end-of-cycle-event-handler', '事件执行异常', ...arguments);
         }
     }
 }

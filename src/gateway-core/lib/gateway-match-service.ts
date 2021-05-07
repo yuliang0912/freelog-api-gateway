@@ -1,6 +1,6 @@
 import {scope, provide, ScopeEnum} from 'midway';
 import {isArray, isEmpty, trim, trimEnd} from 'lodash';
-import {IGatewayMatchService, RouterInfo} from "../../interface";
+import {IGatewayMatchService, RouterInfo} from '../../interface';
 
 @provide()
 @scope(ScopeEnum.Singleton)
@@ -29,7 +29,7 @@ export class GatewayMatchService implements IGatewayMatchService {
                 continue;
             }
             let matchScore = 0;
-            router.routerSchemes = [""];
+            router.routerSchemes = [''];
             router.customParamsMap = new Map();
             for (let i = 0, j = routerSchemes.length; i < j; i++) {
                 if (routerSchemes[i].toLowerCase() === urlPathSchemes[i].toLowerCase()) {
@@ -41,12 +41,12 @@ export class GatewayMatchService implements IGatewayMatchService {
                     router.customParamsMap.set(routerSchemes[i].substring(1), urlPathSchemes[i]);
                 } else {
                     matchScore = 0;
-                    break
+                    break;
                 }
             }
             //method完全匹配比ALL匹配分值更高
             if (matchScore > 0 && router.httpMethod.includes(httpMethod)) {
-                matchScore += 1
+                matchScore += 1;
             }
             if (matchScore > maxSatisfyingRouter.score) {
                 maxSatisfyingRouter.routerId = router.routerId;
@@ -64,15 +64,15 @@ export class GatewayMatchService implements IGatewayMatchService {
      */
     generateUpstreamRouterUrl(routerInfo: RouterInfo, url: string): string {
 
-        const {forwardUriScheme} = routerInfo.upstream
+        const {forwardUriScheme} = routerInfo.upstream;
         const upstreamRouterUrl = forwardUriScheme.split('/').map(segment => {
             if (!this.customParamRegExp.test(segment)) {
                 return segment;
             }
             const paramName = segment.substring(1);
             return routerInfo?.customParamsMap.get(paramName) ?? '';
-        }).join("/");
+        }).join('/');
 
-        return url.replace(new RegExp(trimEnd(routerInfo?.routerSchemes.join('/'), '/'), "i"), trimEnd(upstreamRouterUrl, '/'));
+        return url.replace(new RegExp(trimEnd(routerInfo?.routerSchemes.join('/'), '/'), 'i'), trimEnd(upstreamRouterUrl, '/'));
     }
 }

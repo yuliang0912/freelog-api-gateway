@@ -26,7 +26,7 @@ let ClientInternalIdentityAuthentication = class ClientInternalIdentityAuthentic
             return comHandlerResult.setError(new egg_freelog_base_1.GatewayAuthenticationError(ctx.gettext('user-authentication-failed')))
                 .setTips('内部身份认证失败,未获取到有效内部身份');
         }
-        const clientId = ctx.checkHeader("clientid").exist().notEmpty().toInt().value;
+        const clientId = ctx.checkHeader('clientid').exist().notEmpty().toInt().value;
         if (!clientId) {
             return comHandlerResult.setError(new egg_freelog_base_1.GatewayArgumentError(ctx.gettext('params-required-validate-failed', 'clientId')))
                 .setTips('缺少参数clientid');

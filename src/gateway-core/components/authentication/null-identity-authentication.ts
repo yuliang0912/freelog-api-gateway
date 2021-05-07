@@ -3,7 +3,7 @@ import {
     ICommonComponentHandler, IComponentHandleResult
 } from '../../../interface';
 import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../enum';
-import {FreelogContext} from "egg-freelog-base";
+import {FreelogContext} from 'egg-freelog-base';
 
 @scope(ScopeEnum.Singleton)
 @provide(`gateway_com_${RouterComponentNameEnum.Null_Identity_Authentication}`)

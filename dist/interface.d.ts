@@ -1,5 +1,5 @@
-import { FreelogContext } from "egg-freelog-base";
-import { RouterComponentLevelEnum, RouterComponentNameEnum, RouterComponentTypeEnum } from "./enum";
+import { FreelogContext } from 'egg-freelog-base';
+import { RouterComponentLevelEnum, RouterComponentNameEnum, RouterComponentTypeEnum } from './enum';
 export interface UpstreamInfo {
     serverGroupName: string;
     serverGroupInfo?: ServerGroupInfo;

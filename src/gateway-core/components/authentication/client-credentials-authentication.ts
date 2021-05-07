@@ -4,7 +4,7 @@ import {provide, inject, scope, ScopeEnum} from 'midway';
 import {GatewayArgumentError, GatewayAuthenticationError, CryptoHelper, FreelogContext} from 'egg-freelog-base';
 import {
     ICommonComponentHandler, IComponentHandleResult, IGatewayConfigService
-} from "../../../interface";
+} from '../../../interface';
 import {RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum} from '../../../enum';
 
 @scope(ScopeEnum.Singleton)
@@ -23,9 +23,9 @@ export class ClientCredentialsAuthentication implements ICommonComponentHandler 
     async handle(ctx: FreelogContext, config?: object): Promise<IComponentHandleResult> {
 
         const comHandlerResult = this.componentHandleResult.build(this.comName, this.comType);
-        const clientId = ctx.checkHeader("clientid").exist().notEmpty().toInt().value;
-        const timeLine: number = ctx.checkHeader("timeline").exist().notEmpty().toInt().value;
-        const sign = ctx.checkHeader("sign").exist().notEmpty().value;
+        const clientId = ctx.checkHeader('clientid').exist().notEmpty().toInt().value;
+        const timeLine: number = ctx.checkHeader('timeline').exist().notEmpty().toInt().value;
+        const sign = ctx.checkHeader('sign').exist().notEmpty().value;
         const currentUnixTime = Math.round(new Date().getTime() / 1000);
 
         if (!isEmpty(ctx.errors)) {

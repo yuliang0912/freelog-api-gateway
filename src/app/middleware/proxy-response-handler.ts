@@ -1,4 +1,4 @@
-import {FreelogContext, ApiInvokingError, FreelogApplication} from "egg-freelog-base";
+import {FreelogContext, ApiInvokingError, FreelogApplication} from 'egg-freelog-base';
 
 export default function proxyResponseHandlerMiddleware(_options: object | null, _app: FreelogApplication): any {
 
@@ -39,8 +39,8 @@ export default function proxyResponseHandlerMiddleware(_options: object | null, 
 
         ctx.body = body;
         ctx.status = statusCode;
-        Object.keys(headers).forEach(header => ctx.set(header, headers[header]))
+        Object.keys(headers).forEach(header => ctx.set(header, headers[header]));
 
-        await next()
-    }
+        await next();
+    };
 }

@@ -1,6 +1,6 @@
 import { ICommonComponentHandler, IComponentHandleResult } from '../../../interface';
 import { RouterComponentLevelEnum, RouterComponentTypeEnum, RouterComponentNameEnum } from '../../../enum';
-import { FreelogContext } from "egg-freelog-base";
+import { FreelogContext } from 'egg-freelog-base';
 export declare class RefuseAllRequestAuthorization implements ICommonComponentHandler {
     comName: RouterComponentNameEnum;
     comType: RouterComponentTypeEnum;
