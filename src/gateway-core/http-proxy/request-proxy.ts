@@ -20,7 +20,7 @@ export class HttpRequestProxy implements IHttpRequestProxy {
         const serverInfo = serverGroupInfo.servers.find(x => x.status === 1);
 
         const options = {
-            method: upstreamRouterInfo.method ?? method,
+            method: method ?? ctx.method,
             uri: `${protocol}://${serverInfo.serverIp}:${port}${forwardUrl}`,
             headers: ctx.headers || {},
             json: false,
