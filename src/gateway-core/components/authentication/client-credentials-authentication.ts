@@ -1,4 +1,4 @@
-import {parse} from 'url';
+import {URL} from 'url';
 import {isEmpty, pick} from 'lodash';
 import {provide, inject, scope, ScopeEnum} from 'midway';
 import {GatewayArgumentError, GatewayAuthenticationError, CryptoHelper, FreelogContext} from 'egg-freelog-base';
@@ -45,9 +45,8 @@ export class ClientCredentialsAuthentication implements ICommonComponentHandler 
                 .setTips('客户端认证失败或未找到客户端信息');
         }
 
-        const text = `${parse(ctx.url).path}&timeline=${timeLine}`;
-        //const {pathname, search} = new URL(ctx.url);
-        //const text = `${pathname + search}${search ? '&' : '?'}timeline=${timeLine}`;
+        const {pathname, search} = new URL(ctx.href);
+        const text = `${pathname + search}&timeline=${timeLine}`;
 
         if (CryptoHelper.hmacSha1(text, clientInfo.privateKey) !== sign) {
             console.log(text, clientInfo.privateKey);
