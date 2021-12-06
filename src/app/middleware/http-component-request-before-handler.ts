@@ -33,7 +33,9 @@ class HttpComponentRequestBeforeHandler {
 
     /**
      * 递归分析组件调用逻辑并且执行组件调用
-     * @param httpComponentRules
+     * @param ctx
+     * @param comList
+     * @param comConfig
      * @param isEvery
      */
     async recursionInvokingGatewayComponents(ctx: FreelogContext, comList: Array<string | string[] | object>, comConfig?: object, isEvery: boolean = false) {
@@ -64,6 +66,7 @@ class HttpComponentRequestBeforeHandler {
 
     /**
      * object类型的调用逻辑操作解析并且执行组件调用
+     * @param ctx
      * @param objectCondition
      * @param comConfig
      */
@@ -93,6 +96,7 @@ class HttpComponentRequestBeforeHandler {
 
     /**
      * 实际执行代理组件调用
+     * @param ctx
      * @param comName
      * @param comConfig
      */
@@ -133,6 +137,8 @@ class HttpComponentRequestBeforeHandler {
         };
 
         const lastHandleFailedResult = gatewayInfo.componentProcessResults.reverse().find(x => !x.handleResult);
+
+        console.log(JSON.stringify(gatewayInfo.componentProcessResults));
 
         //目前只有认证与授权.后续如果有流量限制熔断等再拓展
         if (lastHandleFailedResult.comType === RouterComponentTypeEnum.Authentication) {
