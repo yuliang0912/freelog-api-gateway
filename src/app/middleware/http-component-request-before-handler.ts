@@ -138,8 +138,6 @@ class HttpComponentRequestBeforeHandler {
 
         const lastHandleFailedResult = gatewayInfo.componentProcessResults.reverse().find(x => !x.handleResult);
 
-        console.log(JSON.stringify(gatewayInfo.componentProcessResults));
-
         //目前只有认证与授权.后续如果有流量限制熔断等再拓展
         if (lastHandleFailedResult.comType === RouterComponentTypeEnum.Authentication) {
             throw new GatewayAuthenticationError('认证失败', data);

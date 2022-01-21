@@ -6,6 +6,7 @@ export default class HomeController {
      * @returns {Promise<void>}
      */
     index(ctx: any): Promise<void>;
+    update(ctx: any): Promise<void>;
     /**
      * 运行状态
      * @param ctx
