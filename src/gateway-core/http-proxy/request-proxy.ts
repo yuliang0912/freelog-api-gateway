@@ -46,7 +46,7 @@ export class HttpRequestProxy implements IHttpRequestProxy {
 
         return new Promise((resolve, reject) => {
             const proxyServer = Request(options, (error, response) => error ? reject(error) : resolve(response));
-            if (ctx.req.readable && !['GET', 'HEAD', 'DELETE'].includes(options.method)) {
+            if (ctx.req.readable && !['GET', 'HEAD'].includes(options.method)) {
                 ctx.req.pipe(proxyServer);
             }
             if (ctx.res.writable) {
