@@ -12,6 +12,10 @@ export default class HomeController {
         ctx.body = '<h1>freelog api gateway!</h1>';
     }
 
+    async update(ctx) {
+        ctx.body = '<h1>freelog api gateway!</h1>';
+    }
+
     /**
      * 运行状态
      * @param ctx

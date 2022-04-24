@@ -1,4 +1,4 @@
-import {EggAppInfo} from "midway";
+import {EggAppInfo} from 'midway';
 
 export default (appInfo: EggAppInfo) => {
 
@@ -9,15 +9,14 @@ export default (appInfo: EggAppInfo) => {
     config.mongoose = {
         url: 'mongodb://127.0.0.1:27017/api-gateway'
     };
-    //
+
     // config.mongoose = {
     //     url: 'mongodb://39.108.77.211:30772/api-gateway'
     // };
 
     config.mongoose = {
-        url: `mongodb://gateway_service:QzA4Qzg3QTA3NDRCQTA0NDU1RUQxMjI3MTA4ODQ1MTk=@dds-wz9ac40fee5c09441604-pub.mongodb.rds.aliyuncs.com:3717,dds-wz9ac40fee5c09442584-pub.mongodb.rds.aliyuncs.com:3717/test-api-gateway?replicaSet=mgset-44484047`
+        url: decodeURIComponent(`mongodb%3A%2F%2Fgateway_service%3AQzA4Qzg3QTA3NDRCQTA0NDU1RUQxMjI3MTA4ODQ1MTk%3D%40freelog-prod-public.mongodb.rds.aliyuncs.com%3A3717%2Cfreelog-prod-public-secondary.mongodb.rds.aliyuncs.com%3A3717%2Ffreelog-api-gateway%3FreplicaSet%3Dmgset-58730021`)
     };
-
 
     return config;
 }
