@@ -28,6 +28,7 @@ export class HttpRequestProxy implements IHttpRequestProxy {
             timeout: 30000, //默认30秒
             encoding: null
         };
+        options.uri = options.uri.replace('http://api-identity-service.production:7111/', 'http://api.testfreelog.com/');
         options.headers['traceId'] = ctx.traceId;
         options.headers['requestId'] = ctx.requestId;
         if (!options.headers['Accept-Language'] && !options.headers['accept-language']) {

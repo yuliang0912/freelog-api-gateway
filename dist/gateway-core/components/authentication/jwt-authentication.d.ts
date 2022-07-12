@@ -8,6 +8,8 @@ export declare class JwtAuthentication implements ICommonComponentHandler {
     RasSha256Key: any;
     componentHandleResult: IComponentHandleResult;
     handle(ctx: FreelogContext, config?: object): Promise<IComponentHandleResult>;
+    getUserInfo(ctx: FreelogContext, userId: number): Promise<any>;
+    _isJson(headers: object): any;
     /**
      * 获取有效期
      */
