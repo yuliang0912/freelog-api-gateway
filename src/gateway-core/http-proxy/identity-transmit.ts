@@ -9,6 +9,7 @@ export class identityTransmit implements IIdentityTransmit {
 
     transmit(ctx: FreelogContext): void {
         const identityInfo = ctx.gatewayInfo.identityInfo ?? {};
+        console.log(identityInfo);
         if (identityInfo.userInfo?.status === 1) {
             new GatewayUserFreezeError('用户已被冻结,无法访问');
         }
