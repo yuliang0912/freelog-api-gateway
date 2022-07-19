@@ -21,7 +21,6 @@ class HttpComponentRequestBeforeHandler {
     }
 
     async main(ctx: FreelogContext, next) {
-
         const routerInfo = ctx.gatewayInfo.routerInfo as RouterInfo;
         for (const httpComponentRule of routerInfo.httpComponentRules) {
             await this.recursionInvokingGatewayComponents(ctx, httpComponentRule.httpComponentRules, httpComponentRule.componentConfig, true).then(result => {
