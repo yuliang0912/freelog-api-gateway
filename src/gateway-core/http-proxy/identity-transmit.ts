@@ -20,6 +20,6 @@ export class identityTransmit implements IIdentityTransmit {
     }
 
     private freezeUserIsPass(url: string) {
-        return url.startsWith('/v2/users/') || url.startsWith('/v2/activities/');
+        return url.startsWith('/v2/users/') || url.startsWith('/v2/activities/') || url.startsWith('/v2/passport');
     }
 }
