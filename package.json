@@ -4,7 +4,7 @@
   "description": "飞致网络网关服务!",
   "private": true,
   "dependencies": {
-    "async": "^3.2.0",
+    "async": "^3.2.2",
     "axios": "^0.21.1",
     "bluebird": "^3.7.1",
     "egg-freelog-base": "^3.1.39",
